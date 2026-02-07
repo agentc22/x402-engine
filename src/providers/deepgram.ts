@@ -1,15 +1,33 @@
 import { createClient, type DeepgramClient } from "@deepgram/sdk";
 import { config } from "../config.js";
+import { keyPool } from "../lib/key-pool.js";
 
-let client: DeepgramClient | null = null;
+// Pool of pre-initialized Deepgram clients (one per key)
+let clients: DeepgramClient[] = [];
+let clientIndex = 0;
 
 export function initDeepgram(): void {
-  if (!config.deepgramApiKey) {
+  if (!keyPool.has("deepgram")) {
     console.log("  Deepgram API key not configured — transcribe endpoint will return 502");
     return;
   }
-  client = createClient(config.deepgramApiKey);
-  console.log("  Deepgram client initialized");
+
+  // Create a client for each key in the pool
+  const keyCount = keyPool.count("deepgram");
+  for (let i = 0; i < keyCount; i++) {
+    const key = keyPool.acquire("deepgram");
+    if (key) clients.push(createClient(key));
+  }
+  console.log(`  Deepgram client initialized (${clients.length} key${clients.length > 1 ? "s" : ""})`);
+}
+
+function getClient(): DeepgramClient {
+  if (clients.length === 0) {
+    throw Object.assign(new Error("Deepgram not configured"), { status: 502 });
+  }
+  const client = clients[clientIndex];
+  clientIndex = (clientIndex + 1) % clients.length;
+  return client;
 }
 
 export interface TranscriptionRequest {
@@ -38,9 +56,7 @@ export interface TranscriptionResponse {
 }
 
 export async function transcribe(req: TranscriptionRequest): Promise<TranscriptionResponse> {
-  if (!client) {
-    throw Object.assign(new Error("Deepgram not configured"), { status: 502 });
-  }
+  const client = getClient();
 
   const options: Record<string, any> = {
     model: req.model || config.computeProviders.deepgram.model,

@@ -1,25 +1,39 @@
 import { PinataSDK } from "pinata";
 import { config } from "../config.js";
+import { keyPool } from "../lib/key-pool.js";
 
-let pinata: PinataSDK | null = null;
+// Pool of pre-initialized Pinata clients (one per JWT)
+let pinataClients: PinataSDK[] = [];
+let pinataIndex = 0;
 
 export function initIpfs(): void {
-  if (!config.pinataJwt) {
+  if (!keyPool.has("pinata")) {
     console.log("  Pinata JWT not configured — IPFS endpoints will return 502");
     return;
   }
-  pinata = new PinataSDK({
-    pinataJwt: config.pinataJwt,
-    pinataGateway: config.pinataGateway,
-  });
-  console.log("  Pinata IPFS client initialized");
+
+  const keyCount = keyPool.count("pinata");
+  for (let i = 0; i < keyCount; i++) {
+    const jwt = keyPool.acquire("pinata");
+    if (jwt) {
+      pinataClients.push(
+        new PinataSDK({
+          pinataJwt: jwt,
+          pinataGateway: config.pinataGateway,
+        }),
+      );
+    }
+  }
+  console.log(`  Pinata IPFS client initialized (${pinataClients.length} key${pinataClients.length > 1 ? "s" : ""})`);
 }
 
 function getPinata(): PinataSDK {
-  if (!pinata) {
+  if (pinataClients.length === 0) {
     throw Object.assign(new Error("Pinata IPFS not configured"), { status: 502 });
   }
-  return pinata;
+  const client = pinataClients[pinataIndex];
+  pinataIndex = (pinataIndex + 1) % pinataClients.length;
+  return client;
 }
 
 export interface PinResponse {

@@ -1,16 +1,10 @@
-import { config } from "../config.js";
+import { keyPool } from "../lib/key-pool.js";
 
 const ALLIUM_BASE = "https://api.allium.so/api/v1/developer";
 
-function headers(): Record<string, string> {
-  return {
-    "Content-Type": "application/json",
-    "X-API-KEY": config.alliumApiKey,
-  };
-}
-
 async function alliumPost(path: string, body: unknown, query?: Record<string, string>): Promise<any> {
-  if (!config.alliumApiKey) {
+  const key = keyPool.acquire("allium");
+  if (!key) {
     throw Object.assign(new Error("Allium API key not configured"), { status: 502 });
   }
 
@@ -23,7 +17,10 @@ async function alliumPost(path: string, body: unknown, query?: Record<string, st
 
   const res = await fetch(url.toString(), {
     method: "POST",
-    headers: headers(),
+    headers: {
+      "Content-Type": "application/json",
+      "X-API-KEY": key,
+    },
     body: JSON.stringify(body),
     signal: AbortSignal.timeout(30_000),
   });
@@ -40,7 +37,8 @@ async function alliumPost(path: string, body: unknown, query?: Record<string, st
 }
 
 async function alliumGet(path: string, query?: Record<string, string>): Promise<any> {
-  if (!config.alliumApiKey) {
+  const key = keyPool.acquire("allium");
+  if (!key) {
     throw Object.assign(new Error("Allium API key not configured"), { status: 502 });
   }
 
@@ -52,7 +50,10 @@ async function alliumGet(path: string, query?: Record<string, string>): Promise<
   }
 
   const res = await fetch(url.toString(), {
-    headers: headers(),
+    headers: {
+      "Content-Type": "application/json",
+      "X-API-KEY": key,
+    },
     signal: AbortSignal.timeout(30_000),
   });
 

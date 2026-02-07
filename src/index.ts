@@ -20,6 +20,7 @@ import { initFal } from "./providers/fal.js";
 import { initDeepgram } from "./providers/deepgram.js";
 import { initIpfs } from "./providers/ipfs.js";
 import { checkMegaETHConnection } from "./verification/megaeth.js";
+import { keyPool } from "./lib/key-pool.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -57,7 +58,8 @@ app.get("/health/deep", expensiveEndpointLimiter, async (_req, res) => {
       database: dbOk ? "ok" : "down",
       megaethRpc: megaethOk ? "ok" : "down",
     },
-    pool: poolStats,
+    pgPool: poolStats,
+    keyPool: keyPool.stats(),
     memory: {
       heapUsedMB: Math.round(memUsage.heapUsed / 1024 / 1024),
       heapTotalMB: Math.round(memUsage.heapTotal / 1024 / 1024),
@@ -210,6 +212,16 @@ async function main() {
 
   await initDatabase();
   console.log("  Database initialized (PostgreSQL, pool max=50)");
+
+  // Register API key pools
+  for (const [provider, keys] of Object.entries(config.keys)) {
+    keyPool.register(provider, keys as string[]);
+  }
+  const poolStats = keyPool.stats();
+  const poolSummary = Object.entries(poolStats)
+    .map(([p, s]) => `${p}=${s.keys}`)
+    .join(", ");
+  console.log(`  Key pools: ${poolSummary || "none"}`);
 
   initFal();
   initDeepgram();

@@ -1,4 +1,4 @@
-import { config } from "../config.js";
+import { keyPool } from "../lib/key-pool.js";
 
 const COINGECKO_BASE = "https://api.coingecko.com/api/v3";
 const COINGECKO_PRO_BASE = "https://pro-api.coingecko.com/api/v3";
@@ -7,26 +7,18 @@ function isProKey(key: string): boolean {
   return !!key && !key.startsWith("CG-");
 }
 
-function getBaseUrl(): string {
-  return config.coingeckoApiKey && isProKey(config.coingeckoApiKey)
-    ? COINGECKO_PRO_BASE
-    : COINGECKO_BASE;
-}
-
-function getHeaders(): Record<string, string> {
-  if (!config.coingeckoApiKey) return {};
-  if (isProKey(config.coingeckoApiKey)) {
-    return { "x-cg-pro-api-key": config.coingeckoApiKey };
-  }
-  return { "x-cg-demo-api-key": config.coingeckoApiKey };
-}
-
 async function geckoFetch(path: string, params?: URLSearchParams): Promise<any> {
-  const url = params
-    ? `${getBaseUrl()}${path}?${params}`
-    : `${getBaseUrl()}${path}`;
+  const key = keyPool.acquire("coingecko");
+
+  const baseUrl = key && isProKey(key) ? COINGECKO_PRO_BASE : COINGECKO_BASE;
+  const headers: Record<string, string> = {};
+  if (key) {
+    headers[isProKey(key) ? "x-cg-pro-api-key" : "x-cg-demo-api-key"] = key;
+  }
+
+  const url = params ? `${baseUrl}${path}?${params}` : `${baseUrl}${path}`;
   const res = await fetch(url, {
-    headers: getHeaders(),
+    headers,
     signal: AbortSignal.timeout(30_000),
   });
   const data = await res.json();

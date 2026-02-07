@@ -1,5 +1,6 @@
 import { Sandbox } from "@e2b/code-interpreter";
 import { config } from "../config.js";
+import { keyPool } from "../lib/key-pool.js";
 
 export interface CodeExecutionRequest {
   code: string;
@@ -17,7 +18,8 @@ export interface CodeExecutionResponse {
 }
 
 export async function executeCode(req: CodeExecutionRequest): Promise<CodeExecutionResponse> {
-  if (!config.e2bApiKey) {
+  const apiKey = keyPool.acquire("e2b");
+  if (!apiKey) {
     throw Object.assign(new Error("E2B not configured"), { status: 502 });
   }
 
@@ -27,7 +29,7 @@ export async function executeCode(req: CodeExecutionRequest): Promise<CodeExecut
 
   const sandbox = await Sandbox.create({
     timeoutMs: timeout * 1000,
-    apiKey: config.e2bApiKey,
+    apiKey,
   });
 
   try {

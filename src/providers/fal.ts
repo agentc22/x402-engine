@@ -1,13 +1,16 @@
 import { fal } from "@fal-ai/client";
 import { config } from "../config.js";
+import { keyPool } from "../lib/key-pool.js";
 
 export function initFal(): void {
-  if (!config.falApiKey) {
+  if (!keyPool.has("fal")) {
     console.log("  fal.ai API key not configured — image endpoints will return 502");
     return;
   }
-  fal.config({ credentials: config.falApiKey });
-  console.log("  fal.ai client configured");
+  // Configure with the first key — will be rotated per-request
+  const firstKey = keyPool.acquire("fal");
+  if (firstKey) fal.config({ credentials: firstKey });
+  console.log(`  fal.ai client configured (${keyPool.count("fal")} key${keyPool.count("fal") > 1 ? "s" : ""})`);
 }
 
 export interface ImageGenerationRequest {
@@ -32,9 +35,14 @@ const MODEL_MAP: Record<string, string> = {
 };
 
 export async function generateImage(req: ImageGenerationRequest): Promise<ImageGenerationResponse> {
-  if (!config.falApiKey) {
+  const apiKey = keyPool.acquire("fal");
+  if (!apiKey) {
     throw Object.assign(new Error("fal.ai not configured"), { status: 502 });
   }
+
+  // Rotate key before each call. fal.ai SDK is a singleton, but image
+  // generation takes 2-10s so concurrent contention is rare.
+  fal.config({ credentials: apiKey });
 
   const modelId = MODEL_MAP[req.model] || MODEL_MAP.fast;
   const start = Date.now();
