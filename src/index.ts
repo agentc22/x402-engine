@@ -25,6 +25,9 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const app = express();
 
+// Trust the first proxy (Railway's reverse proxy) for correct client IP in rate limiting
+app.set("trust proxy", 1);
+
 // --- Global body limit: 1MB (route-specific overrides below) ---
 app.use(express.json({ limit: "1mb" }));
 

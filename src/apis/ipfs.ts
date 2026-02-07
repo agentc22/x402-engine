@@ -6,12 +6,23 @@ import { logRequest } from "../db/ledger.js";
 import { isPublicUrl, isValidCid, safeErrorMessage } from "../lib/validation.js";
 
 const router = Router();
+
+// Concurrency limiter for memory-buffered uploads
+const MAX_CONCURRENT_UPLOADS = 5;
+let activeUploads = 0;
+
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 100 * 1024 * 1024 }, // 100MB max
 });
 
 router.post("/api/ipfs/pin", upload.single("file"), async (req: Request, res: Response) => {
+  if (activeUploads >= MAX_CONCURRENT_UPLOADS) {
+    res.status(503).json({ error: "Too many concurrent uploads — try again shortly" });
+    return;
+  }
+  activeUploads++;
+
   const start = Date.now();
   let upstreamStatus = 0;
 
@@ -28,7 +39,7 @@ router.post("/api/ipfs/pin", upload.single("file"), async (req: Request, res: Re
       result = await pinJson(json, name);
     } else if (req.body?.url) {
       // SSRF protection: validate URL is public
-      const urlCheck = isPublicUrl(req.body.url);
+      const urlCheck = await isPublicUrl(req.body.url);
       if (!urlCheck.valid) {
         res.status(400).json({ error: urlCheck.reason });
         return;
@@ -49,6 +60,7 @@ router.post("/api/ipfs/pin", upload.single("file"), async (req: Request, res: Re
     const status = err.status === 502 ? 502 : 500;
     res.status(status).json({ error: "IPFS pin failed" });
   } finally {
+    activeUploads--;
     logRequest({
       service: "ipfs-pin",
       endpoint: "/api/ipfs/pin",

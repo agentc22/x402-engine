@@ -3,7 +3,7 @@ import { verifyMegaETHPayment, type PaymentProof } from "../verification/megaeth
 import { buildRoutesConfig, NETWORKS } from "../services/registry.js";
 import { MEGAETH_CONFIG } from "../config/chains.js";
 import { logRequest } from "../db/ledger.js";
-import { priceStringToTokenAmount } from "../lib/validation.js";
+import { priceStringToTokenAmount, truncateHash } from "../lib/validation.js";
 import type { RoutesConfig } from "@x402/core/server";
 
 // --- Payment header parsing ---
@@ -130,7 +130,7 @@ export function megaethPaymentMiddleware(): RequestHandler {
     const verifyMs = Date.now() - start;
 
     if (!result.valid) {
-      console.log(`  MegaETH payment FAILED: ${result.error}, txHash=${txHash} (${verifyMs}ms)`);
+      console.log(`  MegaETH payment FAILED: ${result.error}, txHash=${truncateHash(txHash)} (${verifyMs}ms)`);
       res.status(402).json({
         x402Version: 2,
         error: "Payment verification failed",
@@ -150,7 +150,7 @@ export function megaethPaymentMiddleware(): RequestHandler {
       method: "direct",
     };
 
-    console.log(`  MegaETH payment verified: ${result.txHash} (${verifyMs}ms)`);
+    console.log(`  MegaETH payment verified: ${truncateHash(result.txHash || "")} (${verifyMs}ms)`);
 
     // Intercept response to log actual status
     const originalEnd = res.end.bind(res);

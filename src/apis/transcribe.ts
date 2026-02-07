@@ -23,7 +23,7 @@ router.post("/api/transcribe", async (req: Request, res: Response) => {
 
   // SSRF protection on audio_url
   if (audio_url) {
-    const urlCheck = isPublicUrl(audio_url);
+    const urlCheck = await isPublicUrl(audio_url);
     if (!urlCheck.valid) {
       res.status(400).json({ error: urlCheck.reason });
       return;

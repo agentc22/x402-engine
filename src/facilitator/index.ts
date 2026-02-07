@@ -123,14 +123,24 @@ router.get("/facilitator/megaeth/supported", async (_req: Request, res: Response
 });
 
 router.post("/facilitator/megaeth/verify", async (req: Request, res: Response) => {
+  const { paymentPayload, paymentRequirements } = req.body || {};
+  if (!paymentPayload?.payload || !paymentRequirements?.amount || !paymentRequirements?.payTo) {
+    res.status(400).json({ error: "Missing paymentPayload or paymentRequirements" });
+    return;
+  }
   const client = new MegaETHFacilitatorClient();
-  const result = await client.verify(req.body.paymentPayload, req.body.paymentRequirements);
+  const result = await client.verify(paymentPayload, paymentRequirements);
   res.status(result.isValid ? 200 : 402).json(result);
 });
 
 router.post("/facilitator/megaeth/settle", async (req: Request, res: Response) => {
+  const { paymentPayload, paymentRequirements } = req.body || {};
+  if (!paymentPayload?.payload || !paymentRequirements) {
+    res.status(400).json({ error: "Missing paymentPayload or paymentRequirements" });
+    return;
+  }
   const client = new MegaETHFacilitatorClient();
-  const result = await client.settle(req.body.paymentPayload, req.body.paymentRequirements);
+  const result = await client.settle(paymentPayload, paymentRequirements);
   res.status(result.success ? 200 : 501).json(result);
 });
 

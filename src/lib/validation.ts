@@ -1,6 +1,7 @@
 import { URL } from "url";
+import { resolve4, resolve6 } from "dns/promises";
 
-// --- URL validation (SSRF protection) ---
+// --- URL validation (SSRF protection with DNS rebinding defense) ---
 
 const BLOCKED_HOSTNAMES = new Set([
   "localhost",
@@ -11,20 +12,30 @@ const BLOCKED_HOSTNAMES = new Set([
   "metadata.google.com",
 ]);
 
-const BLOCKED_IP_PREFIXES = [
-  "10.",        // RFC 1918
-  "172.16.", "172.17.", "172.18.", "172.19.",
-  "172.20.", "172.21.", "172.22.", "172.23.",
-  "172.24.", "172.25.", "172.26.", "172.27.",
-  "172.28.", "172.29.", "172.30.", "172.31.",
-  "192.168.",   // RFC 1918
-  "169.254.",   // Link-local / cloud metadata
-  "0.",
-  "fd",         // IPv6 ULA
-  "fe80:",      // IPv6 link-local
-];
+function isPrivateIPv4(ip: string): boolean {
+  const parts = ip.split(".").map(Number);
+  if (parts.length !== 4 || parts.some((p) => isNaN(p))) return true; // malformed = blocked
+  const [a, b] = parts;
+  if (a === 10) return true;                          // 10.0.0.0/8
+  if (a === 172 && b >= 16 && b <= 31) return true;   // 172.16.0.0/12
+  if (a === 192 && b === 168) return true;             // 192.168.0.0/16
+  if (a === 169 && b === 254) return true;             // 169.254.0.0/16 (link-local / cloud metadata)
+  if (a === 127) return true;                          // 127.0.0.0/8
+  if (a === 0) return true;                            // 0.0.0.0/8
+  return false;
+}
 
-export function isPublicUrl(input: string): { valid: true; url: string } | { valid: false; reason: string } {
+function isPrivateIPv6(ip: string): boolean {
+  const lower = ip.toLowerCase();
+  if (lower === "::1") return true;                    // loopback
+  if (lower.startsWith("fe80:")) return true;          // link-local
+  if (lower.startsWith("fd")) return true;             // ULA
+  if (lower.startsWith("fc")) return true;             // ULA
+  if (lower === "::") return true;                     // unspecified
+  return false;
+}
+
+export async function isPublicUrl(input: string): Promise<{ valid: true; url: string } | { valid: false; reason: string }> {
   let parsed: URL;
   try {
     parsed = new URL(input);
@@ -42,15 +53,39 @@ export function isPublicUrl(input: string): { valid: true; url: string } | { val
     return { valid: false, reason: "URL points to a blocked host" };
   }
 
-  for (const prefix of BLOCKED_IP_PREFIXES) {
-    if (hostname.startsWith(prefix)) {
-      return { valid: false, reason: "URL points to a private/reserved IP" };
-    }
-  }
-
-  // Block URLs with ports that aren't standard
+  // Block URLs with non-standard ports
   if (parsed.port && parsed.port !== "80" && parsed.port !== "443") {
     return { valid: false, reason: "Non-standard ports are not allowed" };
+  }
+
+  // DNS resolution check — resolve hostname and verify all IPs are public
+  try {
+    const [ipv4s, ipv6s] = await Promise.allSettled([
+      resolve4(hostname),
+      resolve6(hostname),
+    ]);
+
+    const resolvedIPs: string[] = [];
+    if (ipv4s.status === "fulfilled") resolvedIPs.push(...ipv4s.value);
+    if (ipv6s.status === "fulfilled") resolvedIPs.push(...ipv6s.value);
+
+    if (resolvedIPs.length === 0) {
+      return { valid: false, reason: "URL hostname does not resolve" };
+    }
+
+    for (const ip of resolvedIPs) {
+      if (ip.includes(":")) {
+        if (isPrivateIPv6(ip)) {
+          return { valid: false, reason: "URL resolves to a private/reserved IP" };
+        }
+      } else {
+        if (isPrivateIPv4(ip)) {
+          return { valid: false, reason: "URL resolves to a private/reserved IP" };
+        }
+      }
+    }
+  } catch {
+    return { valid: false, reason: "Failed to resolve URL hostname" };
   }
 
   return { valid: true, url: parsed.toString() };
@@ -117,15 +152,21 @@ export function clampInt(val: string | undefined, min: number, max: number, fall
 
 export function safeErrorMessage(err: unknown, fallback: string): string {
   if (err instanceof Error) {
-    // Strip anything that looks like a URL with credentials or a file path
     const msg = err.message;
     if (msg.includes("://") && msg.includes("@")) return fallback;
     if (msg.startsWith("/") || msg.includes("\\")) return fallback;
-    // Limit length
     if (msg.length > 200) return fallback;
     return msg;
   }
   return fallback;
+}
+
+// --- Log truncation ---
+
+/** Truncate a hex hash for safe logging (first 10 + last 6 chars) */
+export function truncateHash(hash: string): string {
+  if (!hash || hash.length <= 20) return hash;
+  return `${hash.slice(0, 10)}...${hash.slice(-6)}`;
 }
 
 // --- Price conversion (string-based, no floating-point) ---

@@ -17,7 +17,11 @@ export async function initDatabase(): Promise<void> {
     max: 50,
     idleTimeoutMillis: 30_000,
     connectionTimeoutMillis: 5_000,
-    ssl: databaseUrl.includes("railway") ? { rejectUnauthorized: false } : undefined,
+    ssl: process.env.PG_SSL_REJECT_UNAUTHORIZED === "false"
+      ? { rejectUnauthorized: false }
+      : databaseUrl.includes("railway.internal")
+        ? { rejectUnauthorized: false }
+        : undefined,
   });
 
   // Log pool errors instead of crashing
@@ -59,6 +63,9 @@ export async function initDatabase(): Promise<void> {
     client.release();
   }
 
+  // Start batched log flusher
+  startLogFlusher();
+
   // Start daily cleanup timer (every 24 hours)
   cleanupTimer = setInterval(async () => {
     try {
@@ -73,6 +80,61 @@ export async function initDatabase(): Promise<void> {
   cleanupTimer.unref(); // Don't prevent process exit
 }
 
+// --- Batched request logging ---
+// Buffers INSERTs and flushes every 2 seconds or when batch hits 50 entries.
+// Reduces DB connections used under load from 1-per-request to 1-per-flush.
+
+interface LogEntry {
+  id: string;
+  service: string;
+  endpoint: string;
+  payer: string | null;
+  network: string | null;
+  amount: string | null;
+  scheme: string | null;
+  upstreamStatus: number;
+  latencyMs: number;
+}
+
+const LOG_BATCH_SIZE = 50;
+const LOG_FLUSH_INTERVAL_MS = 2_000;
+let logBuffer: LogEntry[] = [];
+let logFlushTimer: ReturnType<typeof setInterval> | null = null;
+
+function startLogFlusher(): void {
+  if (logFlushTimer) return;
+  logFlushTimer = setInterval(flushLogBuffer, LOG_FLUSH_INTERVAL_MS);
+  logFlushTimer.unref();
+}
+
+async function flushLogBuffer(): Promise<void> {
+  if (logBuffer.length === 0) return;
+  const batch = logBuffer;
+  logBuffer = [];
+
+  // Build a multi-row INSERT
+  const values: any[] = [];
+  const placeholders: string[] = [];
+  for (let i = 0; i < batch.length; i++) {
+    const e = batch[i];
+    const offset = i * 9;
+    placeholders.push(
+      `($${offset + 1}, $${offset + 2}, $${offset + 3}, $${offset + 4}, $${offset + 5}, $${offset + 6}, $${offset + 7}, $${offset + 8}, $${offset + 9})`,
+    );
+    values.push(e.id, e.service, e.endpoint, e.payer, e.network, e.amount, e.scheme, e.upstreamStatus, e.latencyMs);
+  }
+
+  try {
+    await pool.query(
+      `INSERT INTO requests (id, service, endpoint, payer, network, amount, scheme, upstream_status, latency_ms)
+       VALUES ${placeholders.join(", ")}`,
+      values,
+    );
+  } catch (err: any) {
+    console.error(`Failed to flush ${batch.length} log entries:`, err.message);
+  }
+}
+
 export function logRequest(entry: {
   service: string;
   endpoint: string;
@@ -83,25 +145,22 @@ export function logRequest(entry: {
   upstreamStatus: number;
   latencyMs: number;
 }): void {
-  const id = uuidv4();
-  // Fire-and-forget — don't block the event loop
-  pool
-    .query(
-      `INSERT INTO requests (id, service, endpoint, payer, network, amount, scheme, upstream_status, latency_ms)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
-      [
-        id,
-        entry.service,
-        entry.endpoint,
-        entry.payer ?? null,
-        entry.network ?? null,
-        entry.amount ?? null,
-        entry.scheme ?? null,
-        entry.upstreamStatus,
-        entry.latencyMs,
-      ],
-    )
-    .catch((err) => console.error("Failed to log request:", err.message));
+  logBuffer.push({
+    id: uuidv4(),
+    service: entry.service,
+    endpoint: entry.endpoint,
+    payer: entry.payer ?? null,
+    network: entry.network ?? null,
+    amount: entry.amount ?? null,
+    scheme: entry.scheme ?? null,
+    upstreamStatus: entry.upstreamStatus,
+    latencyMs: entry.latencyMs,
+  });
+
+  // Flush immediately if batch is full
+  if (logBuffer.length >= LOG_BATCH_SIZE) {
+    flushLogBuffer();
+  }
 }
 
 /**
@@ -211,6 +270,13 @@ export function getPoolStats(): { total: number; idle: number; waiting: number }
  * Gracefully drain the pool and stop cleanup timer.
  */
 export async function shutdownDatabase(): Promise<void> {
+  if (logFlushTimer) {
+    clearInterval(logFlushTimer);
+    logFlushTimer = null;
+  }
+  // Flush any remaining buffered logs
+  await flushLogBuffer();
+
   if (cleanupTimer) {
     clearInterval(cleanupTimer);
     cleanupTimer = null;
