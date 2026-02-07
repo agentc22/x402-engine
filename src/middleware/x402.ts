@@ -46,9 +46,8 @@ export function createPaymentMiddleware(): RequestHandler {
   });
   server.register(NETWORKS.megaeth, megaethScheme);
 
-  if (config.isDev) {
-    server.register(NETWORKS.solanaDevnet, new ExactSvmScheme());
-  }
+  const solNetwork = config.isDev ? NETWORKS.solanaDevnet : NETWORKS.solana;
+  server.register(solNetwork, new ExactSvmScheme());
 
   // Cache routes at startup
   const routes = buildRoutesConfig();

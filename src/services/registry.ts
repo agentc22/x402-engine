@@ -78,12 +78,13 @@ export function buildRoutesConfig(): RoutesConfig {
       });
     }
 
-    // Solana (dev only — no mainnet facilitator with matching network ID yet)
-    if (isDev && config.payToSolana) {
+    // Solana
+    if (config.payToSolana) {
+      const solNetwork = isDev ? NETWORKS.solanaDevnet : NETWORKS.solana;
       accepts.push({
         scheme: "exact",
         price: svc.price,
-        network: NETWORKS.solanaDevnet,
+        network: solNetwork,
         payTo: config.payToSolana,
       });
     }
