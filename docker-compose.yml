@@ -1,0 +1,13 @@
+services:
+  gateway:
+    build: .
+    ports:
+      - "3402:3402"
+    env_file:
+      - .env
+    volumes:
+      - gateway-data:/app/data
+    restart: unless-stopped
+
+volumes:
+  gateway-data:

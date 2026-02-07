@@ -1,0 +1,242 @@
+{
+  "services": [
+    {
+      "id": "image-fast",
+      "name": "Fast Image Generation",
+      "description": "Quick image generation using FLUX Schnell (~2s, good for drafts)",
+      "price": "$0.015",
+      "method": "POST",
+      "path": "/api/image/fast",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": {
+        "provider": "fal",
+        "baseUrl": "https://fal.run/fal-ai/flux/schnell"
+      }
+    },
+    {
+      "id": "image-quality",
+      "name": "Quality Image Generation",
+      "description": "High-quality image generation using FLUX.2 Pro (~5s, production-ready)",
+      "price": "$0.05",
+      "method": "POST",
+      "path": "/api/image/quality",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": {
+        "provider": "fal",
+        "baseUrl": "https://fal.run/fal-ai/flux-2-pro"
+      }
+    },
+    {
+      "id": "image-text",
+      "name": "Text-in-Image Generation",
+      "description": "Image generation with accurate text rendering using Ideogram v3 (best for logos, signage)",
+      "price": "$0.12",
+      "method": "POST",
+      "path": "/api/image/text",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": {
+        "provider": "fal",
+        "baseUrl": "https://fal.run/fal-ai/ideogram/v3/turbo"
+      }
+    },
+    {
+      "id": "code-run",
+      "name": "Code Execution",
+      "description": "Run code in isolated sandbox — Python, JavaScript, Bash, R (up to 5 min)",
+      "price": "$0.005",
+      "method": "POST",
+      "path": "/api/code/run",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": {
+        "provider": "e2b",
+        "baseUrl": "https://api.e2b.dev"
+      }
+    },
+    {
+      "id": "transcribe",
+      "name": "Audio Transcription",
+      "description": "Convert audio to text with speaker identification — covers up to 10 minutes of audio",
+      "price": "$0.10",
+      "method": "POST",
+      "path": "/api/transcribe",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": {
+        "provider": "deepgram",
+        "baseUrl": "https://api.deepgram.com/v1/listen"
+      }
+    },
+    {
+      "id": "crypto-price",
+      "name": "Crypto Price Feed",
+      "description": "Real-time cryptocurrency prices for any coin in any fiat currency",
+      "price": "$0.001",
+      "method": "GET",
+      "path": "/api/crypto/price",
+      "mimeType": "application/json",
+      "category": "crypto",
+      "upstream": {
+        "provider": "coingecko",
+        "baseUrl": "https://api.coingecko.com/api/v3/simple/price"
+      }
+    },
+    {
+      "id": "crypto-markets",
+      "name": "Crypto Market Data",
+      "description": "Market rankings with price, volume, market cap — filterable by category",
+      "price": "$0.002",
+      "method": "GET",
+      "path": "/api/crypto/markets",
+      "mimeType": "application/json",
+      "category": "crypto",
+      "upstream": {
+        "provider": "coingecko",
+        "baseUrl": "https://api.coingecko.com/api/v3/coins/markets"
+      }
+    },
+    {
+      "id": "crypto-history",
+      "name": "Crypto Historical Data",
+      "description": "Historical price, market cap, and volume data for any coin",
+      "price": "$0.003",
+      "method": "GET",
+      "path": "/api/crypto/history",
+      "mimeType": "application/json",
+      "category": "crypto",
+      "upstream": {
+        "provider": "coingecko",
+        "baseUrl": "https://api.coingecko.com/api/v3/coins"
+      }
+    },
+    {
+      "id": "crypto-trending",
+      "name": "Trending Crypto",
+      "description": "Currently trending coins on CoinGecko",
+      "price": "$0.001",
+      "method": "GET",
+      "path": "/api/crypto/trending",
+      "mimeType": "application/json",
+      "category": "crypto",
+      "upstream": {
+        "provider": "coingecko",
+        "baseUrl": "https://api.coingecko.com/api/v3/search/trending"
+      }
+    },
+    {
+      "id": "crypto-search",
+      "name": "Crypto Search",
+      "description": "Search for a coin by name or symbol to get its CoinGecko ID",
+      "price": "$0.001",
+      "method": "GET",
+      "path": "/api/crypto/search",
+      "mimeType": "application/json",
+      "category": "crypto",
+      "upstream": {
+        "provider": "coingecko",
+        "baseUrl": "https://api.coingecko.com/api/v3/search"
+      }
+    },
+    {
+      "id": "wallet-balances",
+      "name": "Wallet Balances",
+      "description": "Token balances for any wallet across 20+ chains — EVM, Solana, Bitcoin",
+      "price": "$0.005",
+      "method": "POST",
+      "path": "/api/wallet/balances",
+      "mimeType": "application/json",
+      "category": "crypto",
+      "upstream": {
+        "provider": "allium",
+        "baseUrl": "https://api.allium.so/api/v1/developer/wallet/balances"
+      }
+    },
+    {
+      "id": "wallet-transactions",
+      "name": "Wallet Transactions",
+      "description": "Transaction history with asset transfers and labels for any wallet",
+      "price": "$0.005",
+      "method": "POST",
+      "path": "/api/wallet/transactions",
+      "mimeType": "application/json",
+      "category": "crypto",
+      "upstream": {
+        "provider": "allium",
+        "baseUrl": "https://api.allium.so/api/v1/developer/wallet/transactions"
+      }
+    },
+    {
+      "id": "wallet-pnl",
+      "name": "Wallet P&L",
+      "description": "Portfolio profit/loss with realized and unrealized P&L per token",
+      "price": "$0.01",
+      "method": "POST",
+      "path": "/api/wallet/pnl",
+      "mimeType": "application/json",
+      "category": "crypto",
+      "upstream": {
+        "provider": "allium",
+        "baseUrl": "https://api.allium.so/api/v1/developer/wallet/pnl"
+      }
+    },
+    {
+      "id": "token-prices",
+      "name": "Token Prices",
+      "description": "Real-time DEX-derived token prices with OHLC data — up to 200 tokens per request",
+      "price": "$0.005",
+      "method": "POST",
+      "path": "/api/token/prices",
+      "mimeType": "application/json",
+      "category": "crypto",
+      "upstream": {
+        "provider": "allium",
+        "baseUrl": "https://api.allium.so/api/v1/developer/prices"
+      }
+    },
+    {
+      "id": "token-metadata",
+      "name": "Token Metadata",
+      "description": "Token/asset metadata — name, symbol, decimals, chain info",
+      "price": "$0.002",
+      "method": "GET",
+      "path": "/api/token/metadata",
+      "mimeType": "application/json",
+      "category": "crypto",
+      "upstream": {
+        "provider": "allium",
+        "baseUrl": "https://api.allium.so/api/v1/developer/assets"
+      }
+    },
+    {
+      "id": "ipfs-pin",
+      "name": "IPFS Pin",
+      "description": "Pin JSON, files, or URLs to IPFS for decentralized storage",
+      "price": "$0.01",
+      "method": "POST",
+      "path": "/api/ipfs/pin",
+      "mimeType": "application/json",
+      "category": "storage",
+      "upstream": {
+        "provider": "pinata",
+        "baseUrl": "https://api.pinata.cloud"
+      }
+    },
+    {
+      "id": "ipfs-get",
+      "name": "IPFS Retrieve",
+      "description": "Fetch a file from IPFS by CID via gateway",
+      "price": "$0.001",
+      "method": "GET",
+      "path": "/api/ipfs/get",
+      "mimeType": "application/json",
+      "category": "storage",
+      "upstream": {
+        "provider": "pinata",
+        "baseUrl": "https://gateway.pinata.cloud"
+      }
+    }
+  ]
+}

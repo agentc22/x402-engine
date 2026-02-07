@@ -1,0 +1,96 @@
+{
+  "_verified": "2026-02-06 via on-chain RPC calls and docs.megaeth.com/frontier",
+
+  "chain": {
+    "name": "MegaETH",
+    "chainId": 4326,
+    "caip2": "eip155:4326",
+    "type": "EVM L2 (OP Stack fork)",
+    "nativeCurrency": { "name": "Ether", "symbol": "ETH", "decimals": 18 }
+  },
+
+  "rpc": {
+    "http": "https://mainnet.megaeth.com/rpc",
+    "ws": "wss://mainnet.megaeth.com/ws",
+    "_note": "alpha.megaeth.com does NOT resolve. mainnet.megaeth.com is the canonical endpoint."
+  },
+
+  "explorers": {
+    "blockscout": "https://megaeth.blockscout.com",
+    "etherscan": "https://mega.etherscan.io",
+    "_note": "Both return HTTP 200. Blockscout has full API (v2/tokens, v2/addresses, etc)."
+  },
+
+  "tokens": {
+    "USDm": {
+      "address": "0xFAfDdbb3FC7688494971a79cc65DCa3EF82079E7",
+      "name": "MegaUSD",
+      "symbol": "USDm",
+      "decimals": 18,
+      "totalSupply": "22,347,971.46 USDm (at time of verification)",
+      "holders": 423,
+      "source": "docs.megaeth.com/frontier + on-chain eth_call verified",
+      "backing": "Ethena USDtb (delta-hedged, 1:1 peg to USD)",
+      "_note": "This is the canonical stablecoin on MegaETH. 18 decimals, NOT 6 like USDC."
+    },
+    "WETH": {
+      "address": "0x4200000000000000000000000000000000000006",
+      "name": "Wrapped Ether",
+      "symbol": "WETH",
+      "decimals": 18,
+      "source": "docs.megaeth.com/frontier + on-chain verified"
+    },
+    "MEGA": {
+      "address": "0x28B7E77f82B25B95953825F1E3eA0E36c1c29861",
+      "name": "MEGA Token",
+      "symbol": "MEGA",
+      "source": "docs.megaeth.com/frontier"
+    }
+  },
+
+  "contracts": {
+    "multicall3": "0xcA11bde05977b3631167028862bE2a173976CA11",
+    "l1StandardBridgeProxy": "0x0CA3A2FBC3D770b578223FBB6b062fa875a2eE75"
+  },
+
+  "gas": {
+    "baseFee": "0.001 gwei (1,000,000 wei / 10^6 wei)",
+    "baseFeeHex": "0xf4240",
+    "priorityFee": "0",
+    "eip1559": false,
+    "ethTransferGas": 60000,
+    "_note": "Base fee is fixed. No EIP-1559 adjustments. eth_gasPrice confirmed returns 0xf4240."
+  },
+
+  "realtimeTx": {
+    "methods": [
+      "eth_sendRawTransactionSync",
+      "realtime_sendRawTransaction"
+    ],
+    "bothAvailable": true,
+    "_note": "Both methods confirmed available (return RLP decode error on dummy tx, NOT method-not-found). EIP-7966 standard. Receipt returned in <10ms."
+  },
+
+  "websocket": {
+    "keepaliveMethod": "eth_chainId",
+    "keepaliveIntervalSeconds": 30,
+    "maxConnections": 50,
+    "maxSubscriptionsPerConnection": 10,
+    "subscriptions": ["miniBlocks", "newHeads", "logs"]
+  },
+
+  "x402Integration": {
+    "status": "pending_facilitator_support",
+    "paymentAsset": "USDm",
+    "paymentAssetAddress": "0xFAfDdbb3FC7688494971a79cc65DCa3EF82079E7",
+    "paymentAssetDecimals": 18,
+    "_note": "Official x402 facilitator at x402.org does not yet support eip155:4326. ExactEvmScheme should work once facilitator adds support — USDm is ERC-20 compatible. Key difference: 18 decimals (not 6 like USDC on Base/Solana)."
+  },
+
+  "testnet": {
+    "chainId": 6343,
+    "rpcHttp": "https://carrot.megaeth.com/rpc",
+    "rpcWs": "wss://carrot.megaeth.com/ws",
+    "explorer": "https://megaeth-testnet-v2.blockscout.com"
+  }
+}
