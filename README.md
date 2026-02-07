@@ -8,46 +8,13 @@ Built on the `@x402/express` SDK (v2.3.0) with direct on-chain verification for 
 
 | Network | Chain ID | Stablecoin | Decimals | Confirmation | Verification |
 |---------|----------|------------|----------|--------------|--------------|
-| **MegaETH** | 4326 | USDm | 18 | ~10ms | Direct on-chain |
 | **Base** | 8453 | USDC | 6 | ~2s | Via facilitator |
+| **MegaETH** | 4326 | USDm | 18 | ~10ms | Direct on-chain |
 | **Solana** | mainnet | USDC | 6 | ~400ms | Via facilitator |
 
 MegaETH offers the fastest payment verification at <10ms using `eth_sendRawTransactionSync` ([EIP-7966](https://github.com/ethereum/EIPs/pull/7966)). Payments are verified directly on-chain without a facilitator — no settlement step, no response buffering.
 
-### MegaETH Details
-
-- **RPC:** `https://mainnet.megaeth.com/rpc`
-- **WebSocket:** `wss://mainnet.megaeth.com/ws`
-- **Explorer:** [megaeth.blockscout.com](https://megaeth.blockscout.com)
-- **USDm contract:** [`0xFAfDdbb3FC7688494971a79cc65DCa3EF82079E7`](https://megaeth.blockscout.com/address/0xFAfDdbb3FC7688494971a79cc65DCa3EF82079E7)
-
 ## Services
-
-### Basic
-
-| Endpoint | Price | Upstream |
-|----------|-------|----------|
-| `GET /api/weather/current` | $0.001 | OpenWeatherMap |
-| `GET /api/search/web` | $0.002 | Brave Search |
-| `GET /api/places/search` | $0.005 | Google Places |
-
-### Enrichment
-
-| Endpoint | Price | Upstream |
-|----------|-------|----------|
-| `GET /api/enrich/company` | $0.05 | Proxycurl |
-| `GET /api/enrich/person` | $0.03 | Proxycurl |
-| `GET /api/enrich/email/verify` | $0.01 | Hunter.io |
-| `GET /api/enrich/email/find` | $0.02 | Hunter.io |
-| `GET /api/search/people` | $0.10 | Proxycurl |
-
-### Travel
-
-| Endpoint | Price | Upstream |
-|----------|-------|----------|
-| `GET /api/travel/flights` | $0.10 | Amadeus |
-| `GET /api/travel/hotels` | $0.05 | Amadeus |
-| `GET /api/travel/airports` | $0.005 | Amadeus |
 
 ### Compute
 
@@ -59,17 +26,20 @@ MegaETH offers the fastest payment verification at <10ms using `eth_sendRawTrans
 | `/api/code/run` | POST | $0.005 | E2B | Sandbox (Python, JS, Bash, R) |
 | `/api/transcribe` | POST | $0.10 | Deepgram | Audio to text (up to 10 min) |
 
-### Crypto
+### Crypto & Blockchain
 
-| Endpoint | Price | Upstream | Description |
-|----------|-------|----------|-------------|
-| `GET /api/crypto/price` | $0.001 | CoinGecko | Real-time prices |
-| `GET /api/crypto/markets` | $0.002 | CoinGecko | Market rankings |
-| `GET /api/crypto/history` | $0.003 | CoinGecko | Historical data |
-| `GET /api/crypto/trending` | $0.001 | CoinGecko | Trending coins |
-| `GET /api/crypto/search` | $0.001 | CoinGecko | Search by name/symbol |
-| `POST /api/rpc/call` | $0.001 | Alchemy | Multi-chain JSON-RPC |
-| `POST /api/rpc/batch` | $0.01 | Alchemy | Batch RPC (up to 100) |
+| Endpoint | Method | Price | Upstream | Description |
+|----------|--------|-------|----------|-------------|
+| `/api/crypto/price` | GET | $0.001 | CoinGecko | Real-time prices |
+| `/api/crypto/markets` | GET | $0.002 | CoinGecko | Market rankings |
+| `/api/crypto/history` | GET | $0.003 | CoinGecko | Historical data |
+| `/api/crypto/trending` | GET | $0.001 | CoinGecko | Trending coins |
+| `/api/crypto/search` | GET | $0.001 | CoinGecko | Search by name/symbol |
+| `/api/wallet/balances` | POST | $0.005 | Allium | Multichain wallet balances |
+| `/api/wallet/transactions` | POST | $0.005 | Allium | Transaction history |
+| `/api/wallet/pnl` | POST | $0.01 | Allium | Portfolio P&L |
+| `/api/token/prices` | POST | $0.005 | Allium | DEX-derived token prices |
+| `/api/token/metadata` | GET | $0.002 | Allium | Token metadata |
 
 ### Storage
 
@@ -78,21 +48,11 @@ MegaETH offers the fastest payment verification at <10ms using `eth_sendRawTrans
 | `/api/ipfs/pin` | POST | $0.01 | Pinata | Pin JSON, files, or URLs |
 | `/api/ipfs/get` | GET | $0.001 | Pinata | Retrieve by CID |
 
-## Why Cheaper Than Frontier LLMs?
-
-| Task | Claude/GPT Cost | Gateway Cost | Savings |
-|------|-----------------|--------------|---------|
-| Image Generation | ~$0.08-0.15 | $0.015-0.12 | 5-10x |
-| Code Execution | ~$0.10-0.50 | $0.005 | 20-100x |
-| Transcription | ~$0.05-0.10/min | $0.10 flat | 5-10x |
-
-Frontier LLMs are expensive for "dumb" compute tasks. Delegate to specialized providers, use the LLM for thinking.
-
 ## Quick Start
 
 ```bash
 cp .env.example .env
-# Fill in your wallet addresses and API keys
+# Fill in your wallet addresses, DATABASE_URL, and API keys
 
 npm install
 npm run dev
@@ -116,11 +76,6 @@ curl -X POST http://localhost:3402/api/code/run \
 # Crypto price (returns 402 without payment)
 curl "http://localhost:3402/api/crypto/price?ids=bitcoin,ethereum&currencies=usd"
 
-# Blockchain RPC (returns 402 without payment)
-curl -X POST http://localhost:3402/api/rpc/call \
-  -H "Content-Type: application/json" \
-  -d '{"chain": "ethereum", "method": "eth_blockNumber", "params": []}'
-
 # IPFS pin JSON (returns 402 without payment)
 curl -X POST http://localhost:3402/api/ipfs/pin \
   -H "Content-Type: application/json" \
@@ -136,11 +91,11 @@ curl -H "X-DEV-BYPASS: dev-secret-change-me" \
 | Endpoint | Description |
 |----------|-------------|
 | `GET /health` | Health check |
+| `GET /health/deep` | Deep health check (DB, RPC, key pools, memory) |
 | `GET /.well-known/x402.json` | x402 service discovery (networks, services, pricing) |
 | `GET /api/services` | List all services |
 | `GET /api/services/:id` | Single service details with payment options |
-| `GET /api/rpc/chains` | List supported blockchain chains |
-| `GET /facilitator/megaeth/status` | MegaETH RPC connectivity and replay protection stats |
+| `GET /facilitator/megaeth/status` | MegaETH RPC connectivity stats |
 
 ### Payment Flow
 
@@ -162,7 +117,7 @@ In development mode (`NODE_ENV=development`), add the `X-DEV-BYPASS` header with
 
 ```bash
 curl -H "X-DEV-BYPASS: dev-secret-change-me" \
-  "http://localhost:3402/api/weather/current?q=London"
+  "http://localhost:3402/api/crypto/price?ids=bitcoin&currencies=usd"
 ```
 
 ## Configuration
@@ -170,16 +125,14 @@ curl -H "X-DEV-BYPASS: dev-secret-change-me" \
 See [`.env.example`](.env.example) for all environment variables.
 
 Required:
+- `DATABASE_URL` — PostgreSQL connection string
 - `PAY_TO_EVM` — EVM wallet address to receive Base and MegaETH payments
 - `PAY_TO_SOLANA` — Solana wallet address to receive Solana payments
 
-Provider keys (add as needed per category):
-- **Basic:** `OPENWEATHER_API_KEYS`, `BRAVE_SEARCH_API_KEYS`, `GOOGLE_PLACES_API_KEYS`
-- **Enrichment:** `PROXYCURL_API_KEYS`, `HUNTER_API_KEYS`
-- **Travel:** `AMADEUS_CLIENT_ID` / `AMADEUS_CLIENT_SECRET`
-- **Compute:** `FAL_API_KEY`, `E2B_API_KEY`, `DEEPGRAM_API_KEY`
-- **Crypto:** `COINGECKO_API_KEY` (optional), `ALCHEMY_API_KEY`
-- **Storage:** `PINATA_JWT`
+Provider keys (add as needed per category, supports comma-separated key pools):
+- **Compute:** `FAL_API_KEYS`, `E2B_API_KEYS`, `DEEPGRAM_API_KEYS`
+- **Crypto:** `COINGECKO_API_KEYS` (optional), `ALLIUM_API_KEYS`
+- **Storage:** `PINATA_JWTS`
 
 ## Scripts
 
@@ -198,46 +151,41 @@ Provider keys (add as needed per category):
 ```
 src/
   index.ts                  # Express app, middleware ordering, free endpoints
-  config.ts                 # Typed env validation
-  config/chains.ts          # Chain definitions (MegaETH, Base)
+  config.ts                 # Typed env validation, CSV key pool support
+  config/chains.ts          # Chain definitions (MegaETH, Base, Base Sepolia)
   middleware/
     x402.ts                 # SDK payment middleware (Base, Solana)
     payment.ts              # MegaETH direct payment middleware
+    rate-limit.ts           # Rate limiting (free, paid, expensive tiers)
   verification/
     megaeth.ts              # On-chain receipt verification, replay protection
   facilitator/
     index.ts                # Custom MegaETH FacilitatorClient + HTTP endpoints
   services/
     registry.ts             # Service definitions, route config builder
-    key-pool.ts             # Round-robin API key selection
+  lib/
+    key-pool.ts             # Round-robin API key rotation
+    cache.ts                # In-memory TTL cache
+    validation.ts           # Input validation, SSRF protection, safe logging
   providers/
-    proxycurl.ts            # Proxycurl (LinkedIn enrichment)
-    hunter.ts               # Hunter.io (email)
-    amadeus.ts              # Amadeus (travel)
     fal.ts                  # fal.ai (image generation)
     e2b.ts                  # E2B (code execution)
     deepgram.ts             # Deepgram (transcription)
     coingecko.ts            # CoinGecko (crypto prices)
-    rpc.ts                  # Multi-chain blockchain RPC
+    allium.ts               # Allium (wallet data, token prices)
     ipfs.ts                 # Pinata (IPFS storage)
   apis/
-    weather.ts              # OpenWeatherMap handler
-    web-search.ts           # Brave Search handler
-    maps.ts                 # Google Places handler
-    enrich.ts               # Company/person enrichment, email verify/find
-    people-search.ts        # People search by company/role
-    travel.ts               # Flights, hotels, airport lookup
     image.ts                # Image generation (3 tiers)
     code.ts                 # Code execution sandbox
     transcribe.ts           # Audio transcription
-    crypto.ts               # Crypto prices, markets, history
-    rpc.ts                  # Blockchain RPC calls
+    crypto.ts               # Crypto prices, markets, history (cached)
+    blockchain.ts           # Wallet balances, transactions, P&L, tokens
     ipfs.ts                 # IPFS pin and retrieve
   db/
-    ledger.ts               # SQLite ledger (requests, API key usage)
+    ledger.ts               # PostgreSQL ledger (batched writes, replay protection)
 ```
 
-Middleware ordering: JSON parsing > free routes > dev bypass > MegaETH direct verification > SDK payment middleware (Base/Solana) > API handlers.
+Middleware ordering: JSON parsing > CORS > request ID > free routes > static files > rate limit > dev bypass > MegaETH direct verification > SDK payment middleware (Base/Solana) > API handlers.
 
 ## MegaETH Quirks
 

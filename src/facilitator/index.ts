@@ -123,37 +123,52 @@ router.get("/facilitator/megaeth/supported", async (_req: Request, res: Response
 });
 
 router.post("/facilitator/megaeth/verify", async (req: Request, res: Response) => {
-  const { paymentPayload, paymentRequirements } = req.body || {};
-  if (!paymentPayload?.payload || !paymentRequirements?.amount || !paymentRequirements?.payTo) {
-    res.status(400).json({ error: "Missing paymentPayload or paymentRequirements" });
-    return;
+  try {
+    const { paymentPayload, paymentRequirements } = req.body || {};
+    if (!paymentPayload?.payload || !paymentRequirements?.amount || !paymentRequirements?.payTo) {
+      res.status(400).json({ error: "Missing paymentPayload or paymentRequirements" });
+      return;
+    }
+    const client = new MegaETHFacilitatorClient();
+    const result = await client.verify(paymentPayload, paymentRequirements);
+    res.status(result.isValid ? 200 : 402).json(result);
+  } catch (err: any) {
+    console.error("Facilitator verify error:", err.message);
+    res.status(500).json({ error: "Verification failed" });
   }
-  const client = new MegaETHFacilitatorClient();
-  const result = await client.verify(paymentPayload, paymentRequirements);
-  res.status(result.isValid ? 200 : 402).json(result);
 });
 
 router.post("/facilitator/megaeth/settle", async (req: Request, res: Response) => {
-  const { paymentPayload, paymentRequirements } = req.body || {};
-  if (!paymentPayload?.payload || !paymentRequirements) {
-    res.status(400).json({ error: "Missing paymentPayload or paymentRequirements" });
-    return;
+  try {
+    const { paymentPayload, paymentRequirements } = req.body || {};
+    if (!paymentPayload?.payload || !paymentRequirements) {
+      res.status(400).json({ error: "Missing paymentPayload or paymentRequirements" });
+      return;
+    }
+    const client = new MegaETHFacilitatorClient();
+    const result = await client.settle(paymentPayload, paymentRequirements);
+    res.status(result.success ? 200 : 501).json(result);
+  } catch (err: any) {
+    console.error("Facilitator settle error:", err.message);
+    res.status(500).json({ error: "Settlement failed" });
   }
-  const client = new MegaETHFacilitatorClient();
-  const result = await client.settle(paymentPayload, paymentRequirements);
-  res.status(result.success ? 200 : 501).json(result);
 });
 
 router.get("/facilitator/megaeth/status", async (_req: Request, res: Response) => {
-  const connected = await checkMegaETHConnection();
-  const stats = await getStats();
-  res.json({
-    network: MEGAETH_CONFIG.caip2,
-    rpc: MEGAETH_CONFIG.rpc,
-    connected,
-    stablecoin: MEGAETH_CONFIG.stablecoin,
-    usedTxHashes: stats.usedTxHashes,
-  });
+  try {
+    const connected = await checkMegaETHConnection();
+    const stats = await getStats();
+    res.json({
+      network: MEGAETH_CONFIG.caip2,
+      rpc: MEGAETH_CONFIG.rpc,
+      connected,
+      stablecoin: MEGAETH_CONFIG.stablecoin,
+      usedTxHashes: stats.usedTxHashes,
+    });
+  } catch (err: any) {
+    console.error("Facilitator status error:", err.message);
+    res.status(500).json({ error: "Status check failed" });
+  }
 });
 
 export default router;

@@ -1,7 +1,9 @@
 import express from "express";
+import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
 import type { Server } from "http";
+import { v4 as uuidv4 } from "uuid";
 import { config } from "./config.js";
 import { initDatabase, checkDatabase, getPoolStats, shutdownDatabase } from "./db/ledger.js";
 import { getAllServices, getService, buildRoutesConfig } from "./services/registry.js";
@@ -28,6 +30,21 @@ const app = express();
 
 // Trust the first proxy (Railway's reverse proxy) for correct client IP in rate limiting
 app.set("trust proxy", 1);
+
+// --- CORS (allow browser-based agents) ---
+app.use(cors({
+  origin: "*",
+  methods: ["GET", "POST", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "X-PAYMENT", "payment-signature", "X-DEV-BYPASS"],
+  exposedHeaders: ["PAYMENT-REQUIRED", "PAYMENT-RESPONSE", "X-Request-ID"],
+}));
+
+// --- Request ID ---
+app.use((_req, res, next) => {
+  const id = uuidv4();
+  res.setHeader("X-Request-ID", id);
+  next();
+});
 
 // --- Global body limit: 1MB (route-specific overrides below) ---
 app.use(express.json({ limit: "1mb" }));

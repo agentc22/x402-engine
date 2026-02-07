@@ -46,15 +46,13 @@ async function run() {
     assert(body.name === "x402 Gateway", `Expected name 'x402 Gateway', got '${body.name}'`);
     assert(body.version === "3.0.0", `Expected version '3.0.0', got '${body.version}'`);
     assert(Array.isArray(body.services), "Expected services array");
-    assert(body.services.length === 20, `Expected 20 services, got ${body.services.length}`);
+    assert(body.services.length === 17, `Expected 17 services, got ${body.services.length}`);
 
     // Verify categories
     assert(body.categories !== undefined, "Expected categories object");
-    assert(body.categories.basic !== undefined, "Expected 'basic' category");
     assert(body.categories.compute !== undefined, "Expected 'compute' category");
     assert(body.categories.crypto !== undefined, "Expected 'crypto' category");
     assert(body.categories.storage !== undefined, "Expected 'storage' category");
-    assert(body.categories.basic.length === 3, `Expected 3 basic services, got ${body.categories.basic.length}`);
     assert(body.categories.compute.length === 5, `Expected 5 compute services, got ${body.categories.compute.length}`);
     assert(body.categories.crypto.length === 10, `Expected 10 crypto services, got ${body.categories.crypto.length}`);
     assert(body.categories.storage.length === 2, `Expected 2 storage services, got ${body.categories.storage.length}`);
@@ -92,14 +90,14 @@ async function run() {
     const res = await fetch(`${BASE}/api/services`);
     assert(res.status === 200, `Expected 200, got ${res.status}`);
     const body = await res.json();
-    assert(body.count === 20, `Expected count 20, got ${body.count}`);
+    assert(body.count === 17, `Expected count 17, got ${body.count}`);
   });
 
-  await test("GET /api/services/weather returns weather service", async () => {
-    const res = await fetch(`${BASE}/api/services/weather`);
+  await test("GET /api/services/crypto-price returns crypto-price service", async () => {
+    const res = await fetch(`${BASE}/api/services/crypto-price`);
     assert(res.status === 200, `Expected 200, got ${res.status}`);
     const body = await res.json();
-    assert(body.id === "weather", `Expected id weather, got ${body.id}`);
+    assert(body.id === "crypto-price", `Expected id crypto-price, got ${body.id}`);
     assert(body.price === "$0.001", `Expected price $0.001, got ${body.price}`);
   });
 
@@ -110,8 +108,8 @@ async function run() {
 
   // --- Paid endpoints (should return 402 without payment) ---
 
-  await test("GET /api/weather/current?q=London returns 402 without payment", async () => {
-    const res = await fetch(`${BASE}/api/weather/current?q=London`);
+  await test("GET /api/crypto/price returns 402 with payment headers", async () => {
+    const res = await fetch(`${BASE}/api/crypto/price?ids=bitcoin&currencies=usd`);
     assert(res.status === 402, `Expected 402, got ${res.status}`);
     // x402 v2 puts payment requirements in PAYMENT-REQUIRED header (base64 JSON)
     const paymentHeader = res.headers.get("payment-required");
@@ -130,16 +128,10 @@ async function run() {
 
     const networks = decoded.accepts.map((a: any) => a.network);
     console.log(`    (${decoded.accepts.length} payment options: ${networks.join(", ")})`);
-  });
 
-  await test("GET /api/search/web?q=test returns 402 without payment", async () => {
-    const res = await fetch(`${BASE}/api/search/web?q=test`);
-    assert(res.status === 402, `Expected 402, got ${res.status}`);
-  });
-
-  await test("GET /api/places/search?q=pizza returns 402 without payment", async () => {
-    const res = await fetch(`${BASE}/api/places/search?q=pizza`);
-    assert(res.status === 402, `Expected 402, got ${res.status}`);
+    // Verify X-Request-ID header
+    const requestId = res.headers.get("x-request-id");
+    assert(!!requestId, "Expected X-Request-ID header");
   });
 
   // --- Compute 402 tests ---
@@ -169,12 +161,7 @@ async function run() {
     assert(res.status === 402, `Expected 402, got ${res.status}`);
   });
 
-  // --- Crypto 402 tests ---
-
-  await test("GET /api/crypto/price returns 402 with $0.001 pricing", async () => {
-    const res = await fetch(`${BASE}/api/crypto/price?ids=bitcoin&currencies=usd`);
-    assert(res.status === 402, `Expected 402, got ${res.status}`);
-  });
+  // --- More 402 tests ---
 
   await test("POST /api/wallet/balances returns 402 with $0.005 pricing", async () => {
     const res = await fetch(`${BASE}/api/wallet/balances`, {
@@ -196,28 +183,14 @@ async function run() {
 
   // --- Dev bypass ---
 
-  await test("GET /api/weather/current?q=London with dev bypass header", async () => {
-    const res = await fetch(`${BASE}/api/weather/current?q=London`, {
+  await test("GET /api/crypto/price with dev bypass header", async () => {
+    const res = await fetch(`${BASE}/api/crypto/price?ids=bitcoin&currencies=usd`, {
       headers: { "X-DEV-BYPASS": DEV_SECRET },
     });
-    // Should either return 200 (weather data) or 502 (if no real API key is configured)
+    // Should either return 200 (data) or 502 (if no real API key is configured)
     // But should NOT be 402
     assert(res.status !== 402, `Got 402 even with bypass header`);
     console.log(`    (status: ${res.status})`);
-  });
-
-  // --- Validation ---
-
-  await test("GET /api/weather/current without params returns 400 (with bypass)", async () => {
-    const res = await fetch(`${BASE}/api/weather/current`, {
-      headers: { "X-DEV-BYPASS": DEV_SECRET },
-    });
-    // Without q or lat/lon, handler should return 400
-    // But 402 means payment middleware caught it first (no bypass) — also acceptable
-    assert(
-      res.status === 400 || res.status === 402,
-      `Expected 400 or 402, got ${res.status}`,
-    );
   });
 
   // --- MegaETH facilitator stub ---
