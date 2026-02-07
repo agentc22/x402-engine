@@ -8,6 +8,7 @@ import {
   type Log,
 } from "viem";
 import { MEGAETH_CONFIG } from "../config/chains.js";
+import { isTxHashUsed, recordTxHash } from "../db/ledger.js";
 
 // --- Chain definition for viem ---
 
@@ -25,7 +26,7 @@ const megaeth = defineChain({
 
 const client = createPublicClient({
   chain: megaeth,
-  transport: http(MEGAETH_CONFIG.rpc),
+  transport: http(MEGAETH_CONFIG.rpc, { timeout: 15_000 }),
 });
 
 // --- ERC-20 Transfer event ABI ---
@@ -41,10 +42,6 @@ const erc20TransferAbi = [
     ],
   },
 ] as const;
-
-// --- Replay protection ---
-// In-memory set of already-used tx hashes. In production, move to SQLite.
-const usedTxHashes = new Set<string>();
 
 // --- Types ---
 
@@ -66,10 +63,7 @@ export interface VerificationResult {
  * Verifies a MegaETH USDm payment by checking the transaction receipt
  * for a Transfer event to the expected recipient with sufficient amount.
  *
- * Flow:
- * 1. Client sends USDm transfer via eth_sendRawTransactionSync (instant receipt)
- * 2. Client includes txHash in payment proof
- * 3. We fetch the receipt (instant on MegaETH) and verify Transfer logs
+ * Replay protection uses PostgreSQL (persistent across restarts).
  */
 export async function verifyMegaETHPayment(
   proof: PaymentProof,
@@ -78,39 +72,34 @@ export async function verifyMegaETHPayment(
 ): Promise<VerificationResult> {
   const txHash = proof.txHash.toLowerCase() as Hex;
 
-  // Replay protection
-  if (usedTxHashes.has(txHash)) {
+  // Validate recipient address format
+  if (!/^0x[a-fA-F0-9]{40}$/.test(expectedRecipient)) {
+    return { valid: false, error: "Invalid recipient address format" };
+  }
+
+  // Replay protection — check PostgreSQL
+  const alreadyUsed = await isTxHashUsed(txHash);
+  if (alreadyUsed) {
     return { valid: false, error: "Transaction already used for payment" };
   }
 
+  // Always fetch receipt from chain — never trust client-provided receipts
   let receipt: TransactionReceipt;
-
-  if (proof.receipt) {
-    // Client provided the receipt inline (MegaETH instant receipt flow).
-    // We still verify it on-chain to prevent forged receipts.
-    receipt = proof.receipt;
-
-    // Sanity check: receipt txHash must match claimed txHash
-    if (receipt.transactionHash.toLowerCase() !== txHash) {
-      return { valid: false, error: "Receipt txHash mismatch" };
-    }
-  }
-
-  // Always fetch from chain — even if receipt was provided — to prevent forgery
   try {
     receipt = await client.getTransactionReceipt({ hash: txHash });
   } catch {
     return { valid: false, error: "Transaction not found on MegaETH" };
   }
 
+  // Validate receipt structure
+  if (!receipt || !receipt.logs || !Array.isArray(receipt.logs)) {
+    return { valid: false, error: "Invalid transaction receipt" };
+  }
+
   // Check tx succeeded
   if (receipt.status !== "success") {
     return { valid: false, error: "Transaction reverted" };
   }
-
-  // Check chain ID via the receipt's block existence on our client
-  // (the client is configured for chain 4326, so if getTransactionReceipt
-  // succeeded, the tx is on the right chain)
 
   // Find USDm Transfer events
   const result = verifyTransferLogs(
@@ -120,8 +109,11 @@ export async function verifyMegaETHPayment(
   );
 
   if (result.valid) {
-    // Mark tx as used (replay protection)
-    usedTxHashes.add(txHash);
+    // Atomically record tx hash — if this returns false, another request beat us
+    const inserted = await recordTxHash(txHash, result.payer, expectedAmount.toString(), MEGAETH_CONFIG.caip2);
+    if (!inserted) {
+      return { valid: false, error: "Transaction already used for payment (race)" };
+    }
     return {
       valid: true,
       payer: result.payer,
@@ -184,14 +176,14 @@ export function verifyTransferLogs(
   if (totalToRecipient === 0n) {
     return {
       valid: false,
-      error: `No USDm transfer to expected recipient ${expectedRecipient}`,
+      error: "No USDm transfer to expected recipient",
     };
   }
 
   if (totalToRecipient < expectedAmount) {
     return {
       valid: false,
-      error: `Insufficient amount: got ${totalToRecipient}, expected ${expectedAmount}`,
+      error: "Insufficient payment amount",
     };
   }
 
@@ -208,18 +200,4 @@ export async function checkMegaETHConnection(): Promise<boolean> {
   } catch {
     return false;
   }
-}
-
-/**
- * Get the number of used tx hashes (for monitoring).
- */
-export function getReplayProtectionStats(): { usedTxCount: number } {
-  return { usedTxCount: usedTxHashes.size };
-}
-
-/**
- * Clear replay protection set. For testing only.
- */
-export function clearReplayProtection(): void {
-  usedTxHashes.clear();
 }

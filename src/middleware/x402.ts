@@ -8,46 +8,30 @@ import { config } from "../config.js";
 import { buildRoutesConfig, NETWORKS } from "../services/registry.js";
 import { MegaETHFacilitatorClient } from "../facilitator/index.js";
 import { MEGAETH_CONFIG } from "../config/chains.js";
+import { priceStringToTokenAmount } from "../lib/validation.js";
 
 /**
  * Converts a decimal USD amount to USDm token units (18 decimals).
- * e.g. 0.001 -> "1000000000000000" (10^15)
+ * Uses string-based arithmetic — no floating-point precision issues.
  */
 function usdToUsdm(amount: number): string {
-  const decimals = MEGAETH_CONFIG.stablecoin.decimals; // 18
-  const [intPart, decPart = ""] = String(amount).split(".");
-  const padded = decPart.padEnd(decimals, "0").slice(0, decimals);
-  return (intPart + padded).replace(/^0+/, "") || "0";
+  // amount comes from the SDK as a number, convert to string carefully
+  const str = amount.toFixed(20).replace(/0+$/, "").replace(/\.$/, "");
+  return priceStringToTokenAmount(str, MEGAETH_CONFIG.stablecoin.decimals).toString();
 }
 
-/**
- * Creates the @x402/express SDK payment middleware.
- *
- * This handles Base and Solana payments via the official facilitator.
- * MegaETH payments are intercepted upstream by megaethPaymentMiddleware
- * (in payment.ts) before reaching this middleware.
- *
- * MegaETH is still registered here so the SDK includes it in 402
- * payment requirement responses — but the MegaETHFacilitatorClient
- * also serves as a fallback if a MegaETH payment somehow reaches
- * the SDK middleware.
- */
 export function createPaymentMiddleware(): RequestHandler {
-  // Use Coinbase CDP facilitator (with auth) if CDP keys are set, otherwise fall back to URL
   const facilitatorConfig = config.cdpApiKeyId && config.cdpApiKeySecret
     ? createFacilitatorConfig(config.cdpApiKeyId, config.cdpApiKeySecret)
     : { url: config.facilitatorUrl || "https://x402.org/facilitator" };
   const officialFacilitator = new HTTPFacilitatorClient(facilitatorConfig);
   const megaethFacilitator = new MegaETHFacilitatorClient();
 
-  // Both facilitators: official for Base/Solana, megaeth for eip155:4326
   const server = new x402ResourceServer([officialFacilitator, megaethFacilitator]);
 
-  // Register EVM scheme for Base (or Base Sepolia in dev)
   const evmNetwork = config.isDev ? NETWORKS.baseSepolia : NETWORKS.base;
   server.register(evmNetwork, new ExactEvmScheme());
 
-  // Register EVM scheme for MegaETH with custom money parser for USDm (18 decimals)
   const megaethScheme = new ExactEvmScheme();
   megaethScheme.registerMoneyParser(async (amount: number, network: string) => {
     if (network !== NETWORKS.megaeth) return null;
@@ -62,19 +46,24 @@ export function createPaymentMiddleware(): RequestHandler {
   });
   server.register(NETWORKS.megaeth, megaethScheme);
 
-  // Register SVM scheme for Solana (dev only — no mainnet facilitator yet)
   if (config.isDev) {
     server.register(NETWORKS.solanaDevnet, new ExactSvmScheme());
   }
 
+  // Cache routes at startup
   const routes = buildRoutesConfig();
   console.log("  Payment routes configured:", Object.keys(routes as Record<string, unknown>).join(", "));
 
   return paymentMiddleware(routes, server);
 }
 
+/**
+ * Dev bypass middleware — only active in development mode.
+ * Disabled entirely when NODE_ENV=production.
+ */
 export function devBypassMiddleware(): RequestHandler {
-  return (req: Request, res: Response, next: NextFunction): void => {
+  return (req: Request, _res: Response, next: NextFunction): void => {
+    // SECURITY: dev bypass is completely disabled in production
     if (
       config.isDev &&
       config.devBypassSecret &&

@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Documentation — x402 Gateway</title>
+  <meta name="description" content="Complete API reference for the x402 Gateway. 17 endpoints, payment integration guides, and code examples.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: { 50: '#eef2ff', 100: '#e0e7ff', 200: '#c7d2fe', 400: '#818cf8', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca', 900: '#312e81' },
+            surface: { 800: '#1e1b2e', 900: '#13111c', 950: '#0b0a12' }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { background: #0b0a12; }
+    .gradient-text { background: linear-gradient(135deg, #818cf8, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .card-glow { background: linear-gradient(135deg, rgba(99,102,241,0.08) 0%, rgba(192,132,252,0.04) 100%); border: 1px solid rgba(99,102,241,0.15); }
+    .sidebar-link.active { color: #818cf8; border-left-color: #818cf8; }
+    .method-get { background: rgba(52,211,153,0.1); color: #34d399; border: 1px solid rgba(52,211,153,0.2); }
+    .method-post { background: rgba(96,165,250,0.1); color: #60a5fa; border: 1px solid rgba(96,165,250,0.2); }
+    pre { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.1) transparent; }
+    pre::-webkit-scrollbar { height: 6px; }
+    pre::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+    .param-required { color: #f87171; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+    .param-optional { color: #6b7280; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+    @media (min-width: 1024px) {
+      .docs-layout { display: grid; grid-template-columns: 240px 1fr; }
+      .docs-sidebar { position: sticky; top: 4rem; height: calc(100vh - 4rem); overflow-y: auto; }
+    }
+  </style>
+</head>
+<body class="text-gray-200 antialiased">
+
+  <!-- Nav -->
+  <nav class="fixed top-0 w-full z-50 bg-surface-950/80 backdrop-blur-md border-b border-white/5">
+    <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <a href="/" class="flex items-center gap-2 font-semibold text-white">
+          <span class="text-xl">⚡</span>
+          <span>x402 Gateway</span>
+        </a>
+        <span class="text-gray-600">/</span>
+        <span class="text-gray-400 text-sm">Documentation</span>
+      </div>
+      <div class="flex items-center gap-4 text-sm">
+        <a href="/.well-known/x402.json" class="text-gray-400 hover:text-white transition hidden sm:block">Discovery</a>
+        <a href="/" class="text-gray-400 hover:text-white transition">Home</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="pt-16 docs-layout max-w-7xl mx-auto">
+    <!-- Sidebar -->
+    <aside class="docs-sidebar hidden lg:block border-r border-white/5 px-4 py-8">
+      <nav class="space-y-6 text-sm">
+        <div>
+          <h4 class="text-gray-500 font-medium uppercase text-xs tracking-wider mb-2 px-3">Getting Started</h4>
+          <a href="#overview" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Overview</a>
+          <a href="#quick-start" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Quick Start</a>
+          <a href="#payment-flow" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Payment Flow</a>
+          <a href="#networks" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Networks</a>
+          <a href="#discovery" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Discovery</a>
+        </div>
+        <div>
+          <h4 class="text-gray-500 font-medium uppercase text-xs tracking-wider mb-2 px-3">Crypto &amp; Blockchain</h4>
+          <a href="#crypto-price" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Price Feed</a>
+          <a href="#crypto-markets" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Market Data</a>
+          <a href="#crypto-history" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Historical Data</a>
+          <a href="#crypto-trending" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Trending</a>
+          <a href="#crypto-search" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Coin Search</a>
+          <a href="#wallet-balances" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Wallet Balances</a>
+          <a href="#wallet-transactions" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Wallet Txns</a>
+          <a href="#wallet-pnl" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Wallet P&amp;L</a>
+          <a href="#token-prices" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Token Prices</a>
+          <a href="#token-metadata" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Token Metadata</a>
+        </div>
+        <div>
+          <h4 class="text-gray-500 font-medium uppercase text-xs tracking-wider mb-2 px-3">Compute</h4>
+          <a href="#image-fast" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Fast Image Gen</a>
+          <a href="#image-quality" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Quality Image Gen</a>
+          <a href="#image-text" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Text-in-Image</a>
+          <a href="#code-run" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Code Execution</a>
+          <a href="#transcribe" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Transcription</a>
+        </div>
+        <div>
+          <h4 class="text-gray-500 font-medium uppercase text-xs tracking-wider mb-2 px-3">Storage</h4>
+          <a href="#ipfs-pin" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">IPFS Pin</a>
+          <a href="#ipfs-get" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">IPFS Retrieve</a>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- Main content -->
+    <main class="px-6 lg:px-12 py-8 min-w-0">
+      <div class="max-w-3xl">
+
+        <!-- Overview -->
+        <section id="overview" class="mb-16">
+          <h1 class="text-3xl font-bold text-white mb-4">API Documentation</h1>
+          <p class="text-gray-400 leading-relaxed mb-4">The x402 Gateway exposes 17 production APIs behind <a href="https://www.x402.org" class="text-brand-400 hover:underline">x402 micropayments</a>. Every endpoint returns <code class="text-xs bg-white/5 px-1.5 py-0.5 rounded">402 Payment Required</code> until a valid stablecoin payment is attached to the request.</p>
+          <div class="card-glow rounded-xl p-5 space-y-2 text-sm">
+            <div class="flex items-start gap-3">
+              <span class="text-brand-400 mt-0.5">Base URL</span>
+              <code class="text-white font-mono text-xs break-all">https://x402-gateway-production.up.railway.app</code>
+            </div>
+            <div class="flex items-start gap-3">
+              <span class="text-brand-400 mt-0.5">Protocol</span>
+              <span class="text-gray-300">x402 v2</span>
+            </div>
+            <div class="flex items-start gap-3">
+              <span class="text-brand-400 mt-0.5">Payment</span>
+              <span class="text-gray-300">USDC on Base, USDC on Solana, or USDm on MegaETH</span>
+            </div>
+            <div class="flex items-start gap-3">
+              <span class="text-brand-400 mt-0.5">Free endpoints</span>
+              <span class="text-gray-300 font-mono text-xs">/health, /.well-known/x402.json, /api/discover, /api/services</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Quick Start -->
+        <section id="quick-start" class="mb-16">
+          <h2 class="text-2xl font-bold text-white mb-4">Quick Start</h2>
+          <p class="text-gray-400 mb-4">Install the x402 client packages and viem:</p>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden mb-6">
+            <div class="flex items-center px-4 py-2 bg-white/[0.03] border-b border-white/5">
+              <span class="text-xs text-gray-500 font-mono">bash</span>
+            </div>
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">npm install @x402/fetch viem</code></pre>
+          </div>
+
+          <p class="text-gray-400 mb-4">Make your first paid call with TypeScript:</p>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden mb-6">
+            <div class="flex items-center px-4 py-2 bg-white/[0.03] border-b border-white/5">
+              <span class="text-xs text-gray-500 font-mono">TypeScript</span>
+            </div>
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300"><span class="text-emerald-400">import</span> { wrapFetchWithPayment } <span class="text-emerald-400">from</span> <span class="text-amber-300">"@x402/fetch"</span>;
+<span class="text-emerald-400">import</span> { createWalletClient, http } <span class="text-emerald-400">from</span> <span class="text-amber-300">"viem"</span>;
+<span class="text-emerald-400">import</span> { privateKeyToAccount } <span class="text-emerald-400">from</span> <span class="text-amber-300">"viem/accounts"</span>;
+<span class="text-emerald-400">import</span> { base } <span class="text-emerald-400">from</span> <span class="text-amber-300">"viem/chains"</span>;
+
+<span class="text-gray-500">// Create a wallet with USDC on Base</span>
+<span class="text-emerald-400">const</span> account = privateKeyToAccount(process.env.PRIVATE_KEY <span class="text-emerald-400">as</span> <span class="text-amber-300">`0x${string}`</span>);
+<span class="text-emerald-400">const</span> wallet = createWalletClient({
+  account,
+  chain: base,
+  transport: http(),
+});
+
+<span class="text-gray-500">// Wrap native fetch — handles 402 negotiation automatically</span>
+<span class="text-emerald-400">const</span> paidFetch = wrapFetchWithPayment(fetch, wallet);
+
+<span class="text-gray-500">// Call any endpoint — payment is transparent</span>
+<span class="text-emerald-400">const</span> BASE = <span class="text-amber-300">"https://x402-gateway-production.up.railway.app"</span>;
+
+<span class="text-gray-500">// GET endpoint</span>
+<span class="text-emerald-400">const</span> price = <span class="text-emerald-400">await</span> paidFetch(<span class="text-amber-300">`${BASE}/api/crypto/price?ids=bitcoin`</span>);
+console.log(<span class="text-emerald-400">await</span> price.json());
+<span class="text-gray-500">// { service: "crypto-price", data: { bitcoin: { usd: 97234 } } }</span>
+
+<span class="text-gray-500">// POST endpoint</span>
+<span class="text-emerald-400">const</span> balances = <span class="text-emerald-400">await</span> paidFetch(<span class="text-amber-300">`${BASE}/api/wallet/balances`</span>, {
+  method: <span class="text-amber-300">"POST"</span>,
+  headers: { <span class="text-amber-300">"Content-Type"</span>: <span class="text-amber-300">"application/json"</span> },
+  body: JSON.stringify({ chain: <span class="text-amber-300">"base"</span>, address: <span class="text-amber-300">"0x..."</span> }),
+});
+console.log(<span class="text-emerald-400">await</span> balances.json());</code></pre>
+          </div>
+
+          <div class="card-glow rounded-xl p-5 text-sm">
+            <h4 class="text-white font-medium mb-2">How does payment work?</h4>
+            <ol class="text-gray-400 space-y-1 list-decimal list-inside">
+              <li><code class="text-xs bg-white/5 px-1 rounded">paidFetch</code> calls the endpoint normally</li>
+              <li>Gateway returns <code class="text-xs bg-white/5 px-1 rounded">402</code> with payment requirements in headers</li>
+              <li>The wrapper reads the requirements, signs a USDC/USDm permit or transfer</li>
+              <li>It retries the request with the payment in <code class="text-xs bg-white/5 px-1 rounded">X-PAYMENT</code> header</li>
+              <li>Gateway verifies the payment, calls the upstream API, and returns data</li>
+            </ol>
+          </div>
+        </section>
+
+        <!-- Payment Flow -->
+        <section id="payment-flow" class="mb-16">
+          <h2 class="text-2xl font-bold text-white mb-4">Payment Flow</h2>
+          <p class="text-gray-400 mb-6">If you're building a custom client (not using <code class="text-xs bg-white/5 px-1.5 py-0.5 rounded">@x402/fetch</code>), here's the raw HTTP flow:</p>
+
+          <h3 class="text-lg font-semibold text-white mb-3">Step 1: Initial request</h3>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden mb-6">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">GET /api/crypto/price?ids=bitcoin HTTP/1.1
+Host: x402-gateway-production.up.railway.app</code></pre>
+          </div>
+
+          <h3 class="text-lg font-semibold text-white mb-3">Step 2: 402 response</h3>
+          <p class="text-gray-400 text-sm mb-3">The gateway returns payment requirements as base64 JSON in the <code class="text-xs bg-white/5 px-1 rounded">PAYMENT-REQUIRED</code> header:</p>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden mb-6">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">HTTP/1.1 402 Payment Required
+PAYMENT-REQUIRED: eyJ4NDAyVmVyc2lvbiI6MiwiYWNjZXB0cyI6Wy4uLl19
+Content-Type: application/json
+
+{
+  "error": "X-PAYMENT header is required",
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "maxAmountRequired": "1000",
+      "resource": "https://x402-gateway-.../api/crypto/price?ids=bitcoin",
+      "payTo": "0x7dd5Be069f2d2eAd75eC7C3423B116fF043c2629",
+      "extra": { ... }
+    }
+  ],
+  "x402Version": 2
+}</code></pre>
+          </div>
+
+          <h3 class="text-lg font-semibold text-white mb-3">Step 3: Retry with payment</h3>
+          <p class="text-gray-400 text-sm mb-3">Sign a payment using the details from <code class="text-xs bg-white/5 px-1 rounded">accepts</code> and send it in the <code class="text-xs bg-white/5 px-1 rounded">X-PAYMENT</code> header:</p>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden mb-6">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">GET /api/crypto/price?ids=bitcoin HTTP/1.1
+Host: x402-gateway-production.up.railway.app
+X-PAYMENT: &lt;base64-encoded signed payment payload&gt;</code></pre>
+          </div>
+
+          <h3 class="text-lg font-semibold text-white mb-3">Step 4: Response with settlement</h3>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden mb-6">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">HTTP/1.1 200 OK
+PAYMENT-RESPONSE: &lt;base64 settlement receipt&gt;
+Content-Type: application/json
+
+{
+  "service": "crypto-price",
+  "data": { "bitcoin": { "usd": 97234.12, "usd_24h_change": 2.31 } }
+}</code></pre>
+          </div>
+        </section>
+
+        <!-- Networks -->
+        <section id="networks" class="mb-16">
+          <h2 class="text-2xl font-bold text-white mb-4">Supported Networks</h2>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="border-b border-white/10">
+                  <th class="text-left py-3 px-3 text-gray-400 font-medium">Network</th>
+                  <th class="text-left py-3 px-3 text-gray-400 font-medium">CAIP-2</th>
+                  <th class="text-left py-3 px-3 text-gray-400 font-medium">Token</th>
+                  <th class="text-left py-3 px-3 text-gray-400 font-medium">Decimals</th>
+                  <th class="text-left py-3 px-3 text-gray-400 font-medium">Speed</th>
+                  <th class="text-left py-3 px-3 text-gray-400 font-medium">Verification</th>
+                </tr>
+              </thead>
+              <tbody class="text-gray-300">
+                <tr class="border-b border-white/5">
+                  <td class="py-3 px-3 text-white font-medium">Base</td>
+                  <td class="py-3 px-3 font-mono text-xs">eip155:8453</td>
+                  <td class="py-3 px-3">USDC</td>
+                  <td class="py-3 px-3 font-mono">6</td>
+                  <td class="py-3 px-3">~2s</td>
+                  <td class="py-3 px-3">Coinbase CDP facilitator</td>
+                </tr>
+                <tr class="border-b border-white/5">
+                  <td class="py-3 px-3 text-white font-medium">MegaETH</td>
+                  <td class="py-3 px-3 font-mono text-xs">eip155:4326</td>
+                  <td class="py-3 px-3">USDm</td>
+                  <td class="py-3 px-3 font-mono">18</td>
+                  <td class="py-3 px-3 text-emerald-400">~10ms</td>
+                  <td class="py-3 px-3">Direct on-chain</td>
+                </tr>
+                <tr>
+                  <td class="py-3 px-3 text-white font-medium">Solana</td>
+                  <td class="py-3 px-3 font-mono text-xs break-all">solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp</td>
+                  <td class="py-3 px-3">USDC</td>
+                  <td class="py-3 px-3 font-mono">6</td>
+                  <td class="py-3 px-3">~400ms</td>
+                  <td class="py-3 px-3">Coinbase CDP facilitator</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="mt-4 card-glow rounded-xl p-4 text-sm text-gray-400">
+            <strong class="text-white">Amount conversion:</strong> <code class="text-xs bg-white/5 px-1 rounded">$0.001</code> = <code class="text-xs bg-white/5 px-1 rounded">1000</code> USDC (6 decimals) = <code class="text-xs bg-white/5 px-1 rounded">1000000000000000</code> USDm (18 decimals)
+          </div>
+        </section>
+
+        <!-- Discovery -->
+        <section id="discovery" class="mb-16">
+          <h2 class="text-2xl font-bold text-white mb-4">Discovery</h2>
+          <p class="text-gray-400 text-sm mb-4">Agents can discover available services and payment options programmatically.</p>
+
+          <div class="space-y-4">
+            <div class="card-glow rounded-xl p-5">
+              <div class="flex items-center gap-3 mb-2">
+                <span class="method-get px-2 py-0.5 rounded text-xs font-mono font-bold">GET</span>
+                <code class="text-white text-sm font-mono">/.well-known/x402.json</code>
+                <span class="text-gray-500 text-xs ml-auto">Free</span>
+              </div>
+              <p class="text-gray-400 text-sm">Full discovery document — services, networks, payment routes, categories.</p>
+            </div>
+            <div class="card-glow rounded-xl p-5">
+              <div class="flex items-center gap-3 mb-2">
+                <span class="method-get px-2 py-0.5 rounded text-xs font-mono font-bold">GET</span>
+                <code class="text-white text-sm font-mono">/api/services</code>
+                <span class="text-gray-500 text-xs ml-auto">Free</span>
+              </div>
+              <p class="text-gray-400 text-sm">List all services with IDs, descriptions, pricing, and endpoints.</p>
+            </div>
+            <div class="card-glow rounded-xl p-5">
+              <div class="flex items-center gap-3 mb-2">
+                <span class="method-get px-2 py-0.5 rounded text-xs font-mono font-bold">GET</span>
+                <code class="text-white text-sm font-mono">/api/services/:id</code>
+                <span class="text-gray-500 text-xs ml-auto">Free</span>
+              </div>
+              <p class="text-gray-400 text-sm">Service details including payment options. Example: <code class="text-xs bg-white/5 px-1 rounded">/api/services/crypto-price</code></p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Divider -->
+        <hr class="border-white/5 mb-16">
+        <h2 class="text-xl font-bold text-gray-500 uppercase tracking-wider mb-8">Crypto &amp; Blockchain</h2>
+
+        <!-- crypto-price -->
+        <section id="crypto-price" class="mb-14">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="method-get px-2 py-0.5 rounded text-xs font-mono font-bold">GET</span>
+            <code class="text-white text-lg font-mono">/api/crypto/price</code>
+            <span class="ml-auto text-brand-400 font-mono text-sm">$0.001</span>
+          </div>
+          <p class="text-gray-400 text-sm mb-4">Real-time cryptocurrency prices in any fiat currency.</p>
+
+          <h4 class="text-white text-sm font-semibold mb-2">Parameters</h4>
+          <div class="overflow-x-auto mb-4">
+            <table class="w-full text-sm">
+              <thead><tr class="border-b border-white/10"><th class="text-left py-2 px-3 text-gray-500 font-medium">Name</th><th class="text-left py-2 px-3 text-gray-500 font-medium">Type</th><th class="text-left py-2 px-3 text-gray-500 font-medium">Description</th></tr></thead>
+              <tbody>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">ids <span class="param-required">required</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400">Comma-separated CoinGecko IDs, e.g. <code class="text-xs bg-white/5 px-1 rounded">bitcoin,ethereum</code></td></tr>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">currencies <span class="param-optional">optional</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400">Comma-separated fiat codes. Default: <code class="text-xs bg-white/5 px-1 rounded">usd</code></td></tr>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">include_24h <span class="param-optional">optional</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400"><code class="text-xs bg-white/5 px-1 rounded">true</code> or <code class="text-xs bg-white/5 px-1 rounded">false</code>. Default: <code class="text-xs bg-white/5 px-1 rounded">true</code></td></tr>
+                <tr><td class="py-2 px-3 font-mono text-xs text-white">include_mcap <span class="param-optional">optional</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400"><code class="text-xs bg-white/5 px-1 rounded">true</code> or <code class="text-xs bg-white/5 px-1 rounded">false</code>. Default: <code class="text-xs bg-white/5 px-1 rounded">false</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h4 class="text-white text-sm font-semibold mb-2">Example Response</h4>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">{
+  "service": "crypto-price",
+  "data": {
+    "bitcoin": { "usd": 97234.12, "usd_24h_change": 2.31 },
+    "ethereum": { "usd": 3456.78, "usd_24h_change": -0.45 }
+  }
+}</code></pre>
+          </div>
+        </section>
+
+        <!-- crypto-markets -->
+        <section id="crypto-markets" class="mb-14">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="method-get px-2 py-0.5 rounded text-xs font-mono font-bold">GET</span>
+            <code class="text-white text-lg font-mono">/api/crypto/markets</code>
+            <span class="ml-auto text-brand-400 font-mono text-sm">$0.002</span>
+          </div>
+          <p class="text-gray-400 text-sm mb-4">Market rankings with price, volume, and market cap.</p>
+
+          <h4 class="text-white text-sm font-semibold mb-2">Parameters</h4>
+          <div class="overflow-x-auto mb-4">
+            <table class="w-full text-sm">
+              <thead><tr class="border-b border-white/10"><th class="text-left py-2 px-3 text-gray-500 font-medium">Name</th><th class="text-left py-2 px-3 text-gray-500 font-medium">Type</th><th class="text-left py-2 px-3 text-gray-500 font-medium">Description</th></tr></thead>
+              <tbody>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">currency <span class="param-optional">optional</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400">Fiat currency. Default: <code class="text-xs bg-white/5 px-1 rounded">usd</code></td></tr>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">category <span class="param-optional">optional</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400">Filter by CoinGecko category</td></tr>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">order <span class="param-optional">optional</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400">Sort order. Default: <code class="text-xs bg-white/5 px-1 rounded">market_cap_desc</code></td></tr>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">limit <span class="param-optional">optional</span></td><td class="py-2 px-3 text-gray-400">number</td><td class="py-2 px-3 text-gray-400">Results per page, max 250. Default: <code class="text-xs bg-white/5 px-1 rounded">100</code></td></tr>
+                <tr><td class="py-2 px-3 font-mono text-xs text-white">page <span class="param-optional">optional</span></td><td class="py-2 px-3 text-gray-400">number</td><td class="py-2 px-3 text-gray-400">Page number. Default: <code class="text-xs bg-white/5 px-1 rounded">1</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h4 class="text-white text-sm font-semibold mb-2">Example Response</h4>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">{
+  "service": "crypto-markets",
+  "count": 100,
+  "data": [
+    { "id": "bitcoin", "symbol": "btc", "name": "Bitcoin",
+      "current_price": 97234, "market_cap": 1920000000000, ... }
+  ]
+}</code></pre>
+          </div>
+        </section>
+
+        <!-- crypto-history -->
+        <section id="crypto-history" class="mb-14">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="method-get px-2 py-0.5 rounded text-xs font-mono font-bold">GET</span>
+            <code class="text-white text-lg font-mono">/api/crypto/history</code>
+            <span class="ml-auto text-brand-400 font-mono text-sm">$0.003</span>
+          </div>
+          <p class="text-gray-400 text-sm mb-4">Historical price, market cap, and volume data.</p>
+
+          <h4 class="text-white text-sm font-semibold mb-2">Parameters</h4>
+          <div class="overflow-x-auto mb-4">
+            <table class="w-full text-sm">
+              <thead><tr class="border-b border-white/10"><th class="text-left py-2 px-3 text-gray-500 font-medium">Name</th><th class="text-left py-2 px-3 text-gray-500 font-medium">Type</th><th class="text-left py-2 px-3 text-gray-500 font-medium">Description</th></tr></thead>
+              <tbody>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">id <span class="param-required">required</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400">CoinGecko coin ID, e.g. <code class="text-xs bg-white/5 px-1 rounded">bitcoin</code></td></tr>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">currency <span class="param-optional">optional</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400">Default: <code class="text-xs bg-white/5 px-1 rounded">usd</code></td></tr>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">days <span class="param-optional">optional</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400">Days of history or <code class="text-xs bg-white/5 px-1 rounded">"max"</code>. Default: <code class="text-xs bg-white/5 px-1 rounded">30</code></td></tr>
+                <tr><td class="py-2 px-3 font-mono text-xs text-white">interval <span class="param-optional">optional</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400">Data interval, e.g. <code class="text-xs bg-white/5 px-1 rounded">daily</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h4 class="text-white text-sm font-semibold mb-2">Example Response</h4>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">{
+  "service": "crypto-history",
+  "data": {
+    "prices": [[1706745600000, 43012.5], [1706832000000, 43150.2], ...],
+    "market_caps": [...],
+    "total_volumes": [...]
+  }
+}</code></pre>
+          </div>
+        </section>
+
+        <!-- crypto-trending -->
+        <section id="crypto-trending" class="mb-14">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="method-get px-2 py-0.5 rounded text-xs font-mono font-bold">GET</span>
+            <code class="text-white text-lg font-mono">/api/crypto/trending</code>
+            <span class="ml-auto text-brand-400 font-mono text-sm">$0.001</span>
+          </div>
+          <p class="text-gray-400 text-sm mb-4">Currently trending coins on CoinGecko. No parameters required.</p>
+
+          <h4 class="text-white text-sm font-semibold mb-2">Example Response</h4>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">{
+  "service": "crypto-trending",
+  "data": {
+    "coins": [
+      { "item": { "id": "pepe", "name": "Pepe", "symbol": "PEPE", "market_cap_rank": 24, ... } }
+    ]
+  }
+}</code></pre>
+          </div>
+        </section>
+
+        <!-- crypto-search -->
+        <section id="crypto-search" class="mb-14">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="method-get px-2 py-0.5 rounded text-xs font-mono font-bold">GET</span>
+            <code class="text-white text-lg font-mono">/api/crypto/search</code>
+            <span class="ml-auto text-brand-400 font-mono text-sm">$0.001</span>
+          </div>
+          <p class="text-gray-400 text-sm mb-4">Search for coins by name or symbol to get CoinGecko IDs.</p>
+
+          <h4 class="text-white text-sm font-semibold mb-2">Parameters</h4>
+          <div class="overflow-x-auto mb-4">
+            <table class="w-full text-sm">
+              <thead><tr class="border-b border-white/10"><th class="text-left py-2 px-3 text-gray-500 font-medium">Name</th><th class="text-left py-2 px-3 text-gray-500 font-medium">Type</th><th class="text-left py-2 px-3 text-gray-500 font-medium">Description</th></tr></thead>
+              <tbody>
+                <tr><td class="py-2 px-3 font-mono text-xs text-white">q <span class="param-required">required</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400">Search query, e.g. <code class="text-xs bg-white/5 px-1 rounded">btc</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h4 class="text-white text-sm font-semibold mb-2">Example Response</h4>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">{
+  "service": "crypto-search",
+  "data": {
+    "coins": [
+      { "id": "bitcoin", "name": "Bitcoin", "symbol": "BTC", "market_cap_rank": 1 }
+    ]
+  }
+}</code></pre>
+          </div>
+        </section>
+
+        <!-- wallet-balances -->
+        <section id="wallet-balances" class="mb-14">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="method-post px-2 py-0.5 rounded text-xs font-mono font-bold">POST</span>
+            <code class="text-white text-lg font-mono">/api/wallet/balances</code>
+            <span class="ml-auto text-brand-400 font-mono text-sm">$0.005</span>
+          </div>
+          <p class="text-gray-400 text-sm mb-4">Token balances for any wallet across 20+ chains. Powered by Allium.</p>
+
+          <h4 class="text-white text-sm font-semibold mb-2">Request Body</h4>
+          <div class="overflow-x-auto mb-4">
+            <table class="w-full text-sm">
+              <thead><tr class="border-b border-white/10"><th class="text-left py-2 px-3 text-gray-500 font-medium">Field</th><th class="text-left py-2 px-3 text-gray-500 font-medium">Type</th><th class="text-left py-2 px-3 text-gray-500 font-medium">Description</th></tr></thead>
+              <tbody>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">chain <span class="param-required">required</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400">Chain name: <code class="text-xs bg-white/5 px-1 rounded">ethereum</code>, <code class="text-xs bg-white/5 px-1 rounded">base</code>, <code class="text-xs bg-white/5 px-1 rounded">solana</code>, etc.</td></tr>
+                <tr><td class="py-2 px-3 font-mono text-xs text-white">address <span class="param-required">required</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400">Wallet address</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h4 class="text-white text-sm font-semibold mb-2">Example</h4>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden mb-4">
+            <div class="flex items-center px-4 py-2 bg-white/[0.03] border-b border-white/5"><span class="text-xs text-gray-500 font-mono">Request</span></div>
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">POST /api/wallet/balances
+Content-Type: application/json
+
+{ "chain": "base", "address": "0x7dd5Be069f2d2eAd75eC7C3423B116fF043c2629" }</code></pre>
+          </div>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
+            <div class="flex items-center px-4 py-2 bg-white/[0.03] border-b border-white/5"><span class="text-xs text-gray-500 font-mono">Response</span></div>
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">{
+  "service": "wallet-balances",
+  "data": {
+    "balances": [
+      { "token_symbol": "USDC", "balance": "164.23", "usd_value": 164.23, ... },
+      { "token_symbol": "ETH", "balance": "0.05", "usd_value": 162.50, ... }
+    ]
+  }
+}</code></pre>
+          </div>
+        </section>
+
+        <!-- wallet-transactions -->
+        <section id="wallet-transactions" class="mb-14">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="method-post px-2 py-0.5 rounded text-xs font-mono font-bold">POST</span>
+            <code class="text-white text-lg font-mono">/api/wallet/transactions</code>
+            <span class="ml-auto text-brand-400 font-mono text-sm">$0.005</span>
+          </div>
+          <p class="text-gray-400 text-sm mb-4">Transaction history with asset transfers and labels.</p>
+
+          <h4 class="text-white text-sm font-semibold mb-2">Request Body</h4>
+          <div class="overflow-x-auto mb-4">
+            <table class="w-full text-sm">
+              <thead><tr class="border-b border-white/10"><th class="text-left py-2 px-3 text-gray-500 font-medium">Field</th><th class="text-left py-2 px-3 text-gray-500 font-medium">Type</th><th class="text-left py-2 px-3 text-gray-500 font-medium">Description</th></tr></thead>
+              <tbody>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">chain <span class="param-required">required</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400">Chain name</td></tr>
+                <tr><td class="py-2 px-3 font-mono text-xs text-white">address <span class="param-required">required</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400">Wallet address</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- wallet-pnl -->
+        <section id="wallet-pnl" class="mb-14">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="method-post px-2 py-0.5 rounded text-xs font-mono font-bold">POST</span>
+            <code class="text-white text-lg font-mono">/api/wallet/pnl</code>
+            <span class="ml-auto text-brand-400 font-mono text-sm">$0.01</span>
+          </div>
+          <p class="text-gray-400 text-sm mb-4">Portfolio profit/loss with realized and unrealized P&amp;L per token.</p>
+
+          <h4 class="text-white text-sm font-semibold mb-2">Request Body</h4>
+          <div class="overflow-x-auto mb-4">
+            <table class="w-full text-sm">
+              <thead><tr class="border-b border-white/10"><th class="text-left py-2 px-3 text-gray-500 font-medium">Field</th><th class="text-left py-2 px-3 text-gray-500 font-medium">Type</th><th class="text-left py-2 px-3 text-gray-500 font-medium">Description</th></tr></thead>
+              <tbody>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">chain <span class="param-required">required</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400">Chain name</td></tr>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">address <span class="param-required">required</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400">Wallet address</td></tr>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">min_liquidity <span class="param-optional">optional</span></td><td class="py-2 px-3 text-gray-400">number</td><td class="py-2 px-3 text-gray-400">Minimum liquidity filter</td></tr>
+                <tr><td class="py-2 px-3 font-mono text-xs text-white">min_volume_24h <span class="param-optional">optional</span></td><td class="py-2 px-3 text-gray-400">number</td><td class="py-2 px-3 text-gray-400">Minimum 24h volume filter</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- token-prices -->
+        <section id="token-prices" class="mb-14">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="method-post px-2 py-0.5 rounded text-xs font-mono font-bold">POST</span>
+            <code class="text-white text-lg font-mono">/api/token/prices</code>
+            <span class="ml-auto text-brand-400 font-mono text-sm">$0.005</span>
+          </div>
+          <p class="text-gray-400 text-sm mb-4">Real-time DEX-derived token prices with OHLC data. Up to 200 tokens per request.</p>
+
+          <h4 class="text-white text-sm font-semibold mb-2">Request Body</h4>
+          <div class="overflow-x-auto mb-4">
+            <table class="w-full text-sm">
+              <thead><tr class="border-b border-white/10"><th class="text-left py-2 px-3 text-gray-500 font-medium">Field</th><th class="text-left py-2 px-3 text-gray-500 font-medium">Type</th><th class="text-left py-2 px-3 text-gray-500 font-medium">Description</th></tr></thead>
+              <tbody>
+                <tr><td class="py-2 px-3 font-mono text-xs text-white">tokens <span class="param-required">required</span></td><td class="py-2 px-3 text-gray-400">array</td><td class="py-2 px-3 text-gray-400">Array of <code class="text-xs bg-white/5 px-1 rounded">{ token_address, chain }</code> objects. Max 200.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h4 class="text-white text-sm font-semibold mb-2">Example</h4>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">POST /api/token/prices
+Content-Type: application/json
+
+{
+  "tokens": [
+    { "token_address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913", "chain": "base" }
+  ]
+}</code></pre>
+          </div>
+        </section>
+
+        <!-- token-metadata -->
+        <section id="token-metadata" class="mb-14">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="method-get px-2 py-0.5 rounded text-xs font-mono font-bold">GET</span>
+            <code class="text-white text-lg font-mono">/api/token/metadata</code>
+            <span class="ml-auto text-brand-400 font-mono text-sm">$0.002</span>
+          </div>
+          <p class="text-gray-400 text-sm mb-4">Token/asset metadata — name, symbol, decimals, chain info.</p>
+
+          <h4 class="text-white text-sm font-semibold mb-2">Parameters <span class="text-gray-500 font-normal text-xs">(at least one required)</span></h4>
+          <div class="overflow-x-auto mb-4">
+            <table class="w-full text-sm">
+              <thead><tr class="border-b border-white/10"><th class="text-left py-2 px-3 text-gray-500 font-medium">Name</th><th class="text-left py-2 px-3 text-gray-500 font-medium">Type</th><th class="text-left py-2 px-3 text-gray-500 font-medium">Description</th></tr></thead>
+              <tbody>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">chain</td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400">Chain name</td></tr>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">address</td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400">Token contract address</td></tr>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">slug</td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400">Token slug</td></tr>
+                <tr><td class="py-2 px-3 font-mono text-xs text-white">id</td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400">Token ID</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Divider -->
+        <hr class="border-white/5 mb-16">
+        <h2 class="text-xl font-bold text-gray-500 uppercase tracking-wider mb-8">Compute</h2>
+
+        <!-- image-fast -->
+        <section id="image-fast" class="mb-14">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="method-post px-2 py-0.5 rounded text-xs font-mono font-bold">POST</span>
+            <code class="text-white text-lg font-mono">/api/image/fast</code>
+            <span class="ml-auto text-brand-400 font-mono text-sm">$0.015</span>
+          </div>
+          <p class="text-gray-400 text-sm mb-4">Quick image generation using FLUX Schnell (~2s). Good for drafts and iteration.</p>
+
+          <h4 class="text-white text-sm font-semibold mb-2">Request Body</h4>
+          <div class="overflow-x-auto mb-4">
+            <table class="w-full text-sm">
+              <thead><tr class="border-b border-white/10"><th class="text-left py-2 px-3 text-gray-500 font-medium">Field</th><th class="text-left py-2 px-3 text-gray-500 font-medium">Type</th><th class="text-left py-2 px-3 text-gray-500 font-medium">Description</th></tr></thead>
+              <tbody>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">prompt <span class="param-required">required</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400">Image description</td></tr>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">width <span class="param-optional">optional</span></td><td class="py-2 px-3 text-gray-400">number</td><td class="py-2 px-3 text-gray-400">256–2048 pixels. Default: <code class="text-xs bg-white/5 px-1 rounded">1024</code></td></tr>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">height <span class="param-optional">optional</span></td><td class="py-2 px-3 text-gray-400">number</td><td class="py-2 px-3 text-gray-400">256–2048 pixels. Default: <code class="text-xs bg-white/5 px-1 rounded">1024</code></td></tr>
+                <tr><td class="py-2 px-3 font-mono text-xs text-white">seed <span class="param-optional">optional</span></td><td class="py-2 px-3 text-gray-400">number</td><td class="py-2 px-3 text-gray-400">For reproducible results</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h4 class="text-white text-sm font-semibold mb-2">Example</h4>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">POST /api/image/fast
+Content-Type: application/json
+
+{ "prompt": "A cyberpunk cityscape at sunset, neon lights reflecting off rain-slicked streets" }</code></pre>
+          </div>
+        </section>
+
+        <!-- image-quality -->
+        <section id="image-quality" class="mb-14">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="method-post px-2 py-0.5 rounded text-xs font-mono font-bold">POST</span>
+            <code class="text-white text-lg font-mono">/api/image/quality</code>
+            <span class="ml-auto text-brand-400 font-mono text-sm">$0.05</span>
+          </div>
+          <p class="text-gray-400 text-sm mb-4">High-quality image generation using FLUX.2 Pro (~5s). Production-ready output.</p>
+          <p class="text-gray-500 text-xs">Same parameters as <a href="#image-fast" class="text-brand-400 hover:underline">/api/image/fast</a>.</p>
+        </section>
+
+        <!-- image-text -->
+        <section id="image-text" class="mb-14">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="method-post px-2 py-0.5 rounded text-xs font-mono font-bold">POST</span>
+            <code class="text-white text-lg font-mono">/api/image/text</code>
+            <span class="ml-auto text-brand-400 font-mono text-sm">$0.12</span>
+          </div>
+          <p class="text-gray-400 text-sm mb-4">Image generation with accurate text rendering using Ideogram v3. Best for logos, signs, and typography.</p>
+          <p class="text-gray-500 text-xs">Same parameters as <a href="#image-fast" class="text-brand-400 hover:underline">/api/image/fast</a>.</p>
+        </section>
+
+        <!-- code-run -->
+        <section id="code-run" class="mb-14">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="method-post px-2 py-0.5 rounded text-xs font-mono font-bold">POST</span>
+            <code class="text-white text-lg font-mono">/api/code/run</code>
+            <span class="ml-auto text-brand-400 font-mono text-sm">$0.005</span>
+          </div>
+          <p class="text-gray-400 text-sm mb-4">Run code in an isolated sandbox. Supports Python, JavaScript, Bash, and R.</p>
+
+          <h4 class="text-white text-sm font-semibold mb-2">Request Body</h4>
+          <div class="overflow-x-auto mb-4">
+            <table class="w-full text-sm">
+              <thead><tr class="border-b border-white/10"><th class="text-left py-2 px-3 text-gray-500 font-medium">Field</th><th class="text-left py-2 px-3 text-gray-500 font-medium">Type</th><th class="text-left py-2 px-3 text-gray-500 font-medium">Description</th></tr></thead>
+              <tbody>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">code <span class="param-required">required</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400">Code to execute (max 100KB)</td></tr>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">language <span class="param-optional">optional</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400"><code class="text-xs bg-white/5 px-1 rounded">python</code>, <code class="text-xs bg-white/5 px-1 rounded">javascript</code>, <code class="text-xs bg-white/5 px-1 rounded">bash</code>, <code class="text-xs bg-white/5 px-1 rounded">r</code>. Default: <code class="text-xs bg-white/5 px-1 rounded">python</code></td></tr>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">timeout <span class="param-optional">optional</span></td><td class="py-2 px-3 text-gray-400">number</td><td class="py-2 px-3 text-gray-400">1–300 seconds</td></tr>
+                <tr><td class="py-2 px-3 font-mono text-xs text-white">files <span class="param-optional">optional</span></td><td class="py-2 px-3 text-gray-400">object</td><td class="py-2 px-3 text-gray-400">Additional files for the sandbox, keyed by filename</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h4 class="text-white text-sm font-semibold mb-2">Example</h4>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden mb-4">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">POST /api/code/run
+Content-Type: application/json
+
+{
+  "code": "import math\nprint(f'Pi to 10 decimals: {math.pi:.10f}')",
+  "language": "python"
+}</code></pre>
+          </div>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
+            <div class="flex items-center px-4 py-2 bg-white/[0.03] border-b border-white/5"><span class="text-xs text-gray-500 font-mono">Response</span></div>
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">{
+  "service": "code-run",
+  "success": true,
+  "data": {
+    "exit_code": 0,
+    "stdout": "Pi to 10 decimals: 3.1415926536\n",
+    "stderr": ""
+  }
+}</code></pre>
+          </div>
+        </section>
+
+        <!-- transcribe -->
+        <section id="transcribe" class="mb-14">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="method-post px-2 py-0.5 rounded text-xs font-mono font-bold">POST</span>
+            <code class="text-white text-lg font-mono">/api/transcribe</code>
+            <span class="ml-auto text-brand-400 font-mono text-sm">$0.10</span>
+          </div>
+          <p class="text-gray-400 text-sm mb-4">Audio transcription with speaker identification using Deepgram Nova-3.</p>
+
+          <h4 class="text-white text-sm font-semibold mb-2">Request Body</h4>
+          <div class="overflow-x-auto mb-4">
+            <table class="w-full text-sm">
+              <thead><tr class="border-b border-white/10"><th class="text-left py-2 px-3 text-gray-500 font-medium">Field</th><th class="text-left py-2 px-3 text-gray-500 font-medium">Type</th><th class="text-left py-2 px-3 text-gray-500 font-medium">Description</th></tr></thead>
+              <tbody>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">audio_url <span class="param-required">required*</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400">URL to audio file</td></tr>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">audio_base64 <span class="param-required">required*</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400">Base64-encoded audio (max 50MB)</td></tr>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">audio_mimetype <span class="param-optional">optional</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400">Required with base64, e.g. <code class="text-xs bg-white/5 px-1 rounded">audio/mp3</code></td></tr>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">language <span class="param-optional">optional</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400">Language code. Default: <code class="text-xs bg-white/5 px-1 rounded">en</code></td></tr>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">diarize <span class="param-optional">optional</span></td><td class="py-2 px-3 text-gray-400">boolean</td><td class="py-2 px-3 text-gray-400">Speaker identification. Default: <code class="text-xs bg-white/5 px-1 rounded">true</code></td></tr>
+                <tr><td class="py-2 px-3 font-mono text-xs text-white">model <span class="param-optional">optional</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400"><code class="text-xs bg-white/5 px-1 rounded">nova-3</code> or <code class="text-xs bg-white/5 px-1 rounded">whisper-large</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="text-gray-500 text-xs mb-4">* Provide either <code class="text-xs bg-white/5 px-1 rounded">audio_url</code> or <code class="text-xs bg-white/5 px-1 rounded">audio_base64</code>, not both.</p>
+
+          <h4 class="text-white text-sm font-semibold mb-2">Example Response</h4>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">{
+  "service": "transcribe",
+  "data": {
+    "text": "Hello, welcome to the meeting. Today we'll discuss...",
+    "segments": [
+      { "text": "Hello", "start": 0.0, "end": 0.5, "speaker": 0, "confidence": 0.98 }
+    ],
+    "speakers": [{ "id": 0, "segments_count": 12 }, { "id": 1, "segments_count": 8 }],
+    "duration_seconds": 145.2,
+    "language": "en",
+    "model": "nova-3"
+  }
+}</code></pre>
+          </div>
+        </section>
+
+        <!-- Divider -->
+        <hr class="border-white/5 mb-16">
+        <h2 class="text-xl font-bold text-gray-500 uppercase tracking-wider mb-8">Storage</h2>
+
+        <!-- ipfs-pin -->
+        <section id="ipfs-pin" class="mb-14">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="method-post px-2 py-0.5 rounded text-xs font-mono font-bold">POST</span>
+            <code class="text-white text-lg font-mono">/api/ipfs/pin</code>
+            <span class="ml-auto text-brand-400 font-mono text-sm">$0.01</span>
+          </div>
+          <p class="text-gray-400 text-sm mb-4">Pin JSON, files, or URLs to IPFS for decentralized storage. Powered by Pinata.</p>
+
+          <h4 class="text-white text-sm font-semibold mb-2">Request Options</h4>
+          <div class="space-y-3 text-sm text-gray-400 mb-4">
+            <div class="card-glow rounded-lg p-4">
+              <p class="text-white font-medium mb-1">Option 1: File upload</p>
+              <p>Send as <code class="text-xs bg-white/5 px-1 rounded">multipart/form-data</code> with a <code class="text-xs bg-white/5 px-1 rounded">file</code> field. Max 100MB.</p>
+            </div>
+            <div class="card-glow rounded-lg p-4">
+              <p class="text-white font-medium mb-1">Option 2: JSON data</p>
+              <p>Send <code class="text-xs bg-white/5 px-1 rounded">{ "json": { ... }, "name": "optional-name" }</code> as JSON body.</p>
+            </div>
+            <div class="card-glow rounded-lg p-4">
+              <p class="text-white font-medium mb-1">Option 3: Pin from URL</p>
+              <p>Send <code class="text-xs bg-white/5 px-1 rounded">{ "url": "https://...", "name": "optional-name" }</code> as JSON body.</p>
+            </div>
+          </div>
+
+          <h4 class="text-white text-sm font-semibold mb-2">Example</h4>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden mb-4">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">POST /api/ipfs/pin
+Content-Type: application/json
+
+{ "json": { "name": "Test", "value": 42 }, "name": "my-data" }</code></pre>
+          </div>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
+            <div class="flex items-center px-4 py-2 bg-white/[0.03] border-b border-white/5"><span class="text-xs text-gray-500 font-mono">Response</span></div>
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">{
+  "service": "ipfs-pin",
+  "data": {
+    "cid": "bafkreihdwdcefgh4dqkjv67uzcmw7ojee6xedzdetojuzjevtensgqas7y",
+    "name": "my-data",
+    "size": 28,
+    "gateway_url": "https://gateway.pinata.cloud/ipfs/bafkrei..."
+  }
+}</code></pre>
+          </div>
+        </section>
+
+        <!-- ipfs-get -->
+        <section id="ipfs-get" class="mb-14">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="method-get px-2 py-0.5 rounded text-xs font-mono font-bold">GET</span>
+            <code class="text-white text-lg font-mono">/api/ipfs/get</code>
+            <span class="ml-auto text-brand-400 font-mono text-sm">$0.001</span>
+          </div>
+          <p class="text-gray-400 text-sm mb-4">Fetch files from IPFS by CID via Pinata gateway.</p>
+
+          <h4 class="text-white text-sm font-semibold mb-2">Parameters</h4>
+          <div class="overflow-x-auto mb-4">
+            <table class="w-full text-sm">
+              <thead><tr class="border-b border-white/10"><th class="text-left py-2 px-3 text-gray-500 font-medium">Name</th><th class="text-left py-2 px-3 text-gray-500 font-medium">Type</th><th class="text-left py-2 px-3 text-gray-500 font-medium">Description</th></tr></thead>
+              <tbody>
+                <tr><td class="py-2 px-3 font-mono text-xs text-white">cid <span class="param-required">required</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400">IPFS Content Identifier</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h4 class="text-white text-sm font-semibold mb-2">Response</h4>
+          <p class="text-gray-400 text-sm">For JSON content: returns <code class="text-xs bg-white/5 px-1 rounded">{ service, cid, data }</code>. For binary content: streams the raw file with appropriate Content-Type.</p>
+        </section>
+
+        <!-- Error handling -->
+        <hr class="border-white/5 mb-16">
+        <section id="errors" class="mb-14">
+          <h2 class="text-2xl font-bold text-white mb-4">Error Handling</h2>
+          <p class="text-gray-400 text-sm mb-4">All errors return JSON with an <code class="text-xs bg-white/5 px-1 rounded">error</code> field.</p>
+          <div class="overflow-x-auto mb-4">
+            <table class="w-full text-sm">
+              <thead><tr class="border-b border-white/10"><th class="text-left py-2 px-3 text-gray-500 font-medium">Status</th><th class="text-left py-2 px-3 text-gray-500 font-medium">Meaning</th></tr></thead>
+              <tbody class="text-gray-300">
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-amber-400">400</td><td class="py-2 px-3">Missing or invalid parameters</td></tr>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-brand-400">402</td><td class="py-2 px-3">Payment required — check <code class="text-xs bg-white/5 px-1 rounded">PAYMENT-REQUIRED</code> header</td></tr>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-amber-400">404</td><td class="py-2 px-3">Resource not found</td></tr>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-amber-400">408</td><td class="py-2 px-3">Execution timeout (code execution)</td></tr>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-red-400">500</td><td class="py-2 px-3">Internal server error</td></tr>
+                <tr><td class="py-2 px-3 font-mono text-red-400">502</td><td class="py-2 px-3">Upstream provider error or not configured</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">{
+  "error": "Missing required parameter: ids",
+  "details": "Provide comma-separated CoinGecko coin IDs"
+}</code></pre>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Sidebar scroll spy -->
+  <script>
+    const sections = document.querySelectorAll('section[id]');
+    const links = document.querySelectorAll('.sidebar-link');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          links.forEach(l => l.classList.remove('active'));
+          const active = document.querySelector(`.sidebar-link[href="#${entry.target.id}"]`);
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-20% 0px -75% 0px' });
+    sections.forEach(s => observer.observe(s));
+  </script>
+
+</body>
+</html>

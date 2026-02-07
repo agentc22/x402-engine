@@ -25,7 +25,10 @@ async function geckoFetch(path: string, params?: URLSearchParams): Promise<any> 
   const url = params
     ? `${getBaseUrl()}${path}?${params}`
     : `${getBaseUrl()}${path}`;
-  const res = await fetch(url, { headers: getHeaders() });
+  const res = await fetch(url, {
+    headers: getHeaders(),
+    signal: AbortSignal.timeout(30_000),
+  });
   const data = await res.json();
   if (!res.ok) {
     throw Object.assign(new Error(data.error || "CoinGecko API error"), {

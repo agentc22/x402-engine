@@ -15,9 +15,9 @@ COPY package.json package-lock.json* ./
 RUN npm ci --omit=dev
 COPY --from=builder /app/dist dist/
 COPY config/ config/
+COPY public/ public/
 
 RUN mkdir -p /app/data
-VOLUME ["/app/data"]
 
 ENV NODE_ENV=production
 ENV PORT=3402

@@ -11,9 +11,9 @@ import { MEGAETH_CONFIG } from "../config/chains.js";
 import {
   verifyMegaETHPayment,
   checkMegaETHConnection,
-  getReplayProtectionStats,
   type PaymentProof,
 } from "../verification/megaeth.js";
+import { getStats } from "../db/ledger.js";
 
 /**
  * MegaETH Facilitator Client — Direct On-Chain Verification
@@ -102,9 +102,11 @@ export class MegaETHFacilitatorClient implements FacilitatorClient {
     const payload = paymentPayload.payload as Record<string, unknown>;
     const txHash = (payload.txHash as string) || "";
 
+    // NOTE: payer comes from the payload which is untrusted, but settle()
+    // is only called after verify() succeeds, so the tx is already validated.
+    // The payer is informational in the settlement response.
     return {
       success: true,
-      payer: (payload.payer as string) || undefined,
       transaction: txHash,
       network: MEGAETH_CONFIG.caip2 as `${string}:${string}`,
     };
@@ -134,13 +136,13 @@ router.post("/facilitator/megaeth/settle", async (req: Request, res: Response) =
 
 router.get("/facilitator/megaeth/status", async (_req: Request, res: Response) => {
   const connected = await checkMegaETHConnection();
-  const stats = getReplayProtectionStats();
+  const stats = await getStats();
   res.json({
     network: MEGAETH_CONFIG.caip2,
     rpc: MEGAETH_CONFIG.rpc,
     connected,
     stablecoin: MEGAETH_CONFIG.stablecoin,
-    replayProtection: stats,
+    usedTxHashes: stats.usedTxHashes,
   });
 });
 

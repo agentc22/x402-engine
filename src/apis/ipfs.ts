@@ -1,7 +1,9 @@
 import { Router, type Request, type Response } from "express";
 import multer from "multer";
+import path from "path";
 import { pinJson, pinFile, pinFromUrl, getFile } from "../providers/ipfs.js";
 import { logRequest } from "../db/ledger.js";
+import { isPublicUrl, isValidCid, safeErrorMessage } from "../lib/validation.js";
 
 const router = Router();
 const upload = multer({
@@ -10,7 +12,6 @@ const upload = multer({
 });
 
 router.post("/api/ipfs/pin", upload.single("file"), async (req: Request, res: Response) => {
-  // Determine pin type from body: json, url, or file upload
   const start = Date.now();
   let upstreamStatus = 0;
 
@@ -18,15 +19,22 @@ router.post("/api/ipfs/pin", upload.single("file"), async (req: Request, res: Re
     let result;
 
     if (req.file) {
-      // File upload via multipart
-      result = await pinFile(req.file.buffer, req.file.originalname);
+      // Sanitize filename
+      const safeName = path.basename(req.file.originalname).replace(/[^a-zA-Z0-9._-]/g, "_");
+      result = await pinFile(req.file.buffer, safeName);
     } else if (req.body?.json) {
-      // Pin JSON object
       const json = typeof req.body.json === "string" ? JSON.parse(req.body.json) : req.body.json;
-      result = await pinJson(json, req.body.name);
+      const name = typeof req.body.name === "string" ? req.body.name.slice(0, 100) : undefined;
+      result = await pinJson(json, name);
     } else if (req.body?.url) {
-      // Pin from URL
-      result = await pinFromUrl(req.body.url, req.body.name);
+      // SSRF protection: validate URL is public
+      const urlCheck = isPublicUrl(req.body.url);
+      if (!urlCheck.valid) {
+        res.status(400).json({ error: urlCheck.reason });
+        return;
+      }
+      const name = typeof req.body.name === "string" ? req.body.name.slice(0, 100) : undefined;
+      result = await pinFromUrl(urlCheck.url, name);
     } else {
       res.status(400).json({
         error: "Provide 'json' object, 'url' string, or upload a 'file' via multipart form",
@@ -38,11 +46,8 @@ router.post("/api/ipfs/pin", upload.single("file"), async (req: Request, res: Re
     res.json({ service: "ipfs-pin", data: result });
   } catch (err: any) {
     upstreamStatus = err.status || 500;
-    if (err.status === 502) {
-      res.status(502).json({ error: "Upstream error", message: err.message });
-    } else {
-      res.status(500).json({ error: "IPFS pin failed", message: err.message });
-    }
+    const status = err.status === 502 ? 502 : 500;
+    res.status(status).json({ error: "IPFS pin failed" });
   } finally {
     logRequest({
       service: "ipfs-pin",
@@ -64,6 +69,11 @@ router.get("/api/ipfs/get", async (req: Request, res: Response) => {
     return;
   }
 
+  if (!isValidCid(cid)) {
+    res.status(400).json({ error: "Invalid CID format" });
+    return;
+  }
+
   const start = Date.now();
   let upstreamStatus = 0;
 
@@ -71,19 +81,18 @@ router.get("/api/ipfs/get", async (req: Request, res: Response) => {
     const { data, contentType } = await getFile(cid);
     upstreamStatus = 200;
 
-    // If it's JSON, return as JSON; otherwise return raw
     if (contentType.includes("json")) {
       res.json({ service: "ipfs-get", cid, data: JSON.parse(data.toString()) });
     } else {
-      res.setHeader("Content-Type", contentType);
+      // Set safe content type — never pass through text/html
+      const safeType = contentType.startsWith("text/html") ? "application/octet-stream" : contentType;
+      res.setHeader("Content-Type", safeType);
+      res.setHeader("X-Content-Type-Options", "nosniff");
       res.send(data);
     }
   } catch (err: any) {
     upstreamStatus = err.status || 500;
-    res.status(err.status === 404 ? 404 : 502).json({
-      error: "IPFS fetch failed",
-      message: err.message,
-    });
+    res.status(err.status === 404 ? 404 : 502).json({ error: "IPFS fetch failed" });
   } finally {
     logRequest({
       service: "ipfs-get",

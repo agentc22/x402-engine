@@ -44,11 +44,10 @@ router.post("/api/code/run", async (req: Request, res: Response) => {
   } catch (err: any) {
     upstreamStatus = err.status || 500;
     if (err.message?.includes("timeout")) {
-      res.status(408).json({ error: "Execution timeout", message: "Code execution exceeded time limit" });
-    } else if (err.status === 502) {
-      res.status(502).json({ error: "Upstream error", message: err.message });
+      res.status(408).json({ error: "Code execution exceeded time limit" });
     } else {
-      res.status(500).json({ error: "Code execution failed", message: err.message });
+      const status = err.status === 502 ? 502 : 500;
+      res.status(status).json({ error: "Code execution failed" });
     }
   } finally {
     logRequest({

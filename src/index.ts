@@ -1,10 +1,14 @@
 import express from "express";
+import path from "path";
+import { fileURLToPath } from "url";
+import type { Server } from "http";
 import { config } from "./config.js";
-import { initDatabase } from "./db/ledger.js";
+import { initDatabase, checkDatabase, getPoolStats, shutdownDatabase } from "./db/ledger.js";
 import { getAllServices, getService, buildRoutesConfig } from "./services/registry.js";
 import { MEGAETH_CONFIG, BASE_CONFIG, BASE_SEPOLIA_CONFIG } from "./config/chains.js";
 import { createPaymentMiddleware, devBypassMiddleware } from "./middleware/x402.js";
 import { megaethPaymentMiddleware } from "./middleware/payment.js";
+import { freeEndpointLimiter, paidEndpointLimiter, expensiveEndpointLimiter } from "./middleware/rate-limit.js";
 import imageRouter from "./apis/image.js";
 import codeRouter from "./apis/code.js";
 import transcribeRouter from "./apis/transcribe.js";
@@ -15,22 +19,60 @@ import megaethFacilitator from "./facilitator/index.js";
 import { initFal } from "./providers/fal.js";
 import { initDeepgram } from "./providers/deepgram.js";
 import { initIpfs } from "./providers/ipfs.js";
+import { checkMegaETHConnection } from "./verification/megaeth.js";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const app = express();
-app.use(express.json({ limit: "50mb" }));
 
-// --- Phase 6: Free endpoints (before payment middleware) ---
+// --- Global body limit: 1MB (route-specific overrides below) ---
+app.use(express.json({ limit: "1mb" }));
 
-app.get("/health", (_req, res) => {
+// --- Static site (landing page + docs) ---
+// Mounted after API routes to avoid unnecessary fs.stat on API requests
+// (moved below, before paid routes)
+
+// --- Free endpoints (before payment middleware) ---
+
+app.get("/health", freeEndpointLimiter, (_req, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
+
+app.get("/health/deep", expensiveEndpointLimiter, async (_req, res) => {
+  const [dbOk, megaethOk] = await Promise.all([
+    checkDatabase(),
+    checkMegaETHConnection(),
+  ]);
+  const poolStats = getPoolStats();
+  const memUsage = process.memoryUsage();
+
+  const healthy = dbOk && megaethOk;
+  res.status(healthy ? 200 : 503).json({
+    status: healthy ? "ok" : "degraded",
+    timestamp: new Date().toISOString(),
+    checks: {
+      database: dbOk ? "ok" : "down",
+      megaethRpc: megaethOk ? "ok" : "down",
+    },
+    pool: poolStats,
+    memory: {
+      heapUsedMB: Math.round(memUsage.heapUsed / 1024 / 1024),
+      heapTotalMB: Math.round(memUsage.heapTotal / 1024 / 1024),
+      rssMB: Math.round(memUsage.rss / 1024 / 1024),
+    },
+  });
+});
+
+// --- Discovery endpoints (cached at startup) ---
+
+const discoveryResponse = buildDiscoveryResponse();
+const servicesResponse = buildServicesResponse();
 
 function buildDiscoveryResponse() {
   const services = getAllServices();
   const routes = buildRoutesConfig();
   const baseChain = config.isDev ? BASE_SEPOLIA_CONFIG : BASE_CONFIG;
 
-  // Group services by category
   const categories: Record<string, { id: string; name: string; price: string; endpoint: string }[]> = {};
   for (const s of services) {
     const cat = s.category || "basic";
@@ -79,17 +121,9 @@ function buildDiscoveryResponse() {
   };
 }
 
-app.get("/.well-known/x402.json", (_req, res) => {
-  res.json(buildDiscoveryResponse());
-});
-
-app.get("/api/discover", (_req, res) => {
-  res.json(buildDiscoveryResponse());
-});
-
-app.get("/api/services", (_req, res) => {
+function buildServicesResponse() {
   const services = getAllServices();
-  res.json({
+  return {
     count: services.length,
     services: services.map((s) => ({
       id: s.id,
@@ -99,13 +133,25 @@ app.get("/api/services", (_req, res) => {
       endpoint: s.path,
       method: s.method,
     })),
-  });
+  };
+}
+
+app.get("/.well-known/x402.json", freeEndpointLimiter, (_req, res) => {
+  res.json(discoveryResponse);
 });
 
-app.get("/api/services/:id", (req, res) => {
-  const svc = getService(req.params.id);
+app.get("/api/discover", freeEndpointLimiter, (_req, res) => {
+  res.json(discoveryResponse);
+});
+
+app.get("/api/services", freeEndpointLimiter, (_req, res) => {
+  res.json(servicesResponse);
+});
+
+app.get("/api/services/:id", freeEndpointLimiter, (req, res) => {
+  const svc = getService(req.params.id as string);
   if (!svc) {
-    res.status(404).json({ error: `Service '${req.params.id}' not found` });
+    res.status(404).json({ error: "Service not found" });
     return;
   }
   const routes = buildRoutesConfig() as Record<string, any>;
@@ -116,28 +162,27 @@ app.get("/api/services/:id", (req, res) => {
   });
 });
 
-// Free informational endpoints removed (Alchemy RPC replaced by Allium)
-
-// MegaETH facilitator stub (free)
+// MegaETH facilitator routes (free, rate limited)
+app.use("/facilitator/megaeth", expensiveEndpointLimiter);
 app.use(megaethFacilitator);
+
+// --- Static site (after free API routes, before payment middleware) ---
+app.use(express.static(path.join(__dirname, "../public")));
+
+// --- Rate limit on paid endpoints (secondary guard to payment requirement) ---
+app.use(paidEndpointLimiter);
 
 // --- Dev bypass middleware (must come before payment middleware) ---
 app.use(devBypassMiddleware());
 
 // --- MegaETH direct payment middleware ---
-// Intercepts payments for eip155:4326 and verifies USDm transfers
-// on-chain. No facilitator, no settlement step, no response buffering.
-// Non-MegaETH payments pass through to the SDK middleware below.
 app.use(megaethPaymentMiddleware());
 
 // --- x402 SDK Payment Middleware (Base + Solana) ---
-// Handles permit-based payment flows via the official facilitator.
-// MegaETH payments are already handled above — this is the fallback.
 const paymentMw = createPaymentMiddleware();
 
 app.use((req, res, next) => {
   if ((req as any).devBypassed || (req as any).x402?.method === "direct") {
-    // Skip SDK middleware: dev bypass or already verified by MegaETH middleware
     next();
   } else {
     paymentMw(req, res, next);
@@ -145,29 +190,32 @@ app.use((req, res, next) => {
 });
 
 // --- Paid API routes (after payment middleware) ---
+// Transcribe gets a larger body limit for audio_base64
+app.use("/api/transcribe", express.json({ limit: "50mb" }), transcribeRouter);
 app.use(imageRouter);
 app.use(codeRouter);
-app.use(transcribeRouter);
 app.use(cryptoRouter);
 app.use(blockchainRouter);
 app.use(ipfsRouter);
 
 // --- Start ---
+let server: Server;
+
 async function main() {
   console.log("Initializing x402 Gateway...");
   console.log(`  Environment: ${config.nodeEnv}`);
 
-  initDatabase();
-  console.log("  Database initialized");
-
+  await initDatabase();
+  console.log("  Database initialized (PostgreSQL, pool max=50)");
 
   initFal();
   initDeepgram();
   initIpfs();
 
-  app.listen(config.port, () => {
+  server = app.listen(config.port, () => {
     console.log(`\nx402 Gateway running on http://localhost:${config.port}`);
     console.log(`  Health: http://localhost:${config.port}/health`);
+    console.log(`  Deep health: http://localhost:${config.port}/health/deep`);
     console.log(`  Discovery: http://localhost:${config.port}/.well-known/x402.json`);
     console.log(`  Services: http://localhost:${config.port}/api/services`);
     if (config.isDev) {
@@ -175,6 +223,35 @@ async function main() {
     }
   });
 }
+
+// --- Graceful shutdown ---
+async function shutdown(signal: string) {
+  console.log(`\n${signal} received — shutting down gracefully...`);
+
+  // Stop accepting new connections
+  if (server) {
+    server.close(() => {
+      console.log("  HTTP server closed");
+    });
+  }
+
+  // Give in-flight requests 10 seconds to complete
+  await new Promise((resolve) => setTimeout(resolve, 10_000));
+
+  // Drain database pool
+  try {
+    await shutdownDatabase();
+    console.log("  Database pool drained");
+  } catch (err: any) {
+    console.error("  Database shutdown error:", err.message);
+  }
+
+  console.log("  Shutdown complete");
+  process.exit(0);
+}
+
+process.on("SIGTERM", () => shutdown("SIGTERM"));
+process.on("SIGINT", () => shutdown("SIGINT"));
 
 main().catch((err) => {
   console.error("Fatal error:", err);

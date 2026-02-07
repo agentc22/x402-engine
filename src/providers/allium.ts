@@ -25,6 +25,7 @@ async function alliumPost(path: string, body: unknown, query?: Record<string, st
     method: "POST",
     headers: headers(),
     body: JSON.stringify(body),
+    signal: AbortSignal.timeout(30_000),
   });
 
   if (!res.ok) {
@@ -50,7 +51,10 @@ async function alliumGet(path: string, query?: Record<string, string>): Promise<
     }
   }
 
-  const res = await fetch(url.toString(), { headers: headers() });
+  const res = await fetch(url.toString(), {
+    headers: headers(),
+    signal: AbortSignal.timeout(30_000),
+  });
 
   if (!res.ok) {
     const text = await res.text().catch(() => "");

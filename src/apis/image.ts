@@ -40,11 +40,8 @@ function imageHandler(model: "fast" | "quality" | "text", serviceId: string, end
       });
     } catch (err: any) {
       upstreamStatus = err.status || 500;
-      if (err.status === 502) {
-        res.status(502).json({ error: "Upstream error", message: err.message });
-      } else {
-        res.status(500).json({ error: "Image generation failed", message: err.message });
-      }
+      const status = err.status === 502 ? 502 : 500;
+      res.status(status).json({ error: "Image generation failed" });
     } finally {
       logRequest({
         service: serviceId,

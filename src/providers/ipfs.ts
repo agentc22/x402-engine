@@ -74,10 +74,18 @@ export async function pinFromUrl(url: string, name?: string): Promise<PinRespons
 }
 
 export async function getFile(cid: string): Promise<{ data: Buffer; contentType: string }> {
-  const res = await fetch(`https://${config.pinataGateway}/ipfs/${cid}`);
+  const res = await fetch(`https://${config.pinataGateway}/ipfs/${cid}`, {
+    signal: AbortSignal.timeout(60_000),
+  });
 
   if (!res.ok) {
     throw Object.assign(new Error(`Failed to fetch CID: ${cid}`), { status: 404 });
+  }
+
+  // Reject files larger than 100MB to prevent OOM
+  const contentLength = res.headers.get("content-length");
+  if (contentLength && parseInt(contentLength, 10) > 100 * 1024 * 1024) {
+    throw Object.assign(new Error("File too large"), { status: 413 });
   }
 
   const data = Buffer.from(await res.arrayBuffer());
