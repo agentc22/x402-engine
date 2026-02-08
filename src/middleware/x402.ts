@@ -21,9 +21,11 @@ function usdToUsdm(amount: number): string {
 }
 
 export function createPaymentMiddleware(): RequestHandler {
-  const facilitatorConfig = config.cdpApiKeyId && config.cdpApiKeySecret
+  const useCdp = !!(config.cdpApiKeyId && config.cdpApiKeySecret);
+  const facilitatorConfig = useCdp
     ? createFacilitatorConfig(config.cdpApiKeyId, config.cdpApiKeySecret)
     : { url: config.facilitatorUrl || "https://x402.org/facilitator" };
+  console.log(`  Facilitator: ${useCdp ? "Coinbase CDP" : facilitatorConfig.url}`);
   const officialFacilitator = new HTTPFacilitatorClient(facilitatorConfig);
   const megaethFacilitator = new MegaETHFacilitatorClient();
 
