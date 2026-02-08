@@ -17,7 +17,9 @@ COPY --from=builder /app/dist dist/
 COPY config/ config/
 COPY public/ public/
 
-RUN mkdir -p /app/data
+RUN mkdir -p /app/data && chown -R node:node /app
+
+USER node
 
 ENV NODE_ENV=production
 ENV PORT=3402

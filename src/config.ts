@@ -29,7 +29,7 @@ export const config = {
   isDev: optional("NODE_ENV", "development") === "development",
 
   payToEvm: required("PAY_TO_EVM"),
-  payToSolana: required("PAY_TO_SOLANA"),
+  payToSolana: optional("PAY_TO_SOLANA", ""),
 
   devBypassSecret: optional("DEV_BYPASS_SECRET", ""),
   facilitatorUrl: optional("FACILITATOR_URL", ""),
