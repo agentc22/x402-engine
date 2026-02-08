@@ -32,6 +32,7 @@ export const config = {
   payToSolana: optional("PAY_TO_SOLANA", ""),
 
   devBypassSecret: optional("DEV_BYPASS_SECRET", ""),
+  dashboardSecret: optional("DASHBOARD_SECRET", ""),
   facilitatorUrl: optional("FACILITATOR_URL", ""),
   cdpApiKeyId: optional("CDP_API_KEY_ID", ""),
   cdpApiKeySecret: optional("CDP_API_KEY_SECRET", ""),

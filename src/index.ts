@@ -17,6 +17,7 @@ import transcribeRouter from "./apis/transcribe.js";
 import cryptoRouter from "./apis/crypto.js";
 import blockchainRouter from "./apis/blockchain.js";
 import ipfsRouter from "./apis/ipfs.js";
+import dashboardRouter from "./apis/dashboard.js";
 import megaethFacilitator from "./facilitator/index.js";
 import { initFal } from "./providers/fal.js";
 import { initDeepgram } from "./providers/deepgram.js";
@@ -196,6 +197,9 @@ app.get("/api/services/:id", freeEndpointLimiter, (req, res) => {
     paymentOptions: routes[routeKey]?.accepts ?? [],
   });
 });
+
+// Dashboard (auth-protected, before payment middleware)
+app.use(dashboardRouter);
 
 // MegaETH facilitator routes (free, rate limited)
 app.use("/facilitator/megaeth", expensiveEndpointLimiter);
