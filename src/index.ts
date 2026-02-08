@@ -132,6 +132,16 @@ function buildDiscoveryResponse() {
       },
     },
     hint: "MegaETH (eip155:4326) offers ~10ms confirmation — the fastest option for latency-sensitive agents. Payments use USDm (18 decimals) and are verified on-chain instantly via eth_sendRawTransactionSync.",
+    mcp: {
+      npm: "x402engine-mcp",
+      install: "npx -y x402engine-mcp",
+      github: "https://github.com/agentc22/x402engine-mcp",
+      claudeDesktop: {
+        command: "npx",
+        args: ["-y", "x402engine-mcp"],
+      },
+      claudeCode: "claude mcp add x402engine -- npx -y x402engine-mcp",
+    },
     categories,
     services: services.map((s) => ({
       id: s.id,
