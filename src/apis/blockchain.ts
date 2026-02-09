@@ -33,7 +33,7 @@ router.post("/api/wallet/balances", async (req: Request, res: Response) => {
   try {
     const data = await getWalletBalances([{ chain, address }]);
     upstreamStatus = 200;
-    res.json({ service: "wallet-balances", data });
+    res.json(data);
   } catch (err: any) {
     upstreamStatus = err.status || 500;
     res.setHeader("Retry-After", "5");
@@ -73,7 +73,7 @@ router.post("/api/wallet/transactions", async (req: Request, res: Response) => {
   try {
     const data = await getWalletTransactions([{ chain, address }]);
     upstreamStatus = 200;
-    res.json({ service: "wallet-transactions", data });
+    res.json(data);
   } catch (err: any) {
     upstreamStatus = err.status || 500;
     res.setHeader("Retry-After", "5");
@@ -130,7 +130,7 @@ router.post("/api/wallet/pnl", async (req: Request, res: Response) => {
   try {
     const data = await getWalletPnl([{ chain, address }], min_liquidity, min_volume_24h);
     upstreamStatus = 200;
-    res.json({ service: "wallet-pnl", data });
+    res.json(data);
   } catch (err: any) {
     upstreamStatus = err.status || 500;
     res.setHeader("Retry-After", "5");
@@ -178,7 +178,7 @@ router.post("/api/token/prices", async (req: Request, res: Response) => {
   try {
     const data = await getTokenPrices(tokens);
     upstreamStatus = 200;
-    res.json({ service: "token-prices", data });
+    res.json(data);
   } catch (err: any) {
     upstreamStatus = err.status || 500;
     res.setHeader("Retry-After", "5");
@@ -242,7 +242,7 @@ router.get("/api/token/metadata", async (req: Request, res: Response) => {
 
     const data = await getAssets(query);
     upstreamStatus = 200;
-    res.json({ service: "token-metadata", data });
+    res.json(data);
   } catch (err: any) {
     upstreamStatus = err.status || 500;
     res.setHeader("Retry-After", "5");

@@ -36,7 +36,7 @@ router.get("/api/crypto/price", async (req: Request, res: Response) => {
   const cacheKey = `price:${ids.join(",")}:${currencies.join(",")}:${include24h}:${includeMcap}`;
   const cached = cache.get(cacheKey);
   if (cached) {
-    res.json({ service: "crypto-price", data: cached, cached: true });
+    res.json(cached);
     return;
   }
 
@@ -47,7 +47,7 @@ router.get("/api/crypto/price", async (req: Request, res: Response) => {
     const data = await getPrice(ids, currencies, include24h, includeMcap);
     upstreamStatus = 200;
     cache.set(cacheKey, data);
-    res.json({ service: "crypto-price", data });
+    res.json(data);
   } catch (err: any) {
     upstreamStatus = err.status || 500;
     res.setHeader("Retry-After", "5");
@@ -85,7 +85,7 @@ router.get("/api/crypto/markets", async (req: Request, res: Response) => {
   const cacheKey = `markets:${currency}:${category}:${order}:${limit}:${page}`;
   const cached = cache.get(cacheKey);
   if (cached) {
-    res.json({ service: "crypto-markets", count: cached.length, data: cached, cached: true });
+    res.json(cached);
     return;
   }
 
@@ -96,7 +96,7 @@ router.get("/api/crypto/markets", async (req: Request, res: Response) => {
     const data = await getMarkets(currency, { category, order, perPage: limit, page });
     upstreamStatus = 200;
     cache.set(cacheKey, data);
-    res.json({ service: "crypto-markets", count: data.length, data });
+    res.json(data);
   } catch (err: any) {
     upstreamStatus = err.status || 500;
     res.setHeader("Retry-After", "5");
@@ -133,7 +133,7 @@ router.get("/api/crypto/history", async (req: Request, res: Response) => {
   const cacheKey = `history:${id}:${currency}:${days}:${interval}`;
   const cached = cache.get(cacheKey);
   if (cached) {
-    res.json({ service: "crypto-history", data: cached, cached: true });
+    res.json(cached);
     return;
   }
 
@@ -144,7 +144,7 @@ router.get("/api/crypto/history", async (req: Request, res: Response) => {
     const data = await getHistorical(id, currency, days, interval);
     upstreamStatus = 200;
     cache.set(cacheKey, data);
-    res.json({ service: "crypto-history", data });
+    res.json(data);
   } catch (err: any) {
     upstreamStatus = err.status || 500;
     res.setHeader("Retry-After", "5");
@@ -165,7 +165,7 @@ router.get("/api/crypto/history", async (req: Request, res: Response) => {
 router.get("/api/crypto/trending", async (req: Request, res: Response) => {
   const cached = cache.get("trending");
   if (cached) {
-    res.json({ service: "crypto-trending", data: cached, cached: true });
+    res.json(cached);
     return;
   }
 
@@ -176,7 +176,7 @@ router.get("/api/crypto/trending", async (req: Request, res: Response) => {
     const data = await getTrending();
     upstreamStatus = 200;
     cache.set("trending", data);
-    res.json({ service: "crypto-trending", data });
+    res.json(data);
   } catch (err: any) {
     upstreamStatus = err.status || 500;
     res.setHeader("Retry-After", "5");
@@ -209,7 +209,7 @@ router.get("/api/crypto/search", async (req: Request, res: Response) => {
   const cacheKey = `search:${q.toLowerCase()}`;
   const cached = cache.get(cacheKey);
   if (cached) {
-    res.json({ service: "crypto-search", data: cached, cached: true });
+    res.json(cached);
     return;
   }
 
@@ -220,7 +220,7 @@ router.get("/api/crypto/search", async (req: Request, res: Response) => {
     const data = await searchCoin(q);
     upstreamStatus = 200;
     cache.set(cacheKey, data);
-    res.json({ service: "crypto-search", data });
+    res.json(data);
   } catch (err: any) {
     upstreamStatus = err.status || 500;
     res.setHeader("Retry-After", "5");
