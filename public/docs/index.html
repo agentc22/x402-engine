@@ -164,7 +164,7 @@
 <span class="text-gray-500">// GET endpoint</span>
 <span class="text-emerald-400">const</span> price = <span class="text-emerald-400">await</span> paidFetch(<span class="text-amber-300">`${BASE}/api/crypto/price?ids=bitcoin`</span>);
 console.log(<span class="text-emerald-400">await</span> price.json());
-<span class="text-gray-500">// { service: "crypto-price", data: { bitcoin: { usd: 97234 } } }</span>
+<span class="text-gray-500">// { bitcoin: { usd: 97234, usd_24h_change: 2.31 } }</span>
 
 <span class="text-gray-500">// POST endpoint</span>
 <span class="text-emerald-400">const</span> balances = <span class="text-emerald-400">await</span> paidFetch(<span class="text-amber-300">`${BASE}/api/wallet/balances`</span>, {
@@ -235,10 +235,8 @@ X-PAYMENT: &lt;base64-encoded signed payment payload&gt;</code></pre>
 PAYMENT-RESPONSE: &lt;base64 settlement receipt&gt;
 Content-Type: application/json
 
-{
-  "service": "crypto-price",
-  "data": { "bitcoin": { "usd": 97234.12, "usd_24h_change": 2.31 } }
-}</code></pre>
+{ "bitcoin": { "usd": 97234.12, "usd_24h_change": 2.31 } }
+</code></pre>
           </div>
         </section>
 
@@ -352,11 +350,8 @@ Content-Type: application/json
           <h4 class="text-white text-sm font-semibold mb-2">Example Response</h4>
           <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
             <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">{
-  "service": "crypto-price",
-  "data": {
-    "bitcoin": { "usd": 97234.12, "usd_24h_change": 2.31 },
-    "ethereum": { "usd": 3456.78, "usd_24h_change": -0.45 }
-  }
+  "bitcoin": { "usd": 97234.12, "usd_24h_change": 2.31 },
+  "ethereum": { "usd": 3456.78, "usd_24h_change": -0.45 }
 }</code></pre>
           </div>
         </section>
@@ -386,15 +381,10 @@ Content-Type: application/json
 
           <h4 class="text-white text-sm font-semibold mb-2">Example Response</h4>
           <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
-            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">{
-  "service": "crypto-markets",
-  "count": 100,
-  "data": [
-    { "id": "bitcoin", "symbol": "btc", "name": "Bitcoin",
-      "current_price": 97234, "market_cap": 1920000000000, ... }
-  ]
-}</code></pre>
-          </div>
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">[
+  { "id": "bitcoin", "symbol": "btc", "name": "Bitcoin",
+    "current_price": 97234, "market_cap": 1920000000000, ... }
+]</code></pre>          </div>
         </section>
 
         <!-- crypto-history -->
@@ -422,14 +412,10 @@ Content-Type: application/json
           <h4 class="text-white text-sm font-semibold mb-2">Example Response</h4>
           <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
             <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">{
-  "service": "crypto-history",
-  "data": {
-    "prices": [[1706745600000, 43012.5], [1706832000000, 43150.2], ...],
-    "market_caps": [...],
-    "total_volumes": [...]
-  }
-}</code></pre>
-          </div>
+  "prices": [[1706745600000, 43012.5], [1706832000000, 43150.2], ...],
+  "market_caps": [...],
+  "total_volumes": [...]
+}</code></pre>          </div>
         </section>
 
         <!-- crypto-trending -->
@@ -444,14 +430,10 @@ Content-Type: application/json
           <h4 class="text-white text-sm font-semibold mb-2">Example Response</h4>
           <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
             <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">{
-  "service": "crypto-trending",
-  "data": {
-    "coins": [
-      { "item": { "id": "pepe", "name": "Pepe", "symbol": "PEPE", "market_cap_rank": 24, ... } }
-    ]
-  }
-}</code></pre>
-          </div>
+  "coins": [
+    { "item": { "id": "pepe", "name": "Pepe", "symbol": "PEPE", "market_cap_rank": 24, ... } }
+  ]
+}</code></pre>          </div>
         </section>
 
         <!-- crypto-search -->
@@ -476,15 +458,10 @@ Content-Type: application/json
           <h4 class="text-white text-sm font-semibold mb-2">Example Response</h4>
           <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
             <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">{
-  "service": "crypto-search",
-  "data": {
-    "coins": [
-      { "id": "bitcoin", "name": "Bitcoin", "symbol": "BTC", "market_cap_rank": 1 }
-    ]
-  }
-}</code></pre>
-          </div>
-        </section>
+  "coins": [
+    { "id": "bitcoin", "name": "Bitcoin", "symbol": "BTC", "market_cap_rank": 1 }
+  ]
+}</code></pre>        </section>
 
         <!-- wallet-balances -->
         <section id="wallet-balances" class="mb-14">
@@ -517,15 +494,11 @@ Content-Type: application/json
           <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
             <div class="flex items-center px-4 py-2 bg-white/[0.03] border-b border-white/5"><span class="text-xs text-gray-500 font-mono">Response</span></div>
             <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">{
-  "service": "wallet-balances",
-  "data": {
-    "balances": [
-      { "token_symbol": "USDC", "balance": "164.23", "usd_value": 164.23, ... },
-      { "token_symbol": "ETH", "balance": "0.05", "usd_value": 162.50, ... }
-    ]
-  }
-}</code></pre>
-          </div>
+  "balances": [
+    { "token_symbol": "USDC", "balance": "164.23", "usd_value": 164.23, ... },
+    { "token_symbol": "ETH", "balance": "0.05", "usd_value": 162.50, ... }
+  ]
+}</code></pre>          </div>
         </section>
 
         <!-- wallet-transactions -->
@@ -860,7 +833,7 @@ Content-Type: application/json
                 <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-amber-400">404</td><td class="py-2 px-3">Resource not found</td></tr>
                 <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-amber-400">408</td><td class="py-2 px-3">Execution timeout (code execution)</td></tr>
                 <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-red-400">500</td><td class="py-2 px-3">Internal server error</td></tr>
-                <tr><td class="py-2 px-3 font-mono text-red-400">502</td><td class="py-2 px-3">Upstream provider error or not configured</td></tr>
+                <tr><td class="py-2 px-3 font-mono text-red-400">503</td><td class="py-2 px-3">Upstream temporarily unavailable (retryable)</td></tr>
               </tbody>
             </table>
           </div>

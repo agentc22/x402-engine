@@ -612,7 +612,7 @@
             <div class="rounded-lg bg-surface-950 border border-white/5 p-4 font-mono text-xs text-gray-400">
               <span class="text-emerald-400">HTTP/1.1 200 OK</span><br>
               <span class="text-gray-600">PAYMENT-RESPONSE:</span> <span class="text-emerald-400/60">&lt;settlement receipt&gt;</span><br>
-              <span class="text-emerald-400/60">{ "bitcoin": { "usd": 97234.12 } }</span>
+              <span class="text-emerald-400/60">{ "bitcoin": { "usd": 97234.12, "usd_24h_change": 2.31 } }</span>
             </div>
           </div>
         </div>
@@ -648,7 +648,7 @@
   <span class="text-amber-300">"https://x402-gateway-production.up.railway.app/api/crypto/price?ids=bitcoin"</span>
 );
 <span class="text-emerald-400">const</span> data = <span class="text-emerald-400">await</span> res.json();
-console.log(data); <span class="text-gray-500">// { bitcoin: { usd: 97234.12 } }</span></code></pre>
+console.log(data); <span class="text-gray-500">// { bitcoin: { usd: 97234.12, usd_24h_change: 2.31 } }</span></code></pre>
       </div>
       <div class="mt-6 text-center">
         <a href="/docs" class="text-brand-400 hover:text-brand-300 text-sm font-medium">Full documentation with all endpoints &rarr;</a>

@@ -110,7 +110,7 @@ function buildDiscoveryResponse() {
     name: "x402 Gateway",
     version: "3.0.0",
     x402Version: 2,
-    apiOrigin: "https://x402-gateway-production.up.railway.app",
+    baseUrl: "https://x402-gateway-production.up.railway.app",
     networks: {
       base: {
         chainId: baseChain.chainId,
