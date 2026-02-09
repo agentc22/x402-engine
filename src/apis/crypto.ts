@@ -50,7 +50,8 @@ router.get("/api/crypto/price", async (req: Request, res: Response) => {
     res.json({ service: "crypto-price", data });
   } catch (err: any) {
     upstreamStatus = err.status || 500;
-    res.status(502).json({ error: "Upstream error" });
+    res.setHeader("Retry-After", "5");
+    res.status(503).json({ error: "Upstream temporarily unavailable", retryable: true });
   } finally {
     logRequest({
       service: "crypto-price",
@@ -98,7 +99,8 @@ router.get("/api/crypto/markets", async (req: Request, res: Response) => {
     res.json({ service: "crypto-markets", count: data.length, data });
   } catch (err: any) {
     upstreamStatus = err.status || 500;
-    res.status(502).json({ error: "Upstream error" });
+    res.setHeader("Retry-After", "5");
+    res.status(503).json({ error: "Upstream temporarily unavailable", retryable: true });
   } finally {
     logRequest({
       service: "crypto-markets",
@@ -145,7 +147,8 @@ router.get("/api/crypto/history", async (req: Request, res: Response) => {
     res.json({ service: "crypto-history", data });
   } catch (err: any) {
     upstreamStatus = err.status || 500;
-    res.status(502).json({ error: "Upstream error" });
+    res.setHeader("Retry-After", "5");
+    res.status(503).json({ error: "Upstream temporarily unavailable", retryable: true });
   } finally {
     logRequest({
       service: "crypto-history",
@@ -176,7 +179,8 @@ router.get("/api/crypto/trending", async (req: Request, res: Response) => {
     res.json({ service: "crypto-trending", data });
   } catch (err: any) {
     upstreamStatus = err.status || 500;
-    res.status(502).json({ error: "Upstream error" });
+    res.setHeader("Retry-After", "5");
+    res.status(503).json({ error: "Upstream temporarily unavailable", retryable: true });
   } finally {
     logRequest({
       service: "crypto-trending",
@@ -219,7 +223,8 @@ router.get("/api/crypto/search", async (req: Request, res: Response) => {
     res.json({ service: "crypto-search", data });
   } catch (err: any) {
     upstreamStatus = err.status || 500;
-    res.status(502).json({ error: "Upstream error" });
+    res.setHeader("Retry-After", "5");
+    res.status(503).json({ error: "Upstream temporarily unavailable", retryable: true });
   } finally {
     logRequest({
       service: "crypto-search",

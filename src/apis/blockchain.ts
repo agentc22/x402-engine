@@ -36,7 +36,8 @@ router.post("/api/wallet/balances", async (req: Request, res: Response) => {
     res.json({ service: "wallet-balances", data });
   } catch (err: any) {
     upstreamStatus = err.status || 500;
-    res.status(502).json({ error: "Failed to fetch wallet balances" });
+    res.setHeader("Retry-After", "5");
+    res.status(503).json({ error: "Failed to fetch wallet balances", retryable: true });
   } finally {
     logRequest({
       service: "wallet-balances",
@@ -75,7 +76,8 @@ router.post("/api/wallet/transactions", async (req: Request, res: Response) => {
     res.json({ service: "wallet-transactions", data });
   } catch (err: any) {
     upstreamStatus = err.status || 500;
-    res.status(502).json({ error: "Failed to fetch transactions" });
+    res.setHeader("Retry-After", "5");
+    res.status(503).json({ error: "Failed to fetch transactions", retryable: true });
   } finally {
     logRequest({
       service: "wallet-transactions",
@@ -131,7 +133,8 @@ router.post("/api/wallet/pnl", async (req: Request, res: Response) => {
     res.json({ service: "wallet-pnl", data });
   } catch (err: any) {
     upstreamStatus = err.status || 500;
-    res.status(502).json({ error: "Failed to fetch wallet P&L" });
+    res.setHeader("Retry-After", "5");
+    res.status(503).json({ error: "Failed to fetch wallet P&L", retryable: true });
   } finally {
     logRequest({
       service: "wallet-pnl",
@@ -178,7 +181,8 @@ router.post("/api/token/prices", async (req: Request, res: Response) => {
     res.json({ service: "token-prices", data });
   } catch (err: any) {
     upstreamStatus = err.status || 500;
-    res.status(502).json({ error: "Failed to fetch token prices" });
+    res.setHeader("Retry-After", "5");
+    res.status(503).json({ error: "Failed to fetch token prices", retryable: true });
   } finally {
     logRequest({
       service: "token-prices",
@@ -241,7 +245,8 @@ router.get("/api/token/metadata", async (req: Request, res: Response) => {
     res.json({ service: "token-metadata", data });
   } catch (err: any) {
     upstreamStatus = err.status || 500;
-    res.status(502).json({ error: "Failed to fetch token metadata" });
+    res.setHeader("Retry-After", "5");
+    res.status(503).json({ error: "Failed to fetch token metadata", retryable: true });
   } finally {
     logRequest({
       service: "token-metadata",
