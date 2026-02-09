@@ -103,7 +103,7 @@ function buildDiscoveryResponse() {
   for (const s of services) {
     const cat = s.category || "basic";
     if (!categories[cat]) categories[cat] = [];
-    categories[cat].push({ id: s.id, name: s.name, price: s.price, endpoint: s.path });
+    categories[cat].push({ id: s.id, name: s.name, price: s.price, endpoint: `https://x402-gateway-production.up.railway.app${s.path}` });
   }
 
   return {
@@ -111,6 +111,7 @@ function buildDiscoveryResponse() {
     version: "3.0.0",
     x402Version: 2,
     baseUrl: "https://x402-gateway-production.up.railway.app",
+    important: "Always use the baseUrl above for API requests. The discovery endpoint may be served from a different domain (e.g. x402engine.app) but API calls must go to the baseUrl to avoid gateway errors.",
     networks: {
       base: {
         chainId: baseChain.chainId,
@@ -150,7 +151,7 @@ function buildDiscoveryResponse() {
       name: s.name,
       description: s.description,
       price: s.price,
-      endpoint: s.path,
+      endpoint: `https://x402-gateway-production.up.railway.app${s.path}`,
       method: s.method,
       category: s.category || "basic",
     })),
@@ -161,13 +162,14 @@ function buildDiscoveryResponse() {
 function buildServicesResponse() {
   const services = getAllServices();
   return {
+    baseUrl: "https://x402-gateway-production.up.railway.app",
     count: services.length,
     services: services.map((s) => ({
       id: s.id,
       name: s.name,
       description: s.description,
       price: s.price,
-      endpoint: s.path,
+      endpoint: `https://x402-gateway-production.up.railway.app${s.path}`,
       method: s.method,
     })),
   };
