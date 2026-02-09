@@ -7,6 +7,13 @@ function isProKey(key: string): boolean {
   return !!key && !key.startsWith("CG-");
 }
 
+const MAX_RETRIES = 3;
+const BASE_DELAY_MS = 500;
+
+function sleep(ms: number) {
+  return new Promise((r) => setTimeout(r, ms));
+}
+
 async function geckoFetch(path: string, params?: URLSearchParams): Promise<any> {
   const key = keyPool.acquire("coingecko");
 
@@ -17,18 +24,48 @@ async function geckoFetch(path: string, params?: URLSearchParams): Promise<any> 
   }
 
   const url = params ? `${baseUrl}${path}?${params}` : `${baseUrl}${path}`;
-  const res = await fetch(url, {
-    headers,
-    signal: AbortSignal.timeout(30_000),
-  });
-  const data = await res.json();
-  if (!res.ok) {
-    throw Object.assign(new Error(data.error || "CoinGecko API error"), {
-      status: res.status,
-      upstream: data,
-    });
+
+  let lastErr: any;
+  for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+    if (attempt > 0) {
+      const delay = BASE_DELAY_MS * 2 ** (attempt - 1) + Math.random() * 200;
+      console.warn(`[coingecko] retry ${attempt}/${MAX_RETRIES} after ${Math.round(delay)}ms`);
+      await sleep(delay);
+    }
+
+    try {
+      const res = await fetch(url, {
+        headers,
+        signal: AbortSignal.timeout(30_000),
+      });
+
+      // 5xx — transient upstream error, retry
+      if (res.status >= 500 && attempt < MAX_RETRIES) {
+        lastErr = Object.assign(new Error(`CoinGecko ${res.status}`), {
+          status: res.status,
+        });
+        continue;
+      }
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw Object.assign(new Error(data.error || "CoinGecko API error"), {
+          status: res.status,
+          upstream: data,
+        });
+      }
+      return data;
+    } catch (err: any) {
+      // Network errors / timeouts — retry
+      if (err.status >= 500 || err.name === "TimeoutError" || err.name === "TypeError") {
+        lastErr = err;
+        if (attempt < MAX_RETRIES) continue;
+      }
+      throw err;
+    }
   }
-  return data;
+
+  throw lastErr;
 }
 
 export async function getPrice(
