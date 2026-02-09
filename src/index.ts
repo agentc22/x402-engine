@@ -224,7 +224,11 @@ app.use((req, res, next) => {
   if ((req as any).devBypassed || (req as any).x402?.method === "direct") {
     next();
   } else {
-    paymentMw(req, res, next);
+    // Express 4 doesn't catch async rejections — wrap SDK middleware
+    Promise.resolve(paymentMw(req, res, next)).catch((err) => {
+      console.error("[x402-sdk] Unhandled error in payment middleware:", err);
+      next(err);
+    });
   }
 });
 
@@ -236,6 +240,18 @@ app.use(codeRouter);
 app.use(cryptoRouter);
 app.use(blockchainRouter);
 app.use(ipfsRouter);
+
+// --- Global error handler (must be after all routes) ---
+// Express 4 async middleware can throw unhandled rejections that hang requests.
+// This catches them and returns a parseable JSON 503 instead of letting
+// the request hang until Cloudflare times out with its own 502 HTML page.
+app.use((err: any, _req: any, res: any, _next: any) => {
+  console.error("[global] Unhandled route error:", err?.message || err);
+  if (!res.headersSent) {
+    res.setHeader("Retry-After", "5");
+    res.status(503).json({ error: "Internal error", retryable: true });
+  }
+});
 
 // --- Start ---
 let server: Server;
@@ -301,6 +317,11 @@ async function shutdown(signal: string) {
 
 process.on("SIGTERM", () => shutdown("SIGTERM"));
 process.on("SIGINT", () => shutdown("SIGINT"));
+
+// Prevent unhandled promise rejections from crashing the process
+process.on("unhandledRejection", (reason) => {
+  console.error("[process] Unhandled promise rejection:", reason);
+});
 
 main().catch((err) => {
   console.error("Fatal error:", err);

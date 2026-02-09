@@ -81,93 +81,98 @@ function getRouteRequirements(
 
 export function megaethPaymentMiddleware(): RequestHandler {
   return async (req: Request, res: Response, next: NextFunction) => {
-    const paymentHeader =
-      (req.headers["payment-signature"] as string) ||
-      (req.headers["x-payment"] as string);
+    try {
+      const paymentHeader =
+        (req.headers["payment-signature"] as string) ||
+        (req.headers["x-payment"] as string);
 
-    if (!paymentHeader) {
-      return next();
-    }
+      if (!paymentHeader) {
+        return next();
+      }
 
-    const decoded = decodePaymentHeader(paymentHeader);
-    if (!decoded) return next();
+      const decoded = decodePaymentHeader(paymentHeader);
+      if (!decoded) return next();
 
-    const network = detectNetwork(decoded);
-    if (network !== "megaeth") {
-      return next();
-    }
+      const network = detectNetwork(decoded);
+      if (network !== "megaeth") {
+        return next();
+      }
 
-    // --- MegaETH direct verification ---
+      // --- MegaETH direct verification ---
 
-    const start = Date.now();
+      const start = Date.now();
 
-    const routeReq = getRouteRequirements(req.method, req.path);
-    if (!routeReq) {
-      return next();
-    }
+      const routeReq = getRouteRequirements(req.method, req.path);
+      if (!routeReq) {
+        return next();
+      }
 
-    // String-based price conversion — no floating-point
-    const expectedAmount = priceStringToTokenAmount(routeReq.amount, MEGAETH_CONFIG.stablecoin.decimals);
-    const expectedRecipient = routeReq.payTo;
+      // String-based price conversion — no floating-point
+      const expectedAmount = priceStringToTokenAmount(routeReq.amount, MEGAETH_CONFIG.stablecoin.decimals);
+      const expectedRecipient = routeReq.payTo;
 
-    const txHash = decoded.payload?.txHash as string | undefined;
-    if (!txHash || !txHash.startsWith("0x")) {
-      res.status(402).json({
-        x402Version: 2,
-        error: "MegaETH payments require a txHash in the payload",
-      });
-      return;
-    }
+      const txHash = decoded.payload?.txHash as string | undefined;
+      if (!txHash || !txHash.startsWith("0x")) {
+        res.status(402).json({
+          x402Version: 2,
+          error: "MegaETH payments require a txHash in the payload",
+        });
+        return;
+      }
 
-    const proof: PaymentProof = { txHash: txHash as `0x${string}` };
+      const proof: PaymentProof = { txHash: txHash as `0x${string}` };
 
-    const result = await verifyMegaETHPayment(
-      proof,
-      expectedAmount,
-      expectedRecipient,
-    );
+      const result = await verifyMegaETHPayment(
+        proof,
+        expectedAmount,
+        expectedRecipient,
+      );
 
-    const verifyMs = Date.now() - start;
+      const verifyMs = Date.now() - start;
 
-    if (!result.valid) {
-      console.log(`  MegaETH payment FAILED: ${result.error}, txHash=${truncateHash(txHash)} (${verifyMs}ms)`);
-      res.status(402).json({
-        x402Version: 2,
-        error: "Payment verification failed",
-        reason: result.error,
-        network: NETWORKS.megaeth,
-      });
-      return;
-    }
+      if (!result.valid) {
+        console.log(`  MegaETH payment FAILED: ${result.error}, txHash=${truncateHash(txHash)} (${verifyMs}ms)`);
+        res.status(402).json({
+          x402Version: 2,
+          error: "Payment verification failed",
+          reason: result.error,
+          network: NETWORKS.megaeth,
+        });
+        return;
+      }
 
-    // Payment verified — attach info, but log AFTER handler completes
-    (req as any).x402 = {
-      payer: result.payer,
-      network: NETWORKS.megaeth,
-      amount: expectedAmount.toString(),
-      txHash: result.txHash,
-      verificationMs: verifyMs,
-      method: "direct",
-    };
-
-    console.log(`  MegaETH payment verified: ${truncateHash(result.txHash || "")} (${verifyMs}ms)`);
-
-    // Intercept response to log actual status
-    const originalEnd = res.end.bind(res);
-    (res as any).end = function (...args: any[]) {
-      logRequest({
-        service: "megaeth-payment",
-        endpoint: req.path,
+      // Payment verified — attach info, but log AFTER handler completes
+      (req as any).x402 = {
         payer: result.payer,
         network: NETWORKS.megaeth,
         amount: expectedAmount.toString(),
-        scheme: "exact",
-        upstreamStatus: res.statusCode,
-        latencyMs: Date.now() - start,
-      });
-      return originalEnd(...args);
-    };
+        txHash: result.txHash,
+        verificationMs: verifyMs,
+        method: "direct",
+      };
 
-    next();
+      console.log(`  MegaETH payment verified: ${truncateHash(result.txHash || "")} (${verifyMs}ms)`);
+
+      // Intercept response to log actual status
+      const originalEnd = res.end.bind(res);
+      (res as any).end = function (...args: any[]) {
+        logRequest({
+          service: "megaeth-payment",
+          endpoint: req.path,
+          payer: result.payer,
+          network: NETWORKS.megaeth,
+          amount: expectedAmount.toString(),
+          scheme: "exact",
+          upstreamStatus: res.statusCode,
+          latencyMs: Date.now() - start,
+        });
+        return originalEnd(...args);
+      };
+
+      next();
+    } catch (err) {
+      console.error("[megaeth-payment] Unhandled error in payment middleware:", err);
+      next(err);
+    }
   };
 }
