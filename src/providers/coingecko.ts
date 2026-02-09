@@ -4,7 +4,11 @@ const COINGECKO_BASE = "https://api.coingecko.com/api/v3";
 const COINGECKO_PRO_BASE = "https://pro-api.coingecko.com/api/v3";
 
 function isProKey(key: string): boolean {
-  return !!key && !key.startsWith("CG-");
+  // CoinGecko pro keys now also start with "CG-" — the old prefix
+  // heuristic no longer works. Use the PRO_API env var to disambiguate,
+  // defaulting to pro since free/demo tier doesn't require a key at all.
+  if (!key) return false;
+  return process.env.COINGECKO_DEMO === "true" ? false : true;
 }
 
 const MAX_RETRIES = 3;
