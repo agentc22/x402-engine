@@ -50,8 +50,9 @@ router.get("/api/crypto/price", async (req: Request, res: Response) => {
     res.json(data);
   } catch (err: any) {
     upstreamStatus = err.status || 500;
+    console.error(`[crypto-price] upstream error: status=${upstreamStatus} message=${err.message}`, err.upstream || "");
     res.setHeader("Retry-After", "5");
-    res.status(503).json({ error: "Upstream temporarily unavailable", retryable: true });
+    res.status(503).json({ error: "Upstream temporarily unavailable", retryable: true, upstreamStatus });
   } finally {
     logRequest({
       service: "crypto-price",
