@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>x402 Gateway — Pay-per-call APIs for AI Agents</title>
+  <title>x402engine — Pay-per-call APIs for AI Agents</title>
   <meta name="description" content="17 production APIs behind HTTP 402 micropayments. Pay with USDC on Base, USDm on MegaETH, or USDC on Solana. No API keys, no subscriptions — just stablecoins.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -41,7 +41,7 @@
     <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
       <a href="/" class="flex items-center gap-2 font-semibold text-white">
         <span class="text-xl">⚡</span>
-        <span>x402 Gateway</span>
+        <span>x402engine</span>
       </a>
       <div class="hidden sm:flex items-center gap-8 text-sm text-gray-400">
         <a href="#what-is-this" class="hover:text-white transition">What is this</a>
@@ -319,8 +319,7 @@
           </div>
         </div>
         <!-- MegaETH -->
-        <div class="card-glow rounded-2xl p-6 transition relative float-delay opacity-75">
-          <div class="absolute -top-3 right-4 px-2 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-[10px] font-medium uppercase tracking-wider">Coming Soon</div>
+        <div class="card-glow rounded-2xl p-6 transition float-delay">
           <div class="flex items-center gap-3 mb-4">
             <div class="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 font-bold text-sm">M</div>
             <div>
@@ -607,8 +606,8 @@
         <div class="flex gap-6">
           <div class="flex-shrink-0 w-10 h-10 rounded-full bg-brand-600/20 border border-brand-500/30 flex items-center justify-center text-brand-400 font-bold text-sm">3</div>
           <div>
-            <h3 class="text-white font-semibold mb-2">Gateway verifies &amp; responds</h3>
-            <p class="text-gray-400 text-sm mb-3">The gateway verifies the payment on-chain (or via the facilitator), executes the API call, and streams back the result. The settlement receipt is in the response headers.</p>
+            <h3 class="text-white font-semibold mb-2">Engine verifies &amp; responds</h3>
+            <p class="text-gray-400 text-sm mb-3">The engine verifies the payment on-chain (or via the facilitator), executes the API call, and streams back the result. The settlement receipt is in the response headers.</p>
             <div class="rounded-lg bg-surface-950 border border-white/5 p-4 font-mono text-xs text-gray-400">
               <span class="text-emerald-400">HTTP/1.1 200 OK</span><br>
               <span class="text-gray-600">PAYMENT-RESPONSE:</span> <span class="text-emerald-400/60">&lt;settlement receipt&gt;</span><br>
@@ -661,7 +660,7 @@ console.log(data); <span class="text-gray-500">// { bitcoin: { usd: 97234.12, us
     <div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-500">
       <div class="flex items-center gap-2">
         <span>⚡</span>
-        <span>x402 Gateway</span>
+        <span>x402engine</span>
       </div>
       <div class="flex items-center gap-6">
         <a href="/docs" class="hover:text-gray-300 transition">Docs</a>

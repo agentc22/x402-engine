@@ -222,6 +222,43 @@ app.use(devBypassMiddleware());
 // --- MegaETH direct payment middleware ---
 app.use(megaethPaymentMiddleware());
 
+// --- Extract payer metadata from payment header ---
+// The x402 SDK middleware handles verification + settlement but does NOT
+// attach payer/network/amount to req.x402.  We parse the payment header
+// up-front so route handlers can log payment metadata regardless of which
+// payment path was used (SDK vs MegaETH direct vs dev bypass).
+app.use((req, _res, next) => {
+  if ((req as any).devBypassed || (req as any).x402) {
+    return next();
+  }
+  const header =
+    (req.headers["payment-signature"] as string) ||
+    (req.headers["x-payment"] as string);
+  if (!header) return next();
+  try {
+    const decoded = JSON.parse(Buffer.from(header, "base64").toString("utf-8"));
+    const network = decoded.accepted?.network;
+    const amount = decoded.accepted?.amount;
+    // EVM: authorization.from  or  permit2Authorization.from
+    // SVM: payload may differ — fall back gracefully
+    const payer =
+      decoded.payload?.authorization?.from ??
+      decoded.payload?.permit2Authorization?.from ??
+      null;
+    if (network) {
+      (req as any).x402 = {
+        payer,
+        network,
+        amount,
+        method: "sdk",
+      };
+    }
+  } catch {
+    // Malformed header — let the SDK middleware handle the error
+  }
+  next();
+});
+
 // --- x402 SDK Payment Middleware (Base + Solana) ---
 const paymentMw = createPaymentMiddleware();
 
