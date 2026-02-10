@@ -54,11 +54,11 @@ router.post("/api/ipfs/pin", upload.single("file"), async (req: Request, res: Re
     }
 
     upstreamStatus = 200;
-    res.json({ service: "ipfs-pin", data: result });
+    res.json(result);
   } catch (err: any) {
     upstreamStatus = err.status || 500;
-    const status = err.status === 502 ? 502 : 500;
-    res.status(status).json({ error: "IPFS pin failed" });
+    res.setHeader("Retry-After", "5");
+    res.status(503).json({ error: "IPFS pin failed", retryable: true });
   } finally {
     activeUploads--;
     logRequest({
@@ -94,7 +94,7 @@ router.get("/api/ipfs/get", async (req: Request, res: Response) => {
     upstreamStatus = 200;
 
     if (contentType.includes("json")) {
-      res.json({ service: "ipfs-get", cid, data: JSON.parse(data.toString()) });
+      res.json(JSON.parse(data.toString()));
     } else {
       // Set safe content type — never pass through text/html
       const safeType = contentType.startsWith("text/html") ? "application/octet-stream" : contentType;
@@ -104,7 +104,12 @@ router.get("/api/ipfs/get", async (req: Request, res: Response) => {
     }
   } catch (err: any) {
     upstreamStatus = err.status || 500;
-    res.status(err.status === 404 ? 404 : 502).json({ error: "IPFS fetch failed" });
+    if (err.status === 404) {
+      res.status(404).json({ error: "CID not found" });
+    } else {
+      res.setHeader("Retry-After", "5");
+      res.status(503).json({ error: "IPFS fetch failed", retryable: true });
+    }
   } finally {
     logRequest({
       service: "ipfs-get",

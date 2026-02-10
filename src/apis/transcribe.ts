@@ -58,14 +58,11 @@ router.post("/api/transcribe", async (req: Request, res: Response) => {
     });
     upstreamStatus = 200;
 
-    res.json({
-      service: "transcribe",
-      data: result,
-    });
+    res.json(result);
   } catch (err: any) {
     upstreamStatus = err.status || 500;
-    const status = err.status === 502 ? 502 : 500;
-    res.status(status).json({ error: "Transcription failed" });
+    res.setHeader("Retry-After", "5");
+    res.status(503).json({ error: "Transcription failed", retryable: true });
   } finally {
     logRequest({
       service: "transcribe",

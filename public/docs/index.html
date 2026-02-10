@@ -692,13 +692,10 @@ Content-Type: application/json
           <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
             <div class="flex items-center px-4 py-2 bg-white/[0.03] border-b border-white/5"><span class="text-xs text-gray-500 font-mono">Response</span></div>
             <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">{
-  "service": "code-run",
   "success": true,
-  "data": {
-    "exit_code": 0,
-    "stdout": "Pi to 10 decimals: 3.1415926536\n",
-    "stderr": ""
-  }
+  "exit_code": 0,
+  "stdout": "Pi to 10 decimals: 3.1415926536\n",
+  "stderr": ""
 }</code></pre>
           </div>
         </section>
@@ -731,17 +728,14 @@ Content-Type: application/json
           <h4 class="text-white text-sm font-semibold mb-2">Example Response</h4>
           <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
             <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">{
-  "service": "transcribe",
-  "data": {
-    "text": "Hello, welcome to the meeting. Today we'll discuss...",
-    "segments": [
-      { "text": "Hello", "start": 0.0, "end": 0.5, "speaker": 0, "confidence": 0.98 }
-    ],
-    "speakers": [{ "id": 0, "segments_count": 12 }, { "id": 1, "segments_count": 8 }],
-    "duration_seconds": 145.2,
-    "language": "en",
-    "model": "nova-3"
-  }
+  "text": "Hello, welcome to the meeting. Today we'll discuss...",
+  "segments": [
+    { "text": "Hello", "start": 0.0, "end": 0.5, "speaker": 0, "confidence": 0.98 }
+  ],
+  "speakers": [{ "id": 0, "segments_count": 12 }, { "id": 1, "segments_count": 8 }],
+  "duration_seconds": 145.2,
+  "language": "en",
+  "model": "nova-3"
 }</code></pre>
           </div>
         </section>
@@ -785,13 +779,10 @@ Content-Type: application/json
           <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
             <div class="flex items-center px-4 py-2 bg-white/[0.03] border-b border-white/5"><span class="text-xs text-gray-500 font-mono">Response</span></div>
             <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">{
-  "service": "ipfs-pin",
-  "data": {
-    "cid": "bafkreihdwdcefgh4dqkjv67uzcmw7ojee6xedzdetojuzjevtensgqas7y",
-    "name": "my-data",
-    "size": 28,
-    "gateway_url": "https://gateway.pinata.cloud/ipfs/bafkrei..."
-  }
+  "cid": "bafkreihdwdcefgh4dqkjv67uzcmw7ojee6xedzdetojuzjevtensgqas7y",
+  "name": "my-data",
+  "size": 28,
+  "gateway_url": "https://gateway.pinata.cloud/ipfs/bafkrei..."
 }</code></pre>
           </div>
         </section>
@@ -816,7 +807,7 @@ Content-Type: application/json
           </div>
 
           <h4 class="text-white text-sm font-semibold mb-2">Response</h4>
-          <p class="text-gray-400 text-sm">For JSON content: returns <code class="text-xs bg-white/5 px-1 rounded">{ service, cid, data }</code>. For binary content: streams the raw file with appropriate Content-Type.</p>
+          <p class="text-gray-400 text-sm">For JSON content: returns the stored JSON object directly. For binary content: streams the raw file with appropriate Content-Type.</p>
         </section>
 
         <!-- Error handling -->

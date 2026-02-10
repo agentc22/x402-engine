@@ -37,17 +37,16 @@ router.post("/api/code/run", async (req: Request, res: Response) => {
     upstreamStatus = 200;
 
     res.json({
-      service: "code-run",
       success: result.exit_code === 0,
-      data: result,
+      ...result,
     });
   } catch (err: any) {
     upstreamStatus = err.status || 500;
     if (err.message?.includes("timeout")) {
       res.status(408).json({ error: "Code execution exceeded time limit" });
     } else {
-      const status = err.status === 502 ? 502 : 500;
-      res.status(status).json({ error: "Code execution failed" });
+      res.setHeader("Retry-After", "5");
+      res.status(503).json({ error: "Code execution failed", retryable: true });
     }
   } finally {
     logRequest({

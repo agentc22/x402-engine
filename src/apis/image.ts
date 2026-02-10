@@ -34,14 +34,11 @@ function imageHandler(model: "fast" | "quality" | "text", serviceId: string, end
       });
       upstreamStatus = 200;
 
-      res.json({
-        service: serviceId,
-        data: result,
-      });
+      res.json(result);
     } catch (err: any) {
       upstreamStatus = err.status || 500;
-      const status = err.status === 502 ? 502 : 500;
-      res.status(status).json({ error: "Image generation failed" });
+      res.setHeader("Retry-After", "5");
+      res.status(503).json({ error: "Image generation failed", retryable: true });
     } finally {
       logRequest({
         service: serviceId,
