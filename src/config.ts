@@ -70,7 +70,7 @@ export const config = {
       models: {
         fast: "fal-ai/flux/schnell",
         quality: "fal-ai/flux-2-pro",
-        text: "fal-ai/ideogram/v3/turbo",
+        text: "fal-ai/ideogram/v3",
       },
     },
     e2b: {
