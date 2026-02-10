@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>API Documentation — x402engine</title>
-  <meta name="description" content="Complete API reference for the x402engine. 17 endpoints, payment integration guides, and code examples.">
+  <meta name="description" content="Complete API reference for the x402engine. 31 endpoints, payment integration guides, and code examples.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -81,6 +81,11 @@
           <a href="#wallet-pnl" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Wallet P&amp;L</a>
           <a href="#token-prices" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Token Prices</a>
           <a href="#token-metadata" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Token Metadata</a>
+          <a href="#ens-resolve" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">ENS Resolve</a>
+          <a href="#ens-reverse" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">ENS Reverse</a>
+          <a href="#nft-metadata" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">NFT Metadata</a>
+          <a href="#nft-ownership" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">NFT Ownership</a>
+          <a href="#nft-collection" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">NFT Collection</a>
         </div>
         <div>
           <h4 class="text-gray-500 font-medium uppercase text-xs tracking-wider mb-2 px-3">Compute</h4>
@@ -89,6 +94,14 @@
           <a href="#image-text" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Text-in-Image</a>
           <a href="#code-run" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Code Execution</a>
           <a href="#transcribe" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Transcription</a>
+        </div>
+        <div>
+          <div class="mt-6 mb-2 text-xs text-gray-600 uppercase tracking-wider font-medium px-3">LLM & AI</div>
+          <a href="#llm-haiku" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Claude Haiku</a>
+          <a href="#llm-sonnet" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Claude Sonnet</a>
+          <a href="#llm-gpt4o-mini" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">GPT-4o Mini</a>
+          <a href="#llm-llama" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Llama 70B</a>
+          <a href="#embeddings" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Embeddings</a>
         </div>
         <div>
           <h4 class="text-gray-500 font-medium uppercase text-xs tracking-wider mb-2 px-3">Storage</h4>
@@ -105,7 +118,7 @@
         <!-- Overview -->
         <section id="overview" class="mb-16">
           <h1 class="text-3xl font-bold text-white mb-4">API Documentation</h1>
-          <p class="text-gray-400 leading-relaxed mb-4">The x402engine exposes 17 production APIs behind <a href="https://www.x402.org" class="text-brand-400 hover:underline">x402 micropayments</a>. Every endpoint returns <code class="text-xs bg-white/5 px-1.5 py-0.5 rounded">402 Payment Required</code> until a valid stablecoin payment is attached to the request.</p>
+          <p class="text-gray-400 leading-relaxed mb-4">The x402engine exposes 31 production APIs behind <a href="https://www.x402.org" class="text-brand-400 hover:underline">x402 micropayments</a>. Every endpoint returns <code class="text-xs bg-white/5 px-1.5 py-0.5 rounded">402 Payment Required</code> until a valid stablecoin payment is attached to the request.</p>
           <div class="card-glow rounded-xl p-5 space-y-2 text-sm">
             <div class="flex items-start gap-3">
               <span class="text-brand-400 mt-0.5">Base URL</span>
@@ -600,6 +613,127 @@ Content-Type: application/json
           </div>
         </section>
 
+        <section id="ens-resolve" class="mb-14">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="method-get px-2 py-0.5 rounded text-xs font-bold">GET</span>
+            <h3 class="text-lg font-semibold text-white">/api/ens/resolve</h3>
+            <span class="text-brand-400 text-sm font-mono ml-auto">$0.001</span>
+          </div>
+          <p class="text-gray-400 text-sm mb-4">Resolve an ENS name to an Ethereum address. Uses public Ethereum RPCs — no API key needed.</p>
+          <div class="overflow-x-auto mb-4">
+            <table class="w-full text-sm">
+              <thead><tr class="border-b border-white/5"><th class="text-left py-2 text-gray-500 font-medium">Param</th><th class="text-left py-2 text-gray-500 font-medium">Type</th><th class="text-left py-2 text-gray-500 font-medium">Description</th></tr></thead>
+              <tbody class="text-gray-300">
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">name <span class="param-required">required</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">ENS name (e.g. "vitalik.eth")</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">GET /api/ens/resolve?name=vitalik.eth
+
+<span class="text-gray-500">// Response</span>
+{
+  "name": "vitalik.eth",
+  "address": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+}</code></pre>
+          </div>
+        </section>
+
+        <section id="ens-reverse" class="mb-14">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="method-get px-2 py-0.5 rounded text-xs font-bold">GET</span>
+            <h3 class="text-lg font-semibold text-white">/api/ens/reverse</h3>
+            <span class="text-brand-400 text-sm font-mono ml-auto">$0.001</span>
+          </div>
+          <p class="text-gray-400 text-sm mb-4">Reverse lookup — find the ENS name for an Ethereum address. Returns null if no reverse record is set.</p>
+          <div class="overflow-x-auto mb-4">
+            <table class="w-full text-sm">
+              <thead><tr class="border-b border-white/5"><th class="text-left py-2 text-gray-500 font-medium">Param</th><th class="text-left py-2 text-gray-500 font-medium">Type</th><th class="text-left py-2 text-gray-500 font-medium">Description</th></tr></thead>
+              <tbody class="text-gray-300">
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">address <span class="param-required">required</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">Ethereum address (0x...)</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">GET /api/ens/reverse?address=0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045
+
+<span class="text-gray-500">// Response</span>
+{
+  "address": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
+  "name": "vitalik.eth"
+}</code></pre>
+          </div>
+        </section>
+
+        <section id="nft-metadata" class="mb-14">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="method-get px-2 py-0.5 rounded text-xs font-bold">GET</span>
+            <h3 class="text-lg font-semibold text-white">/api/nft/metadata</h3>
+            <span class="text-brand-400 text-sm font-mono ml-auto">$0.005</span>
+          </div>
+          <p class="text-gray-400 text-sm mb-4">Get NFT name, description, image, traits, and collection info. Supports Ethereum, Base, Polygon, Arbitrum, Optimism, and Zora.</p>
+          <div class="overflow-x-auto mb-4">
+            <table class="w-full text-sm">
+              <thead><tr class="border-b border-white/5"><th class="text-left py-2 text-gray-500 font-medium">Param</th><th class="text-left py-2 text-gray-500 font-medium">Type</th><th class="text-left py-2 text-gray-500 font-medium">Description</th></tr></thead>
+              <tbody class="text-gray-300">
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">chain <span class="param-required">required</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">Chain name (ethereum, base, polygon, arbitrum, optimism, zora)</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">contract <span class="param-required">required</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">Contract address (0x...)</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">tokenId <span class="param-required">required</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">Token ID (numeric)</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">GET /api/nft/metadata?chain=ethereum&contract=0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d&tokenId=1
+
+<span class="text-gray-500">// Response</span>
+{
+  "name": "BAYC #1",
+  "description": "...",
+  "image": "https://...",
+  "traits": [{"trait_type": "Background", "value": "Orange"}],
+  "collection": "BoredApeYachtClub",
+  "token_standard": "ERC721"
+}</code></pre>
+          </div>
+        </section>
+
+        <section id="nft-ownership" class="mb-14">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="method-get px-2 py-0.5 rounded text-xs font-bold">GET</span>
+            <h3 class="text-lg font-semibold text-white">/api/nft/ownership</h3>
+            <span class="text-brand-400 text-sm font-mono ml-auto">$0.005</span>
+          </div>
+          <p class="text-gray-400 text-sm mb-4">Get the current owner(s) of an NFT.</p>
+          <div class="overflow-x-auto mb-4">
+            <table class="w-full text-sm">
+              <thead><tr class="border-b border-white/5"><th class="text-left py-2 text-gray-500 font-medium">Param</th><th class="text-left py-2 text-gray-500 font-medium">Type</th><th class="text-left py-2 text-gray-500 font-medium">Description</th></tr></thead>
+              <tbody class="text-gray-300">
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">chain <span class="param-required">required</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">Chain name</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">contract <span class="param-required">required</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">Contract address</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">tokenId <span class="param-required">required</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">Token ID</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="nft-collection" class="mb-14">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="method-get px-2 py-0.5 rounded text-xs font-bold">GET</span>
+            <h3 class="text-lg font-semibold text-white">/api/nft/collection</h3>
+            <span class="text-brand-400 text-sm font-mono ml-auto">$0.005</span>
+          </div>
+          <p class="text-gray-400 text-sm mb-4">Get collection metadata — name, symbol, total supply, floor price, description.</p>
+          <div class="overflow-x-auto mb-4">
+            <table class="w-full text-sm">
+              <thead><tr class="border-b border-white/5"><th class="text-left py-2 text-gray-500 font-medium">Param</th><th class="text-left py-2 text-gray-500 font-medium">Type</th><th class="text-left py-2 text-gray-500 font-medium">Description</th></tr></thead>
+              <tbody class="text-gray-300">
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">chain <span class="param-required">required</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">Chain name</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">contract <span class="param-required">required</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">Contract address</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
         <!-- Divider -->
         <hr class="border-white/5 mb-16">
         <h2 class="text-xl font-bold text-gray-500 uppercase tracking-wider mb-8">Compute</h2>
@@ -808,6 +942,100 @@ Content-Type: application/json
 
           <h4 class="text-white text-sm font-semibold mb-2">Response</h4>
           <p class="text-gray-400 text-sm">For JSON content: returns the stored JSON object directly. For binary content: streams the raw file with appropriate Content-Type.</p>
+        </section>
+
+        <!-- Divider -->
+        <hr class="border-white/5 mb-16">
+        <h2 class="text-xl font-bold text-gray-500 uppercase tracking-wider mb-8">LLM & AI</h2>
+
+        <section id="llm-haiku" class="mb-14">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="method-post px-2 py-0.5 rounded text-xs font-bold">POST</span>
+            <h3 class="text-lg font-semibold text-white">/api/llm/haiku</h3>
+            <span class="text-brand-400 text-sm font-mono ml-auto">$0.01</span>
+          </div>
+          <p class="text-gray-400 text-sm mb-4">Chat completion via Claude 3.5 Haiku. Fast and affordable for simple tasks.</p>
+          <div class="overflow-x-auto mb-4">
+            <table class="w-full text-sm">
+              <thead><tr class="border-b border-white/5"><th class="text-left py-2 text-gray-500 font-medium">Field</th><th class="text-left py-2 text-gray-500 font-medium">Type</th><th class="text-left py-2 text-gray-500 font-medium">Description</th></tr></thead>
+              <tbody class="text-gray-300">
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">messages <span class="param-required">required</span></td><td class="py-2 text-xs">array</td><td class="py-2 text-xs text-gray-400">Array of {role, content} objects</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">max_tokens <span class="param-optional">optional</span></td><td class="py-2 text-xs">number</td><td class="py-2 text-xs text-gray-400">Max tokens (1-4096, default 1024)</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">POST /api/llm/haiku
+{
+  "messages": [{"role": "user", "content": "Explain x402 in one sentence"}],
+  "max_tokens": 100
+}
+
+<span class="text-gray-500">// Response</span>
+{
+  "content": "x402 is a protocol that enables...",
+  "model": "anthropic/claude-3.5-haiku",
+  "usage": {"prompt_tokens": 12, "completion_tokens": 24, "total_tokens": 36}
+}</code></pre>
+          </div>
+        </section>
+
+        <section id="llm-sonnet" class="mb-14">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="method-post px-2 py-0.5 rounded text-xs font-bold">POST</span>
+            <h3 class="text-lg font-semibold text-white">/api/llm/sonnet</h3>
+            <span class="text-brand-400 text-sm font-mono ml-auto">$0.05</span>
+          </div>
+          <p class="text-gray-400 text-sm mb-4">Chat completion via Claude 3.5 Sonnet. Best for complex reasoning and coding tasks. Same request/response format as Haiku.</p>
+        </section>
+
+        <section id="llm-gpt4o-mini" class="mb-14">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="method-post px-2 py-0.5 rounded text-xs font-bold">POST</span>
+            <h3 class="text-lg font-semibold text-white">/api/llm/gpt4o-mini</h3>
+            <span class="text-brand-400 text-sm font-mono ml-auto">$0.005</span>
+          </div>
+          <p class="text-gray-400 text-sm mb-4">Chat completion via GPT-4o Mini. Lightweight and cost-effective. Same request/response format as Haiku.</p>
+        </section>
+
+        <section id="llm-llama" class="mb-14">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="method-post px-2 py-0.5 rounded text-xs font-bold">POST</span>
+            <h3 class="text-lg font-semibold text-white">/api/llm/llama</h3>
+            <span class="text-brand-400 text-sm font-mono ml-auto">$0.003</span>
+          </div>
+          <p class="text-gray-400 text-sm mb-4">Chat completion via Llama 3.1 70B Instruct. Open-source, general-purpose. Same request/response format as Haiku.</p>
+        </section>
+
+        <section id="embeddings" class="mb-14">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="method-post px-2 py-0.5 rounded text-xs font-bold">POST</span>
+            <h3 class="text-lg font-semibold text-white">/api/embeddings</h3>
+            <span class="text-brand-400 text-sm font-mono ml-auto">$0.001</span>
+          </div>
+          <p class="text-gray-400 text-sm mb-4">Generate text embeddings using OpenAI text-embedding-3-small (1536 dimensions). Useful for semantic search, clustering, and RAG.</p>
+          <div class="overflow-x-auto mb-4">
+            <table class="w-full text-sm">
+              <thead><tr class="border-b border-white/5"><th class="text-left py-2 text-gray-500 font-medium">Field</th><th class="text-left py-2 text-gray-500 font-medium">Type</th><th class="text-left py-2 text-gray-500 font-medium">Description</th></tr></thead>
+              <tbody class="text-gray-300">
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">text <span class="param-optional">option 1</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">Single text to embed</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">texts <span class="param-optional">option 2</span></td><td class="py-2 text-xs">string[]</td><td class="py-2 text-xs text-gray-400">Array of texts (1-100)</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">POST /api/embeddings
+{ "text": "What is x402?" }
+
+<span class="text-gray-500">// Response (single)</span>
+{ "embedding": [0.012, -0.034, ...] }  <span class="text-gray-500">// 1536 dimensions</span>
+
+POST /api/embeddings
+{ "texts": ["What is x402?", "How do payments work?"] }
+
+<span class="text-gray-500">// Response (batch)</span>
+{ "embeddings": [[0.012, ...], [-0.005, ...]] }</code></pre>
+          </div>
         </section>
 
         <!-- Error handling -->

@@ -1,7 +1,7 @@
 import { Router, type Request, type Response } from "express";
-import { getNftMetadata, getNftOwnership, getCollection } from "../providers/opensea.js";
+import { getNftMetadata, getNftOwners, getContractMetadata } from "../providers/alchemy-nft.js";
 import { logRequest } from "../db/ledger.js";
-import { isValidEthAddress, isValidChain } from "../lib/validation.js";
+import { isValidEthAddress } from "../lib/validation.js";
 import { TTLCache } from "../lib/cache.js";
 
 const router = Router();
@@ -9,9 +9,9 @@ const router = Router();
 // 5-minute TTL cache for NFT data
 const cache = new TTLCache<any>(300_000);
 
+// Chains supported by Alchemy NFT API
 const VALID_CHAINS = new Set([
-  "ethereum", "base", "polygon", "arbitrum", "optimism", "avalanche",
-  "bsc", "zora", "blast", "sei", "abstract",
+  "ethereum", "base", "polygon", "arbitrum", "optimism", "zora",
 ]);
 
 function validateChain(chain: string | undefined): string | null {
@@ -32,7 +32,7 @@ function validateTokenId(tokenId: string | undefined): boolean {
 router.get("/api/nft/metadata", async (req: Request, res: Response) => {
   const chain = validateChain(req.query.chain as string);
   if (!chain) {
-    res.status(400).json({ error: "Provide valid 'chain' (ethereum, base, polygon, etc)" });
+    res.status(400).json({ error: "Provide valid 'chain' (ethereum, base, polygon, arbitrum, optimism, zora)" });
     return;
   }
   const contract = req.query.contract as string;
@@ -59,16 +59,15 @@ router.get("/api/nft/metadata", async (req: Request, res: Response) => {
   try {
     const raw = await getNftMetadata(chain, contract, tokenId);
     upstreamStatus = 200;
-    const nft = raw.nft || raw;
     const result = {
-      name: nft.name,
-      description: nft.description,
-      image: nft.image_url || nft.display_image_url,
-      traits: nft.traits,
-      collection: nft.collection,
-      token_standard: nft.token_standard,
-      contract: nft.contract,
-      identifier: nft.identifier,
+      name: raw.name || raw.title,
+      description: raw.description,
+      image: raw.image?.cachedUrl || raw.image?.originalUrl || raw.image?.pngUrl,
+      traits: raw.raw?.metadata?.attributes || [],
+      collection: raw.collection,
+      token_standard: raw.tokenType,
+      contract: raw.contract?.address || contract,
+      identifier: raw.tokenId || tokenId,
     };
     cache.set(cacheKey, result);
     res.json(result);
@@ -93,7 +92,7 @@ router.get("/api/nft/metadata", async (req: Request, res: Response) => {
 router.get("/api/nft/ownership", async (req: Request, res: Response) => {
   const chain = validateChain(req.query.chain as string);
   if (!chain) {
-    res.status(400).json({ error: "Provide valid 'chain' (ethereum, base, polygon, etc)" });
+    res.status(400).json({ error: "Provide valid 'chain' (ethereum, base, polygon, arbitrum, optimism, zora)" });
     return;
   }
   const contract = req.query.contract as string;
@@ -118,12 +117,10 @@ router.get("/api/nft/ownership", async (req: Request, res: Response) => {
   let upstreamStatus = 0;
 
   try {
-    const raw = await getNftOwnership(chain, contract, tokenId);
+    const raw = await getNftOwners(chain, contract, tokenId);
     upstreamStatus = 200;
-    const nft = raw.nft || raw;
     const result = {
-      owner: nft.owners?.[0]?.address || nft.owner,
-      token_standard: nft.token_standard,
+      owners: raw.owners || [],
       contract: contract,
       tokenId: tokenId,
     };
@@ -150,7 +147,7 @@ router.get("/api/nft/ownership", async (req: Request, res: Response) => {
 router.get("/api/nft/collection", async (req: Request, res: Response) => {
   const chain = validateChain(req.query.chain as string);
   if (!chain) {
-    res.status(400).json({ error: "Provide valid 'chain' (ethereum, base, polygon, etc)" });
+    res.status(400).json({ error: "Provide valid 'chain' (ethereum, base, polygon, arbitrum, optimism, zora)" });
     return;
   }
   const contract = req.query.contract as string;
@@ -170,16 +167,17 @@ router.get("/api/nft/collection", async (req: Request, res: Response) => {
   let upstreamStatus = 0;
 
   try {
-    const raw = await getCollection(chain, contract);
+    const raw = await getContractMetadata(chain, contract);
     upstreamStatus = 200;
     const result = {
       name: raw.name,
-      description: raw.description,
-      image: raw.image_url,
-      collection: raw.collection,
-      owner: raw.owner,
-      total_supply: raw.total_supply,
-      contracts: raw.contracts,
+      symbol: raw.symbol,
+      description: raw.openSeaMetadata?.description || null,
+      image: raw.openSeaMetadata?.imageUrl || null,
+      token_type: raw.tokenType,
+      total_supply: raw.totalSupply,
+      floor_price: raw.openSeaMetadata?.floorPrice || null,
+      deployed_by: raw.contractDeployer,
     };
     cache.set(cacheKey, result);
     res.json(result);

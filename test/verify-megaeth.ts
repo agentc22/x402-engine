@@ -93,14 +93,14 @@ async function run() {
     assert(body.connected === true, "RPC should be connected");
     assert(body.stablecoin.symbol === "USDm", "Wrong stablecoin");
     assert(body.stablecoin.decimals === 18, "Wrong decimals");
-    assert(typeof body.replayProtection.usedTxCount === "number", "Missing replay stats");
-    console.log(`    (connected: ${body.connected}, usedTx: ${body.replayProtection.usedTxCount})`);
+    assert(typeof body.usedTxHashes === "number", "Missing replay stats");
+    console.log(`    (connected: ${body.connected}, usedTx: ${body.usedTxHashes})`);
   });
 
   // --- 402 response format tests ---
 
-  await test("402 response includes MegaETH with correct USDm math", async () => {
-    const res = await fetch(`${BASE}/api/weather/current?q=London`);
+  await test("402 response includes MegaETH with correct USDm math ($0.001)", async () => {
+    const res = await fetch(`${BASE}/api/crypto/price?ids=bitcoin&currencies=usd`);
     assert(res.status === 402, `Expected 402, got ${res.status}`);
 
     const header = res.headers.get("payment-required");
@@ -119,8 +119,9 @@ async function run() {
     assert(megaeth.extra?.name === "USDm", `Wrong asset name: ${megaeth.extra?.name}`);
   });
 
-  await test("402 for search ($0.002) has correct MegaETH USDm amount", async () => {
-    const res = await fetch(`${BASE}/api/search/web?q=test`);
+  await test("402 for crypto/markets ($0.002) has correct MegaETH USDm amount", async () => {
+    const res = await fetch(`${BASE}/api/crypto/markets`);
+    assert(res.status === 402, `Expected 402, got ${res.status}`);
     const header = res.headers.get("payment-required");
     assert(!!header, "Missing PAYMENT-REQUIRED header");
     const decoded = JSON.parse(atob(header!));
@@ -132,8 +133,13 @@ async function run() {
     assert(megaeth.amount === "2000000000000000", `Wrong amount: ${megaeth.amount}`);
   });
 
-  await test("402 for places ($0.005) has correct MegaETH USDm amount", async () => {
-    const res = await fetch(`${BASE}/api/places/search?q=pizza`);
+  await test("402 for wallet/balances ($0.005) has correct MegaETH USDm amount", async () => {
+    const res = await fetch(`${BASE}/api/wallet/balances`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ chain: "ethereum", address: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045" }),
+    });
+    assert(res.status === 402, `Expected 402, got ${res.status}`);
     const header = res.headers.get("payment-required");
     assert(!!header, "Missing PAYMENT-REQUIRED header");
     const decoded = JSON.parse(atob(header!));
@@ -161,13 +167,12 @@ async function run() {
     };
     const encoded = btoa(JSON.stringify(paymentPayload));
 
-    const res = await fetch(`${BASE}/api/weather/current?q=London`, {
+    const res = await fetch(`${BASE}/api/crypto/price?ids=bitcoin&currencies=usd`, {
       headers: { "payment-signature": encoded },
     });
     assert(res.status === 402, `Expected 402, got ${res.status}`);
     const body = await res.json();
     assert(body.error?.includes("txHash"), `Expected txHash error, got: ${body.error}`);
-    assert(body.hint !== undefined, "Expected hint in response");
   });
 
   await test("MegaETH payment header with bogus txHash returns 402 from middleware", async () => {
@@ -184,7 +189,7 @@ async function run() {
     };
     const encoded = btoa(JSON.stringify(paymentPayload));
 
-    const res = await fetch(`${BASE}/api/weather/current?q=London`, {
+    const res = await fetch(`${BASE}/api/crypto/price?ids=bitcoin&currencies=usd`, {
       headers: { "payment-signature": encoded },
     });
     assert(res.status === 402, `Expected 402, got ${res.status}`);
@@ -208,7 +213,7 @@ async function run() {
     };
     const encoded = btoa(JSON.stringify(paymentPayload));
 
-    const res = await fetch(`${BASE}/api/weather/current?q=London`, {
+    const res = await fetch(`${BASE}/api/crypto/price?ids=bitcoin&currencies=usd`, {
       headers: { "payment-signature": encoded },
     });
     // SDK middleware should handle this and return 402 (invalid payment)

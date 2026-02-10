@@ -55,7 +55,7 @@ export const config = {
     pinata: csvKeys("PINATA_JWTS", "PINATA_JWT"),
     amadeus: csvKeys("AMADEUS_API_KEYS", "AMADEUS_API_KEY"),
     amadeusSecret: csvKeys("AMADEUS_API_SECRETS", "AMADEUS_API_SECRET"),
-    opensea: csvKeys("OPENSEA_API_KEYS", "OPENSEA_API_KEY"),
+    alchemy: csvKeys("ALCHEMY_API_KEYS", "ALCHEMY_API_KEY"),
     openrouter: csvKeys("OPENROUTER_API_KEYS", "OPENROUTER_API_KEY"),
   },
 

@@ -304,8 +304,8 @@
       "mimeType": "application/json",
       "category": "crypto",
       "upstream": {
-        "provider": "opensea",
-        "baseUrl": "https://api.opensea.io/api/v2"
+        "provider": "alchemy",
+        "baseUrl": "https://eth-mainnet.g.alchemy.com/nft/v3"
       }
     },
     {
@@ -318,8 +318,8 @@
       "mimeType": "application/json",
       "category": "crypto",
       "upstream": {
-        "provider": "opensea",
-        "baseUrl": "https://api.opensea.io/api/v2"
+        "provider": "alchemy",
+        "baseUrl": "https://eth-mainnet.g.alchemy.com/nft/v3"
       }
     },
     {
@@ -332,8 +332,8 @@
       "mimeType": "application/json",
       "category": "crypto",
       "upstream": {
-        "provider": "opensea",
-        "baseUrl": "https://api.opensea.io/api/v2"
+        "provider": "alchemy",
+        "baseUrl": "https://eth-mainnet.g.alchemy.com/nft/v3"
       }
     },
     {

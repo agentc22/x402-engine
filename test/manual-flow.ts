@@ -27,7 +27,7 @@ function assert(condition: boolean, msg: string) {
 }
 
 async function run() {
-  console.log(`\nTesting x402 Gateway at ${BASE}\n`);
+  console.log(`\nTesting x402engine at ${BASE}\n`);
 
   // --- Free endpoints ---
 
@@ -43,7 +43,7 @@ async function run() {
     assert(res.status === 200, `Expected 200, got ${res.status}`);
     const body = await res.json();
     assert(body.x402Version === 2, "Expected x402Version 2");
-    assert(body.name === "x402 Gateway", `Expected name 'x402 Gateway', got '${body.name}'`);
+    assert(body.name === "x402engine", `Expected name 'x402engine', got '${body.name}'`);
     assert(body.version === "3.0.0", `Expected version '3.0.0', got '${body.version}'`);
     assert(Array.isArray(body.services), "Expected services array");
     assert(body.services.length === 17, `Expected 17 services, got ${body.services.length}`);
