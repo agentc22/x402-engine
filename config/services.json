@@ -237,6 +237,62 @@
         "provider": "pinata",
         "baseUrl": "https://gateway.pinata.cloud"
       }
+    },
+    {
+      "id": "travel-flights",
+      "name": "Flight Search",
+      "description": "Search flight offers by route, dates, and passengers — returns pricing, itineraries, and airlines",
+      "price": "$0.01",
+      "method": "GET",
+      "path": "/api/travel/flights",
+      "mimeType": "application/json",
+      "category": "travel",
+      "upstream": {
+        "provider": "amadeus",
+        "baseUrl": "https://api.amadeus.com/v2/shopping/flight-offers"
+      }
+    },
+    {
+      "id": "travel-locations",
+      "name": "Airport & City Search",
+      "description": "Autocomplete search for airports and cities by keyword — returns IATA codes, names, coordinates",
+      "price": "$0.005",
+      "method": "GET",
+      "path": "/api/travel/locations",
+      "mimeType": "application/json",
+      "category": "travel",
+      "upstream": {
+        "provider": "amadeus",
+        "baseUrl": "https://api.amadeus.com/v1/reference-data/locations"
+      }
+    },
+    {
+      "id": "travel-hotels",
+      "name": "Hotel Search",
+      "description": "Search hotel offers by city code and dates — returns room details, pricing, and availability",
+      "price": "$0.01",
+      "method": "GET",
+      "path": "/api/travel/hotels",
+      "mimeType": "application/json",
+      "category": "travel",
+      "upstream": {
+        "provider": "amadeus",
+        "baseUrl": "https://api.amadeus.com/v3/shopping/hotel-offers"
+      }
+    },
+    {
+      "id": "travel-cheapest-dates",
+      "name": "Cheapest Travel Dates",
+      "description": "Find the cheapest travel dates for a route — returns date/price pairs sorted by price",
+      "price": "$0.01",
+      "method": "GET",
+      "path": "/api/travel/cheapest-dates",
+      "mimeType": "application/json",
+      "category": "travel",
+      "upstream": {
+        "provider": "amadeus",
+        "baseUrl": "https://api.amadeus.com/v1/shopping/flight-dates"
+      }
     }
   ]
 }

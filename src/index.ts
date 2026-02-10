@@ -17,11 +17,13 @@ import transcribeRouter from "./apis/transcribe.js";
 import cryptoRouter from "./apis/crypto.js";
 import blockchainRouter from "./apis/blockchain.js";
 import ipfsRouter from "./apis/ipfs.js";
+import travelRouter from "./apis/travel.js";
 import dashboardRouter from "./apis/dashboard.js";
 import megaethFacilitator from "./facilitator/index.js";
 import { initFal } from "./providers/fal.js";
 import { initDeepgram } from "./providers/deepgram.js";
 import { initIpfs } from "./providers/ipfs.js";
+import { initAmadeus } from "./providers/amadeus.js";
 import { checkMegaETHConnection } from "./verification/megaeth.js";
 import { keyPool } from "./lib/key-pool.js";
 
@@ -107,7 +109,7 @@ function buildDiscoveryResponse() {
   }
 
   return {
-    name: "x402 Gateway",
+    name: "x402engine",
     version: "3.0.0",
     x402Version: 2,
     baseUrl: "https://x402-gateway-production.up.railway.app",
@@ -243,6 +245,7 @@ app.use(codeRouter);
 app.use(cryptoRouter);
 app.use(blockchainRouter);
 app.use(ipfsRouter);
+app.use(travelRouter);
 
 // --- Global error handler (must be after all routes) ---
 // Express 4 async middleware can throw unhandled rejections that hang requests.
@@ -260,7 +263,7 @@ app.use((err: any, _req: any, res: any, _next: any) => {
 let server: Server;
 
 async function main() {
-  console.log("Initializing x402 Gateway...");
+  console.log("Initializing x402engine...");
   console.log(`  Environment: ${config.nodeEnv}`);
 
   await initDatabase();
@@ -279,9 +282,10 @@ async function main() {
   initFal();
   initDeepgram();
   initIpfs();
+  initAmadeus();
 
   server = app.listen(config.port, () => {
-    console.log(`\nx402 Gateway running on http://localhost:${config.port}`);
+    console.log(`\nx402engine running on http://localhost:${config.port}`);
     console.log(`  Health: http://localhost:${config.port}/health`);
     console.log(`  Deep health: http://localhost:${config.port}/health/deep`);
     console.log(`  Discovery: http://localhost:${config.port}/.well-known/x402.json`);

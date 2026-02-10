@@ -53,6 +53,8 @@ export const config = {
     coingecko: csvKeys("COINGECKO_API_KEYS", "COINGECKO_API_KEY"),
     allium: csvKeys("ALLIUM_API_KEYS", "ALLIUM_API_KEY"),
     pinata: csvKeys("PINATA_JWTS", "PINATA_JWT"),
+    amadeus: csvKeys("AMADEUS_API_KEYS", "AMADEUS_API_KEY"),
+    amadeusSecret: csvKeys("AMADEUS_API_SECRETS", "AMADEUS_API_SECRET"),
   },
 
   // Keep singular accessors for backward compatibility (first key or empty)
@@ -63,6 +65,7 @@ export const config = {
   alliumApiKey: optional("ALLIUM_API_KEY", ""),
   pinataJwt: optional("PINATA_JWT", ""),
   pinataGateway: optional("PINATA_GATEWAY", "gateway.pinata.cloud"),
+  amadeusHostname: optional("AMADEUS_HOSTNAME", "production"),
 
   // Compute provider settings
   computeProviders: {
