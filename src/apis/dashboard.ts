@@ -191,7 +191,11 @@ function timeAgo(d) {
 }
 async function load() {
   try {
-    const r = await fetch('/api/dashboard/stats?key=' + KEY);
+    const [r, npmWeek, npmAll] = await Promise.all([
+      fetch('/api/dashboard/stats?key=' + KEY),
+      fetch('https://api.npmjs.org/downloads/point/last-week/x402engine-mcp').then(r=>r.json()).catch(()=>({downloads:0})),
+      fetch('https://api.npmjs.org/downloads/point/2000-01-01:2099-12-31/x402engine-mcp').then(r=>r.json()).catch(()=>({downloads:0})),
+    ]);
     const d = await r.json();
     if (d.error) { document.getElementById('cards').innerHTML = '<div class="card"><div class="value" style="color:#f66">Error</div><div class="label">'+d.error+'</div></div>'; return; }
 
@@ -201,8 +205,9 @@ async function load() {
       {l:'Last 24h', v:d.last24h.toLocaleString()},
       {l:'Last 7 Days', v:d.last7d.toLocaleString()},
       {l:'Unique Payers', v:d.topPayers.length},
+      {l:'NPM Downloads', v:npmAll.downloads.toLocaleString(), s:'This week: '+npmWeek.downloads.toLocaleString()},
       {l:'Networks', v:d.byNetwork.map(n=>netLabel(n.network)).join(', ') || 'None yet'},
-    ].map(c=>'<div class="card"><div class="label">'+c.l+'</div><div class="value">'+c.v+'</div></div>').join('');
+    ].map(c=>'<div class="card"><div class="label">'+c.l+'</div><div class="value">'+c.v+'</div>'+(c.s?'<div class="sub">'+c.s+'</div>':'')+'</div>').join('');
 
     // Hourly chart
     const hMax = Math.max(...d.hourly.map(h=>h.count), 1);
