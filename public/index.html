@@ -140,160 +140,6 @@
     </div>
   </section>
 
-  <!-- Use Cases -->
-  <section id="use-cases" class="py-20">
-    <div class="max-w-5xl mx-auto px-6">
-      <div class="text-center mb-14">
-        <h2 class="text-3xl font-bold text-white mb-3">Built for autonomous software</h2>
-        <p class="text-gray-400 max-w-2xl mx-auto text-lg">AI agents, bots, and scripts that need to use external services without a human setting up accounts first.</p>
-      </div>
-
-      <div class="grid md:grid-cols-2 gap-6">
-        <!-- Use case 1 -->
-        <div class="card-glow rounded-2xl p-6 transition">
-          <div class="flex items-center gap-3 mb-4">
-            <div class="w-10 h-10 rounded-xl bg-brand-500/10 flex items-center justify-center">
-              <svg class="w-5 h-5 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-            </div>
-            <h3 class="text-white font-semibold">AI research assistant</h3>
-          </div>
-          <p class="text-gray-400 text-sm leading-relaxed">You ask your AI "what happened to Bitcoin this week?" It calls the price and history endpoints, pays a fraction of a cent per call, and gives you a chart and summary. It never needed a CoinGecko account.</p>
-          <div class="mt-4 flex items-center gap-2 text-xs text-gray-500">
-            <span class="px-2 py-0.5 rounded-full bg-white/5">crypto/price</span>
-            <span class="px-2 py-0.5 rounded-full bg-white/5">crypto/history</span>
-            <span class="text-gray-600">~$0.004/query</span>
-          </div>
-        </div>
-
-        <!-- Use case 2 -->
-        <div class="card-glow rounded-2xl p-6 transition">
-          <div class="flex items-center gap-3 mb-4">
-            <div class="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center">
-              <svg class="w-5 h-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-            </div>
-            <h3 class="text-white font-semibold">Portfolio tracker bot</h3>
-          </div>
-          <p class="text-gray-400 text-sm leading-relaxed">A trading bot checks wallet balances every hour, looks at trending coins, pulls price history for analysis. It can run 1,000 calls for about $1&ndash;2. No API key management, no rate limit headaches.</p>
-          <div class="mt-4 flex items-center gap-2 text-xs text-gray-500">
-            <span class="px-2 py-0.5 rounded-full bg-white/5">wallet/balances</span>
-            <span class="px-2 py-0.5 rounded-full bg-white/5">crypto/trending</span>
-            <span class="text-gray-600">~$0.006/check</span>
-          </div>
-        </div>
-
-        <!-- Use case 3 -->
-        <div class="card-glow rounded-2xl p-6 transition">
-          <div class="flex items-center gap-3 mb-4">
-            <div class="w-10 h-10 rounded-xl bg-pink-500/10 flex items-center justify-center">
-              <svg class="w-5 h-5 text-pink-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-            </div>
-            <h3 class="text-white font-semibold">Content creation agent</h3>
-          </div>
-          <p class="text-gray-400 text-sm leading-relaxed">An AI writing a blog post needs a custom illustration. It calls the image generation endpoint, pays 1.5 cents, and gets a unique image in 2 seconds. No Midjourney subscription, no credits system.</p>
-          <div class="mt-4 flex items-center gap-2 text-xs text-gray-500">
-            <span class="px-2 py-0.5 rounded-full bg-white/5">image/fast</span>
-            <span class="px-2 py-0.5 rounded-full bg-white/5">image/quality</span>
-            <span class="text-gray-600">$0.015&ndash;0.12/image</span>
-          </div>
-        </div>
-
-        <!-- Use case 4 -->
-        <div class="card-glow rounded-2xl p-6 transition">
-          <div class="flex items-center gap-3 mb-4">
-            <div class="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center">
-              <svg class="w-5 h-5 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
-            </div>
-            <h3 class="text-white font-semibold">Coding assistant</h3>
-          </div>
-          <p class="text-gray-400 text-sm leading-relaxed">An AI agent needs to verify that generated code actually runs. It sends the code to the sandbox, pays half a cent, and gets back the output &mdash; without needing Docker or a dev environment.</p>
-          <div class="mt-4 flex items-center gap-2 text-xs text-gray-500">
-            <span class="px-2 py-0.5 rounded-full bg-white/5">code/run</span>
-            <span class="text-gray-600">$0.005/execution</span>
-          </div>
-        </div>
-
-        <!-- Use case 5 -->
-        <div class="card-glow rounded-2xl p-6 transition">
-          <div class="flex items-center gap-3 mb-4">
-            <div class="w-10 h-10 rounded-xl bg-sky-500/10 flex items-center justify-center">
-              <svg class="w-5 h-5 text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/></svg>
-            </div>
-            <h3 class="text-white font-semibold">Meeting transcription pipeline</h3>
-          </div>
-          <p class="text-gray-400 text-sm leading-relaxed">An app records a meeting, sends the audio to the transcription endpoint, and gets back a full transcript with speaker labels &mdash; who said what, with timestamps. Ten cents per recording.</p>
-          <div class="mt-4 flex items-center gap-2 text-xs text-gray-500">
-            <span class="px-2 py-0.5 rounded-full bg-white/5">transcribe</span>
-            <span class="text-gray-600">$0.10/recording</span>
-          </div>
-        </div>
-
-        <!-- Use case 6 -->
-        <div class="card-glow rounded-2xl p-6 transition">
-          <div class="flex items-center gap-3 mb-4">
-            <div class="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center">
-              <svg class="w-5 h-5 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
-            </div>
-            <h3 class="text-white font-semibold">Decentralized data archival</h3>
-          </div>
-          <p class="text-gray-400 text-sm leading-relaxed">An agent generating reports pins them to IPFS for a penny each. The data becomes permanent, publicly addressable, and doesn't depend on any single company's servers staying online.</p>
-          <div class="mt-4 flex items-center gap-2 text-xs text-gray-500">
-            <span class="px-2 py-0.5 rounded-full bg-white/5">ipfs/pin</span>
-            <span class="px-2 py-0.5 rounded-full bg-white/5">ipfs/get</span>
-            <span class="text-gray-600">$0.01/pin</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Why it matters -->
-  <section id="why-it-matters" class="py-20 bg-surface-900/50">
-    <div class="max-w-4xl mx-auto px-6">
-      <div class="text-center mb-14">
-        <h2 class="text-3xl font-bold text-white mb-3">Why this matters</h2>
-        <p class="text-gray-400 max-w-2xl mx-auto text-lg">The old way of using APIs doesn't work for autonomous software.</p>
-      </div>
-
-      <div class="grid md:grid-cols-2 gap-8">
-        <!-- Old way -->
-        <div class="rounded-2xl border border-red-500/10 bg-red-500/[0.03] p-6">
-          <h3 class="text-red-400 font-semibold mb-4 flex items-center gap-2">
-            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"/></svg>
-            Today: the API key treadmill
-          </h3>
-          <ol class="space-y-3 text-gray-400 text-sm">
-            <li class="flex gap-3"><span class="text-red-400/60 font-mono text-xs mt-0.5">01</span> Sign up for a service with email + password</li>
-            <li class="flex gap-3"><span class="text-red-400/60 font-mono text-xs mt-0.5">02</span> Navigate a dashboard to generate an API key</li>
-            <li class="flex gap-3"><span class="text-red-400/60 font-mono text-xs mt-0.5">03</span> Store the key securely (env vars, secrets manager)</li>
-            <li class="flex gap-3"><span class="text-red-400/60 font-mono text-xs mt-0.5">04</span> Handle rate limits, quotas, and overage billing</li>
-            <li class="flex gap-3"><span class="text-red-400/60 font-mono text-xs mt-0.5">05</span> Rotate keys periodically, manage per-service billing</li>
-            <li class="flex gap-3"><span class="text-red-400/60 font-mono text-xs mt-0.5">06</span> Repeat for every new service your agent needs</li>
-          </ol>
-        </div>
-
-        <!-- New way -->
-        <div class="rounded-2xl border border-emerald-500/10 bg-emerald-500/[0.03] p-6">
-          <h3 class="text-emerald-400 font-semibold mb-4 flex items-center gap-2">
-            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7"/></svg>
-            With x402: just pay
-          </h3>
-          <ol class="space-y-3 text-gray-400 text-sm">
-            <li class="flex gap-3"><span class="text-emerald-400/60 font-mono text-xs mt-0.5">01</span> Fund a wallet with stablecoins</li>
-            <li class="flex gap-3"><span class="text-emerald-400/60 font-mono text-xs mt-0.5">02</span> Call any endpoint &mdash; payment is automatic</li>
-            <li class="flex gap-3"><span class="text-emerald-400/60 font-mono text-xs mt-0.5">03</span> That's it. No keys, no accounts, no billing pages.</li>
-          </ol>
-          <div class="mt-6 pt-4 border-t border-emerald-500/10">
-            <p class="text-gray-400 text-sm leading-relaxed">It's the difference between having a gym membership and paying 10 cents every time you use a treadmill. For software that runs autonomously, the pay-per-use model is simpler, cheaper, and requires zero human setup.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="mt-10 card-glow rounded-2xl p-6 text-center">
-        <p class="text-gray-300 leading-relaxed max-w-2xl mx-auto">This is especially powerful for <strong class="text-white">autonomous agents</strong> &mdash; software that operates without a human babysitting it. An agent can discover available services, compare pricing across networks, and pay on the fly, all programmatically. No human needs to create accounts or manage credentials for it.</p>
-      </div>
-    </div>
-  </section>
-
   <!-- Networks -->
   <section id="networks" class="py-20">
     <div class="max-w-6xl mx-auto px-6">
@@ -319,7 +165,10 @@
           </div>
         </div>
         <!-- MegaETH -->
-        <div class="card-glow rounded-2xl p-6 transition float-delay">
+        <div class="card-glow rounded-2xl p-6 transition float-delay relative overflow-hidden">
+          <div class="absolute top-3 right-3">
+            <span class="px-2.5 py-1 rounded-full bg-emerald-400/10 border border-emerald-400/25 text-emerald-400 text-[10px] font-bold uppercase tracking-wider">Fastest &mdash; 10ms</span>
+          </div>
           <div class="flex items-center gap-3 mb-4">
             <div class="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 font-bold text-sm">M</div>
             <div>
@@ -360,6 +209,55 @@
       <div class="text-center mb-12">
         <h2 class="text-3xl font-bold text-white mb-3">31 APIs, five categories</h2>
         <p class="text-gray-400 max-w-xl mx-auto">Production-grade endpoints backed by best-in-class providers. All priced for micropayments.</p>
+      </div>
+
+      <!-- LLM & AI -->
+      <div class="mb-10">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-400 text-xs font-medium">LLM &amp; AI</span>
+        </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="card-glow rounded-xl p-5 transition">
+            <div class="flex items-start justify-between mb-2">
+              <h3 class="text-white font-medium">Claude 3.5 Haiku</h3>
+              <span class="price-tag text-brand-400 text-sm font-mono">$0.01</span>
+            </div>
+            <p class="text-gray-500 text-sm mb-3">Fast, affordable chat completion</p>
+            <code class="text-xs text-gray-600 font-mono">POST /api/llm/haiku</code>
+          </div>
+          <div class="card-glow rounded-xl p-5 transition">
+            <div class="flex items-start justify-between mb-2">
+              <h3 class="text-white font-medium">Claude 3.5 Sonnet</h3>
+              <span class="price-tag text-brand-400 text-sm font-mono">$0.05</span>
+            </div>
+            <p class="text-gray-500 text-sm mb-3">Complex reasoning &amp; coding</p>
+            <code class="text-xs text-gray-600 font-mono">POST /api/llm/sonnet</code>
+          </div>
+          <div class="card-glow rounded-xl p-5 transition">
+            <div class="flex items-start justify-between mb-2">
+              <h3 class="text-white font-medium">GPT-4o Mini</h3>
+              <span class="price-tag text-brand-400 text-sm font-mono">$0.005</span>
+            </div>
+            <p class="text-gray-500 text-sm mb-3">Lightweight &amp; cost-effective</p>
+            <code class="text-xs text-gray-600 font-mono">POST /api/llm/gpt4o-mini</code>
+          </div>
+          <div class="card-glow rounded-xl p-5 transition">
+            <div class="flex items-start justify-between mb-2">
+              <h3 class="text-white font-medium">Llama 3.1 70B</h3>
+              <span class="price-tag text-brand-400 text-sm font-mono">$0.003</span>
+            </div>
+            <p class="text-gray-500 text-sm mb-3">Open-source, general-purpose</p>
+            <code class="text-xs text-gray-600 font-mono">POST /api/llm/llama</code>
+          </div>
+          <div class="card-glow rounded-xl p-5 transition">
+            <div class="flex items-start justify-between mb-2">
+              <h3 class="text-white font-medium">Text Embeddings</h3>
+              <span class="price-tag text-brand-400 text-sm font-mono">$0.001</span>
+            </div>
+            <p class="text-gray-500 text-sm mb-3">1536-dim vectors for search &amp; RAG</p>
+            <code class="text-xs text-gray-600 font-mono">POST /api/embeddings</code>
+          </div>
+        </div>
       </div>
 
       <!-- Compute -->
@@ -540,55 +438,6 @@
         </div>
       </div>
 
-      <!-- LLM & AI -->
-      <div class="mb-10">
-        <div class="flex items-center gap-3 mb-4">
-          <span class="px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-400 text-xs font-medium">LLM &amp; AI</span>
-        </div>
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <div class="card-glow rounded-xl p-5 transition">
-            <div class="flex items-start justify-between mb-2">
-              <h3 class="text-white font-medium">Claude 3.5 Haiku</h3>
-              <span class="price-tag text-brand-400 text-sm font-mono">$0.01</span>
-            </div>
-            <p class="text-gray-500 text-sm mb-3">Fast, affordable chat completion</p>
-            <code class="text-xs text-gray-600 font-mono">POST /api/llm/haiku</code>
-          </div>
-          <div class="card-glow rounded-xl p-5 transition">
-            <div class="flex items-start justify-between mb-2">
-              <h3 class="text-white font-medium">Claude 3.5 Sonnet</h3>
-              <span class="price-tag text-brand-400 text-sm font-mono">$0.05</span>
-            </div>
-            <p class="text-gray-500 text-sm mb-3">Complex reasoning &amp; coding</p>
-            <code class="text-xs text-gray-600 font-mono">POST /api/llm/sonnet</code>
-          </div>
-          <div class="card-glow rounded-xl p-5 transition">
-            <div class="flex items-start justify-between mb-2">
-              <h3 class="text-white font-medium">GPT-4o Mini</h3>
-              <span class="price-tag text-brand-400 text-sm font-mono">$0.005</span>
-            </div>
-            <p class="text-gray-500 text-sm mb-3">Lightweight &amp; cost-effective</p>
-            <code class="text-xs text-gray-600 font-mono">POST /api/llm/gpt4o-mini</code>
-          </div>
-          <div class="card-glow rounded-xl p-5 transition">
-            <div class="flex items-start justify-between mb-2">
-              <h3 class="text-white font-medium">Llama 3.1 70B</h3>
-              <span class="price-tag text-brand-400 text-sm font-mono">$0.003</span>
-            </div>
-            <p class="text-gray-500 text-sm mb-3">Open-source, general-purpose</p>
-            <code class="text-xs text-gray-600 font-mono">POST /api/llm/llama</code>
-          </div>
-          <div class="card-glow rounded-xl p-5 transition">
-            <div class="flex items-start justify-between mb-2">
-              <h3 class="text-white font-medium">Text Embeddings</h3>
-              <span class="price-tag text-brand-400 text-sm font-mono">$0.001</span>
-            </div>
-            <p class="text-gray-500 text-sm mb-3">1536-dim vectors for search &amp; RAG</p>
-            <code class="text-xs text-gray-600 font-mono">POST /api/embeddings</code>
-          </div>
-        </div>
-      </div>
-
       <!-- Storage -->
       <div>
         <div class="flex items-center gap-3 mb-4">
@@ -612,6 +461,160 @@
             <code class="text-xs text-gray-600 font-mono">GET /api/ipfs/get</code>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Use Cases -->
+  <section id="use-cases" class="py-20">
+    <div class="max-w-5xl mx-auto px-6">
+      <div class="text-center mb-14">
+        <h2 class="text-3xl font-bold text-white mb-3">Built for autonomous software</h2>
+        <p class="text-gray-400 max-w-2xl mx-auto text-lg">AI agents, bots, and scripts that need to use external services without a human setting up accounts first.</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6">
+        <!-- Use case 1 -->
+        <div class="card-glow rounded-2xl p-6 transition">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-xl bg-brand-500/10 flex items-center justify-center">
+              <svg class="w-5 h-5 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+            </div>
+            <h3 class="text-white font-semibold">AI research assistant</h3>
+          </div>
+          <p class="text-gray-400 text-sm leading-relaxed">You ask your AI "what happened to Bitcoin this week?" It calls the price and history endpoints, pays a fraction of a cent per call, and gives you a chart and summary. It never needed a CoinGecko account.</p>
+          <div class="mt-4 flex items-center gap-2 text-xs text-gray-500">
+            <span class="px-2 py-0.5 rounded-full bg-white/5">crypto/price</span>
+            <span class="px-2 py-0.5 rounded-full bg-white/5">crypto/history</span>
+            <span class="text-gray-600">~$0.004/query</span>
+          </div>
+        </div>
+
+        <!-- Use case 2 -->
+        <div class="card-glow rounded-2xl p-6 transition">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center">
+              <svg class="w-5 h-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+            </div>
+            <h3 class="text-white font-semibold">Portfolio tracker bot</h3>
+          </div>
+          <p class="text-gray-400 text-sm leading-relaxed">A trading bot checks wallet balances every hour, looks at trending coins, pulls price history for analysis. It can run 1,000 calls for about $1&ndash;2. No API key management, no rate limit headaches.</p>
+          <div class="mt-4 flex items-center gap-2 text-xs text-gray-500">
+            <span class="px-2 py-0.5 rounded-full bg-white/5">wallet/balances</span>
+            <span class="px-2 py-0.5 rounded-full bg-white/5">crypto/trending</span>
+            <span class="text-gray-600">~$0.006/check</span>
+          </div>
+        </div>
+
+        <!-- Use case 3 -->
+        <div class="card-glow rounded-2xl p-6 transition">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-xl bg-pink-500/10 flex items-center justify-center">
+              <svg class="w-5 h-5 text-pink-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            </div>
+            <h3 class="text-white font-semibold">Content creation agent</h3>
+          </div>
+          <p class="text-gray-400 text-sm leading-relaxed">An AI writing a blog post needs a custom illustration. It calls the image generation endpoint, pays 1.5 cents, and gets a unique image in 2 seconds. No Midjourney subscription, no credits system.</p>
+          <div class="mt-4 flex items-center gap-2 text-xs text-gray-500">
+            <span class="px-2 py-0.5 rounded-full bg-white/5">image/fast</span>
+            <span class="px-2 py-0.5 rounded-full bg-white/5">image/quality</span>
+            <span class="text-gray-600">$0.015&ndash;0.12/image</span>
+          </div>
+        </div>
+
+        <!-- Use case 4 -->
+        <div class="card-glow rounded-2xl p-6 transition">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center">
+              <svg class="w-5 h-5 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+            </div>
+            <h3 class="text-white font-semibold">Coding assistant</h3>
+          </div>
+          <p class="text-gray-400 text-sm leading-relaxed">An AI agent needs to verify that generated code actually runs. It sends the code to the sandbox, pays half a cent, and gets back the output &mdash; without needing Docker or a dev environment.</p>
+          <div class="mt-4 flex items-center gap-2 text-xs text-gray-500">
+            <span class="px-2 py-0.5 rounded-full bg-white/5">code/run</span>
+            <span class="text-gray-600">$0.005/execution</span>
+          </div>
+        </div>
+
+        <!-- Use case 5 -->
+        <div class="card-glow rounded-2xl p-6 transition">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-xl bg-sky-500/10 flex items-center justify-center">
+              <svg class="w-5 h-5 text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/></svg>
+            </div>
+            <h3 class="text-white font-semibold">Meeting transcription pipeline</h3>
+          </div>
+          <p class="text-gray-400 text-sm leading-relaxed">An app records a meeting, sends the audio to the transcription endpoint, and gets back a full transcript with speaker labels &mdash; who said what, with timestamps. Ten cents per recording.</p>
+          <div class="mt-4 flex items-center gap-2 text-xs text-gray-500">
+            <span class="px-2 py-0.5 rounded-full bg-white/5">transcribe</span>
+            <span class="text-gray-600">$0.10/recording</span>
+          </div>
+        </div>
+
+        <!-- Use case 6 -->
+        <div class="card-glow rounded-2xl p-6 transition">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center">
+              <svg class="w-5 h-5 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
+            </div>
+            <h3 class="text-white font-semibold">Decentralized data archival</h3>
+          </div>
+          <p class="text-gray-400 text-sm leading-relaxed">An agent generating reports pins them to IPFS for a penny each. The data becomes permanent, publicly addressable, and doesn't depend on any single company's servers staying online.</p>
+          <div class="mt-4 flex items-center gap-2 text-xs text-gray-500">
+            <span class="px-2 py-0.5 rounded-full bg-white/5">ipfs/pin</span>
+            <span class="px-2 py-0.5 rounded-full bg-white/5">ipfs/get</span>
+            <span class="text-gray-600">$0.01/pin</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why it matters -->
+  <section id="why-it-matters" class="py-20 bg-surface-900/50">
+    <div class="max-w-4xl mx-auto px-6">
+      <div class="text-center mb-14">
+        <h2 class="text-3xl font-bold text-white mb-3">Why this matters</h2>
+        <p class="text-gray-400 max-w-2xl mx-auto text-lg">The old way of using APIs doesn't work for autonomous software.</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-8">
+        <!-- Old way -->
+        <div class="rounded-2xl border border-red-500/10 bg-red-500/[0.03] p-6">
+          <h3 class="text-red-400 font-semibold mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"/></svg>
+            Today: the API key treadmill
+          </h3>
+          <ol class="space-y-3 text-gray-400 text-sm">
+            <li class="flex gap-3"><span class="text-red-400/60 font-mono text-xs mt-0.5">01</span> Sign up for a service with email + password</li>
+            <li class="flex gap-3"><span class="text-red-400/60 font-mono text-xs mt-0.5">02</span> Navigate a dashboard to generate an API key</li>
+            <li class="flex gap-3"><span class="text-red-400/60 font-mono text-xs mt-0.5">03</span> Store the key securely (env vars, secrets manager)</li>
+            <li class="flex gap-3"><span class="text-red-400/60 font-mono text-xs mt-0.5">04</span> Handle rate limits, quotas, and overage billing</li>
+            <li class="flex gap-3"><span class="text-red-400/60 font-mono text-xs mt-0.5">05</span> Rotate keys periodically, manage per-service billing</li>
+            <li class="flex gap-3"><span class="text-red-400/60 font-mono text-xs mt-0.5">06</span> Repeat for every new service your agent needs</li>
+          </ol>
+        </div>
+
+        <!-- New way -->
+        <div class="rounded-2xl border border-emerald-500/10 bg-emerald-500/[0.03] p-6">
+          <h3 class="text-emerald-400 font-semibold mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7"/></svg>
+            With x402: just pay
+          </h3>
+          <ol class="space-y-3 text-gray-400 text-sm">
+            <li class="flex gap-3"><span class="text-emerald-400/60 font-mono text-xs mt-0.5">01</span> Fund a wallet with stablecoins</li>
+            <li class="flex gap-3"><span class="text-emerald-400/60 font-mono text-xs mt-0.5">02</span> Call any endpoint &mdash; payment is automatic</li>
+            <li class="flex gap-3"><span class="text-emerald-400/60 font-mono text-xs mt-0.5">03</span> That's it. No keys, no accounts, no billing pages.</li>
+          </ol>
+          <div class="mt-6 pt-4 border-t border-emerald-500/10">
+            <p class="text-gray-400 text-sm leading-relaxed">It's the difference between having a gym membership and paying 10 cents every time you use a treadmill. For software that runs autonomously, the pay-per-use model is simpler, cheaper, and requires zero human setup.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-10 card-glow rounded-2xl p-6 text-center">
+        <p class="text-gray-300 leading-relaxed max-w-2xl mx-auto">This is especially powerful for <strong class="text-white">autonomous agents</strong> &mdash; software that operates without a human babysitting it. An agent can discover available services, compare pricing across networks, and pay on the fly, all programmatically. No human needs to create accounts or manage credentials for it.</p>
       </div>
     </div>
   </section>
