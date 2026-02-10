@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Status — x402 Gateway</title>
+  <meta name="description" content="Live status dashboard for the x402 Gateway. Monitor health, memory usage, key pool, and uptime.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: { 50: '#eef2ff', 100: '#e0e7ff', 200: '#c7d2fe', 400: '#818cf8', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca', 900: '#312e81' },
+            surface: { 800: '#1e1b2e', 900: '#13111c', 950: '#0b0a12' }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { background: #0b0a12; }
+    .gradient-text { background: linear-gradient(135deg, #818cf8 0%, #c084fc 50%, #f472b6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .card-glow { background: linear-gradient(135deg, rgba(99,102,241,0.08) 0%, rgba(192,132,252,0.04) 100%); border: 1px solid rgba(99,102,241,0.15); }
+    .hero-glow { background: radial-gradient(ellipse 80% 60% at 50% -20%, rgba(99,102,241,0.15) 0%, transparent 70%); }
+    @keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+    .pulse-dot { animation: pulse-dot 2s ease-in-out infinite; }
+  </style>
+</head>
+<body class="text-gray-200 antialiased">
+
+  <!-- Nav -->
+  <nav class="fixed top-0 w-full z-50 bg-surface-950/80 backdrop-blur-md border-b border-white/5">
+    <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-2 font-semibold text-white">
+        <span class="text-xl">⚡</span>
+        <span>x402 Gateway</span>
+      </a>
+      <div class="hidden sm:flex items-center gap-8 text-sm text-gray-400">
+        <a href="/status" class="text-white">Status</a>
+        <a href="/discovery" class="hover:text-white transition">Discovery</a>
+        <a href="/services" class="hover:text-white transition">Services</a>
+        <a href="/docs" class="px-4 py-1.5 rounded-full bg-brand-600 text-white text-sm font-medium hover:bg-brand-500 transition">Docs</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Content -->
+  <section class="relative pt-28 pb-20 hero-glow">
+    <div class="max-w-4xl mx-auto px-6">
+
+      <!-- Header -->
+      <div class="text-center mb-12">
+        <h1 class="text-3xl sm:text-4xl font-bold text-white mb-3">System Status</h1>
+        <p class="text-gray-400">Live health dashboard &mdash; auto-refreshes every 30 seconds</p>
+      </div>
+
+      <!-- Overall Status Banner -->
+      <div id="overall-banner" class="card-glow rounded-2xl p-6 mb-8 flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <div id="status-dot" class="w-4 h-4 rounded-full bg-gray-600 pulse-dot"></div>
+          <div>
+            <div id="status-text" class="text-xl font-bold text-gray-500">Loading...</div>
+            <div id="status-sub" class="text-sm text-gray-500">Checking gateway health</div>
+          </div>
+        </div>
+        <div class="text-right text-sm text-gray-500">
+          <div id="last-check">--</div>
+          <div id="uptime-display">--</div>
+        </div>
+      </div>
+
+      <!-- Error display -->
+      <div id="error-banner" class="hidden rounded-2xl border border-red-500/20 bg-red-500/[0.05] p-4 mb-8 text-red-400 text-sm"></div>
+
+      <!-- Health Checks Grid -->
+      <div class="grid md:grid-cols-2 gap-6 mb-8">
+
+        <!-- Database Check -->
+        <div class="card-glow rounded-2xl p-6">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-brand-500/10 flex items-center justify-center">
+                <svg class="w-5 h-5 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/></svg>
+              </div>
+              <h3 class="text-white font-semibold">Database</h3>
+            </div>
+            <span id="db-badge" class="px-3 py-1 rounded-full text-xs font-medium bg-gray-500/10 text-gray-500">--</span>
+          </div>
+          <div id="db-details" class="space-y-2 text-sm text-gray-400">
+            <div class="flex justify-between"><span>Status</span><span id="db-status" class="text-gray-500">--</span></div>
+            <div class="flex justify-between"><span>Latency</span><span id="db-latency" class="text-gray-500 font-mono">--</span></div>
+          </div>
+        </div>
+
+        <!-- MegaETH RPC Check -->
+        <div class="card-glow rounded-2xl p-6">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center">
+                <svg class="w-5 h-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+              </div>
+              <h3 class="text-white font-semibold">MegaETH RPC</h3>
+            </div>
+            <span id="rpc-badge" class="px-3 py-1 rounded-full text-xs font-medium bg-gray-500/10 text-gray-500">--</span>
+          </div>
+          <div id="rpc-details" class="space-y-2 text-sm text-gray-400">
+            <div class="flex justify-between"><span>Status</span><span id="rpc-status" class="text-gray-500">--</span></div>
+            <div class="flex justify-between"><span>Block Number</span><span id="rpc-block" class="text-gray-500 font-mono">--</span></div>
+            <div class="flex justify-between"><span>Latency</span><span id="rpc-latency" class="text-gray-500 font-mono">--</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Memory & Key Pool -->
+      <div class="grid md:grid-cols-2 gap-6 mb-8">
+
+        <!-- Memory Usage -->
+        <div class="card-glow rounded-2xl p-6">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center">
+              <svg class="w-5 h-5 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/></svg>
+            </div>
+            <h3 class="text-white font-semibold">Memory Usage</h3>
+          </div>
+          <div class="space-y-3 text-sm">
+            <div>
+              <div class="flex justify-between text-gray-400 mb-1"><span>Heap Used</span><span id="mem-heap" class="font-mono text-white">--</span></div>
+              <div class="w-full h-2 rounded-full bg-white/5 overflow-hidden">
+                <div id="mem-heap-bar" class="h-full rounded-full bg-brand-500 transition-all duration-500" style="width: 0%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between text-gray-400 mb-1"><span>Heap Total</span><span id="mem-heap-total" class="font-mono text-white">--</span></div>
+            </div>
+            <div>
+              <div class="flex justify-between text-gray-400 mb-1"><span>RSS</span><span id="mem-rss" class="font-mono text-white">--</span></div>
+              <div class="w-full h-2 rounded-full bg-white/5 overflow-hidden">
+                <div id="mem-rss-bar" class="h-full rounded-full bg-purple-500 transition-all duration-500" style="width: 0%"></div>
+              </div>
+            </div>
+            <div class="flex justify-between text-gray-400"><span>External</span><span id="mem-external" class="font-mono text-white">--</span></div>
+          </div>
+        </div>
+
+        <!-- Key Pool -->
+        <div class="card-glow rounded-2xl p-6">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center">
+              <svg class="w-5 h-5 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>
+            </div>
+            <h3 class="text-white font-semibold">Key Pool</h3>
+          </div>
+          <div id="keypool-content" class="space-y-2 text-sm text-gray-400">
+            <div class="flex justify-between"><span>Status</span><span id="kp-status" class="text-gray-500">--</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Timestamp -->
+      <div class="text-center text-sm text-gray-600">
+        <span id="timestamp-display">--</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-white/5 py-10">
+    <div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-500">
+      <div class="flex items-center gap-2">
+        <span>⚡</span>
+        <span>x402 Gateway</span>
+      </div>
+      <div class="flex items-center gap-6">
+        <a href="/docs" class="hover:text-gray-300 transition">Docs</a>
+        <a href="/.well-known/x402.json" class="hover:text-gray-300 transition">Discovery</a>
+        <a href="/api/services" class="hover:text-gray-300 transition">Services API</a>
+        <a href="/health" class="hover:text-gray-300 transition">Status</a>
+        <a href="https://x.com/x402engine" target="_blank" rel="noopener" class="hover:text-gray-300 transition">@x402engine</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function formatBytes(bytes) {
+      if (!bytes && bytes !== 0) return '--';
+      const mb = bytes / (1024 * 1024);
+      return mb.toFixed(1) + ' MB';
+    }
+
+    function formatUptime(seconds) {
+      if (!seconds && seconds !== 0) return '--';
+      const d = Math.floor(seconds / 86400);
+      const h = Math.floor((seconds % 86400) / 3600);
+      const m = Math.floor((seconds % 3600) / 60);
+      const s = Math.floor(seconds % 60);
+      const parts = [];
+      if (d > 0) parts.push(d + 'd');
+      if (h > 0) parts.push(h + 'h');
+      if (m > 0) parts.push(m + 'm');
+      parts.push(s + 's');
+      return parts.join(' ');
+    }
+
+    function setBadge(el, ok) {
+      if (ok) {
+        el.textContent = 'Healthy';
+        el.className = 'px-3 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20';
+      } else {
+        el.textContent = 'Degraded';
+        el.className = 'px-3 py-1 rounded-full text-xs font-medium bg-red-500/10 text-red-400 border border-red-500/20';
+      }
+    }
+
+    async function fetchHealth() {
+      const errorBanner = document.getElementById('error-banner');
+      try {
+        const res = await fetch('/health/deep');
+        const data = await res.json();
+
+        errorBanner.classList.add('hidden');
+
+        // Overall status
+        const dot = document.getElementById('status-dot');
+        const text = document.getElementById('status-text');
+        const sub = document.getElementById('status-sub');
+        const isHealthy = data.status === 'ok' || data.status === 'healthy';
+
+        if (isHealthy) {
+          dot.className = 'w-4 h-4 rounded-full bg-emerald-400 pulse-dot';
+          text.textContent = 'All Systems Operational';
+          text.className = 'text-xl font-bold text-emerald-400';
+          sub.textContent = 'All checks passing';
+        } else {
+          dot.className = 'w-4 h-4 rounded-full bg-red-400 pulse-dot';
+          text.textContent = 'Degraded Performance';
+          text.className = 'text-xl font-bold text-red-400';
+          sub.textContent = 'One or more checks failing';
+        }
+
+        // Uptime
+        if (data.uptime) {
+          document.getElementById('uptime-display').textContent = 'Uptime: ' + formatUptime(data.uptime);
+        }
+
+        // Timestamp
+        if (data.timestamp) {
+          const ts = new Date(data.timestamp);
+          document.getElementById('timestamp-display').textContent = 'Last response: ' + ts.toLocaleString();
+        }
+
+        document.getElementById('last-check').textContent = 'Checked: ' + new Date().toLocaleTimeString();
+
+        // Database check
+        const checks = data.checks || {};
+        const db = checks.database || {};
+        setBadge(document.getElementById('db-badge'), db.status === 'ok' || db.status === 'healthy');
+        document.getElementById('db-status').textContent = db.status || '--';
+        document.getElementById('db-status').className = (db.status === 'ok' || db.status === 'healthy') ? 'text-emerald-400' : 'text-red-400';
+        document.getElementById('db-latency').textContent = db.latencyMs != null ? db.latencyMs + 'ms' : (db.latency != null ? db.latency + 'ms' : '--');
+
+        // MegaETH RPC check
+        const rpc = checks.megaethRpc || checks.megaeth || checks.rpc || {};
+        setBadge(document.getElementById('rpc-badge'), rpc.status === 'ok' || rpc.status === 'healthy');
+        document.getElementById('rpc-status').textContent = rpc.status || '--';
+        document.getElementById('rpc-status').className = (rpc.status === 'ok' || rpc.status === 'healthy') ? 'text-emerald-400' : 'text-red-400';
+        document.getElementById('rpc-block').textContent = rpc.blockNumber != null ? Number(rpc.blockNumber).toLocaleString() : '--';
+        document.getElementById('rpc-latency').textContent = rpc.latencyMs != null ? rpc.latencyMs + 'ms' : (rpc.latency != null ? rpc.latency + 'ms' : '--');
+
+        // Memory
+        const mem = data.memory || {};
+        const heapUsed = mem.heapUsed || mem.heap_used || 0;
+        const heapTotal = mem.heapTotal || mem.heap_total || 0;
+        const rss = mem.rss || 0;
+        const external = mem.external || 0;
+
+        document.getElementById('mem-heap').textContent = formatBytes(heapUsed);
+        document.getElementById('mem-heap-total').textContent = formatBytes(heapTotal);
+        document.getElementById('mem-rss').textContent = formatBytes(rss);
+        document.getElementById('mem-external').textContent = formatBytes(external);
+
+        // Progress bars (assume 512MB max for visual)
+        const maxMem = 512 * 1024 * 1024;
+        document.getElementById('mem-heap-bar').style.width = Math.min(100, (heapUsed / maxMem) * 100) + '%';
+        document.getElementById('mem-rss-bar').style.width = Math.min(100, (rss / maxMem) * 100) + '%';
+
+        // Key pool
+        const kp = data.keyPool || data.key_pool || checks.keyPool || checks.key_pool || {};
+        const kpContent = document.getElementById('keypool-content');
+        kpContent.innerHTML = '';
+
+        if (Object.keys(kp).length > 0) {
+          const entries = [
+            ['Status', kp.status],
+            ['Total Keys', kp.total != null ? kp.total : kp.totalKeys],
+            ['Available', kp.available != null ? kp.available : kp.availableKeys],
+            ['In Use', kp.inUse != null ? kp.inUse : kp.busyKeys],
+            ['Exhausted', kp.exhausted != null ? kp.exhausted : kp.exhaustedKeys],
+          ];
+          entries.forEach(function(pair) {
+            if (pair[1] != null) {
+              const row = document.createElement('div');
+              row.className = 'flex justify-between';
+              const isStatus = pair[0] === 'Status';
+              const valColor = isStatus
+                ? ((pair[1] === 'ok' || pair[1] === 'healthy') ? 'text-emerald-400' : 'text-red-400')
+                : 'text-white font-mono';
+              row.innerHTML = '<span class="text-gray-400">' + pair[0] + '</span><span class="' + valColor + '">' + pair[1] + '</span>';
+              kpContent.appendChild(row);
+            }
+          });
+        } else {
+          kpContent.innerHTML = '<div class="flex justify-between"><span>Status</span><span class="text-gray-500">No data</span></div>';
+        }
+
+      } catch (err) {
+        errorBanner.classList.remove('hidden');
+        errorBanner.textContent = 'Failed to reach /health/deep — ' + err.message;
+
+        document.getElementById('status-dot').className = 'w-4 h-4 rounded-full bg-red-400 pulse-dot';
+        document.getElementById('status-text').textContent = 'Unreachable';
+        document.getElementById('status-text').className = 'text-xl font-bold text-red-400';
+        document.getElementById('status-sub').textContent = 'Cannot connect to gateway';
+        document.getElementById('last-check').textContent = 'Checked: ' + new Date().toLocaleTimeString();
+      }
+    }
+
+    // Initial fetch + 30s interval
+    fetchHealth();
+    setInterval(fetchHealth, 30000);
+  </script>
+
+</body>
+</html>

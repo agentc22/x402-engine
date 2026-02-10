@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discovery — x402 Gateway</title>
+  <meta name="description" content="Explore the x402 Gateway discovery manifest. Networks, services, and MCP integration info.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: { 50: '#eef2ff', 100: '#e0e7ff', 200: '#c7d2fe', 400: '#818cf8', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca', 900: '#312e81' },
+            surface: { 800: '#1e1b2e', 900: '#13111c', 950: '#0b0a12' }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { background: #0b0a12; }
+    .gradient-text { background: linear-gradient(135deg, #818cf8 0%, #c084fc 50%, #f472b6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .card-glow { background: linear-gradient(135deg, rgba(99,102,241,0.08) 0%, rgba(192,132,252,0.04) 100%); border: 1px solid rgba(99,102,241,0.15); }
+    .card-glow:hover { border-color: rgba(99,102,241,0.35); background: linear-gradient(135deg, rgba(99,102,241,0.12) 0%, rgba(192,132,252,0.06) 100%); }
+    .hero-glow { background: radial-gradient(ellipse 80% 60% at 50% -20%, rgba(99,102,241,0.15) 0%, transparent 70%); }
+    pre code { font-size: 0.8rem; line-height: 1.6; }
+  </style>
+</head>
+<body class="text-gray-200 antialiased">
+
+  <!-- Nav -->
+  <nav class="fixed top-0 w-full z-50 bg-surface-950/80 backdrop-blur-md border-b border-white/5">
+    <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-2 font-semibold text-white">
+        <span class="text-xl">⚡</span>
+        <span>x402 Gateway</span>
+      </a>
+      <div class="hidden sm:flex items-center gap-8 text-sm text-gray-400">
+        <a href="/status" class="hover:text-white transition">Status</a>
+        <a href="/discovery" class="text-white">Discovery</a>
+        <a href="/services" class="hover:text-white transition">Services</a>
+        <a href="/docs" class="px-4 py-1.5 rounded-full bg-brand-600 text-white text-sm font-medium hover:bg-brand-500 transition">Docs</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Content -->
+  <section class="relative pt-28 pb-20 hero-glow">
+    <div class="max-w-5xl mx-auto px-6">
+
+      <!-- Header -->
+      <div class="text-center mb-12">
+        <h1 class="text-3xl sm:text-4xl font-bold text-white mb-3">Gateway Discovery</h1>
+        <p class="text-gray-400">Machine-readable manifest from <code class="text-brand-400 bg-white/5 px-2 py-0.5 rounded text-sm">/.well-known/x402.json</code></p>
+      </div>
+
+      <!-- Loading -->
+      <div id="loading" class="text-center py-20 text-gray-500">Loading discovery manifest...</div>
+
+      <!-- Error -->
+      <div id="error-banner" class="hidden rounded-2xl border border-red-500/20 bg-red-500/[0.05] p-4 mb-8 text-red-400 text-sm"></div>
+
+      <!-- Main content (hidden until loaded) -->
+      <div id="content" class="hidden">
+
+        <!-- Gateway Info -->
+        <div class="card-glow rounded-2xl p-6 mb-8">
+          <h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            Gateway Info
+          </h2>
+          <div class="grid sm:grid-cols-2 gap-4 text-sm">
+            <div class="flex justify-between sm:flex-col sm:gap-1">
+              <span class="text-gray-400">Name</span>
+              <span id="gw-name" class="text-white font-medium">--</span>
+            </div>
+            <div class="flex justify-between sm:flex-col sm:gap-1">
+              <span class="text-gray-400">Version</span>
+              <span id="gw-version" class="text-white font-mono">--</span>
+            </div>
+            <div class="flex justify-between sm:flex-col sm:gap-1">
+              <span class="text-gray-400">Base URL</span>
+              <span id="gw-url" class="text-brand-400 font-mono text-xs break-all">--</span>
+            </div>
+            <div class="flex justify-between sm:flex-col sm:gap-1">
+              <span class="text-gray-400">Protocol</span>
+              <span id="gw-protocol" class="text-white font-mono">--</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Networks -->
+        <div class="mb-8">
+          <h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
+            Supported Networks
+          </h2>
+          <div id="networks-grid" class="grid md:grid-cols-3 gap-6"></div>
+        </div>
+
+        <!-- Services by Category -->
+        <div class="mb-8">
+          <h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+            Services
+          </h2>
+          <div id="services-container"></div>
+        </div>
+
+        <!-- MCP Install Instructions -->
+        <div class="card-glow rounded-2xl p-6 mb-8">
+          <h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            MCP Integration
+          </h2>
+          <p class="text-gray-400 text-sm mb-4">Connect the x402 Gateway as an MCP (Model Context Protocol) server so AI assistants can discover and call paid APIs directly.</p>
+          <div id="mcp-instructions">
+            <p class="text-gray-400 text-sm mb-3">Add this to your MCP client configuration (e.g. Claude Desktop <code class="text-gray-300 bg-white/5 px-1.5 py-0.5 rounded text-xs">claude_desktop_config.json</code>):</p>
+            <div class="rounded-xl bg-surface-950 border border-white/5 overflow-hidden">
+              <div class="flex items-center gap-2 px-4 py-2 bg-white/[0.03] border-b border-white/5">
+                <span class="text-xs text-gray-500 font-mono">JSON</span>
+              </div>
+              <pre class="p-4 overflow-x-auto"><code id="mcp-config" class="text-sm text-gray-300"></code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Raw JSON Link -->
+        <div class="text-center">
+          <a href="/.well-known/x402.json" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-white/5 text-gray-300 text-sm font-medium hover:bg-white/10 transition border border-white/10">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+            View raw JSON
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-white/5 py-10">
+    <div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-500">
+      <div class="flex items-center gap-2">
+        <span>⚡</span>
+        <span>x402 Gateway</span>
+      </div>
+      <div class="flex items-center gap-6">
+        <a href="/docs" class="hover:text-gray-300 transition">Docs</a>
+        <a href="/.well-known/x402.json" class="hover:text-gray-300 transition">Discovery</a>
+        <a href="/api/services" class="hover:text-gray-300 transition">Services API</a>
+        <a href="/health" class="hover:text-gray-300 transition">Status</a>
+        <a href="https://x.com/x402engine" target="_blank" rel="noopener" class="hover:text-gray-300 transition">@x402engine</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const NETWORK_META = {
+      'eip155:8453':  { name: 'Base', letter: 'B', color: 'blue',    token: 'USDC', decimals: 6,  confirm: '~2s' },
+      'eip155:84532': { name: 'Base Sepolia', letter: 'B', color: 'blue', token: 'USDC', decimals: 6, confirm: '~2s' },
+      'eip155:4326':  { name: 'MegaETH', letter: 'M', color: 'emerald', token: 'USDm', decimals: 18, confirm: '~10ms' },
+      'eip155:6343':  { name: 'MegaETH Testnet', letter: 'M', color: 'emerald', token: 'USDm', decimals: 18, confirm: '~10ms' },
+      'solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp': { name: 'Solana', letter: 'S', color: 'purple', token: 'USDC', decimals: 6, confirm: '~400ms' },
+      'solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1':  { name: 'Solana Devnet', letter: 'S', color: 'purple', token: 'USDC', decimals: 6, confirm: '~400ms' },
+    };
+
+    const CATEGORY_COLORS = {
+      'compute':  { bg: 'bg-amber-500/10',   border: 'border-amber-500/20',   text: 'text-amber-400' },
+      'crypto':   { bg: 'bg-emerald-500/10',  border: 'border-emerald-500/20', text: 'text-emerald-400' },
+      'blockchain': { bg: 'bg-emerald-500/10', border: 'border-emerald-500/20', text: 'text-emerald-400' },
+      'storage':  { bg: 'bg-sky-500/10',      border: 'border-sky-500/20',     text: 'text-sky-400' },
+      'default':  { bg: 'bg-brand-500/10',    border: 'border-brand-500/20',   text: 'text-brand-400' },
+    };
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    function getCategoryColor(cat) {
+      const key = (cat || '').toLowerCase();
+      for (const k of Object.keys(CATEGORY_COLORS)) {
+        if (key.includes(k)) return CATEGORY_COLORS[k];
+      }
+      return CATEGORY_COLORS['default'];
+    }
+
+    async function loadDiscovery() {
+      const loading = document.getElementById('loading');
+      const content = document.getElementById('content');
+      const errorBanner = document.getElementById('error-banner');
+
+      try {
+        const res = await fetch('/.well-known/x402.json');
+        const data = await res.json();
+
+        loading.classList.add('hidden');
+        content.classList.remove('hidden');
+
+        // Gateway info
+        document.getElementById('gw-name').textContent = data.name || data.gateway?.name || 'x402 Gateway';
+        document.getElementById('gw-version').textContent = data.version || data.gateway?.version || '--';
+        document.getElementById('gw-url').textContent = data.baseUrl || data.base_url || data.gateway?.baseUrl || window.location.origin;
+        document.getElementById('gw-protocol').textContent = data.protocol || data.x402Version || 'x402';
+
+        // Networks
+        const networks = data.networks || data.supportedNetworks || [];
+        const networksGrid = document.getElementById('networks-grid');
+        networksGrid.innerHTML = '';
+
+        const networkIds = Array.isArray(networks)
+          ? networks.map(function(n) { return typeof n === 'string' ? n : n.id || n.networkId || n.caip2; })
+          : Object.keys(networks);
+
+        networkIds.forEach(function(netId) {
+          const meta = NETWORK_META[netId] || { name: netId, letter: '?', color: 'gray', token: '?', decimals: '?', confirm: '?' };
+          const netObj = Array.isArray(networks)
+            ? networks.find(function(n) { return (typeof n === 'string' ? n : n.id || n.networkId || n.caip2) === netId; })
+            : networks[netId];
+          const extra = typeof netObj === 'object' ? netObj : {};
+
+          const card = document.createElement('div');
+          card.className = 'card-glow rounded-2xl p-6 transition';
+          card.innerHTML = [
+            '<div class="flex items-center gap-3 mb-4">',
+            '  <div class="w-10 h-10 rounded-xl bg-' + meta.color + '-500/10 flex items-center justify-center text-' + meta.color + '-400 font-bold text-sm">' + meta.letter + '</div>',
+            '  <div>',
+            '    <h3 class="text-white font-semibold">' + escapeHtml(meta.name) + '</h3>',
+            '    <span class="text-xs text-gray-500 break-all">' + escapeHtml(netId.length > 20 ? netId.substring(0, 16) + '...' : netId) + '</span>',
+            '  </div>',
+            '</div>',
+            '<div class="space-y-2 text-sm">',
+            '  <div class="flex justify-between"><span class="text-gray-400">Token</span><span class="text-white">' + escapeHtml(extra.token || meta.token) + '</span></div>',
+            '  <div class="flex justify-between"><span class="text-gray-400">Decimals</span><span class="text-white">' + (extra.decimals || meta.decimals) + '</span></div>',
+            '  <div class="flex justify-between"><span class="text-gray-400">Confirmation</span><span class="text-white">' + escapeHtml(extra.confirmationTime || meta.confirm) + '</span></div>',
+            '</div>',
+          ].join('\n');
+          networksGrid.appendChild(card);
+        });
+
+        if (networkIds.length === 0) {
+          networksGrid.innerHTML = '<div class="col-span-3 text-center text-gray-500 py-8">No networks listed in manifest</div>';
+        }
+
+        // Services grouped by category
+        const services = data.services || data.endpoints || [];
+        const container = document.getElementById('services-container');
+        container.innerHTML = '';
+
+        const grouped = {};
+        const serviceList = Array.isArray(services) ? services : Object.values(services);
+
+        serviceList.forEach(function(svc) {
+          const cat = svc.category || svc.group || 'Other';
+          if (!grouped[cat]) grouped[cat] = [];
+          grouped[cat].push(svc);
+        });
+
+        Object.keys(grouped).sort().forEach(function(cat) {
+          const colors = getCategoryColor(cat);
+          const section = document.createElement('div');
+          section.className = 'mb-8';
+
+          let html = '<div class="flex items-center gap-3 mb-4">';
+          html += '<span class="px-3 py-1 rounded-full ' + colors.bg + ' ' + colors.border + ' ' + colors.text + ' text-xs font-medium border">' + escapeHtml(cat) + '</span>';
+          html += '<span class="text-xs text-gray-600">' + grouped[cat].length + ' service' + (grouped[cat].length !== 1 ? 's' : '') + '</span>';
+          html += '</div>';
+          html += '<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">';
+
+          grouped[cat].forEach(function(svc) {
+            const name = svc.name || svc.title || svc.path || '--';
+            const desc = svc.description || svc.desc || '';
+            const price = svc.price || svc.cost || '';
+            const method = svc.method || 'GET';
+            const endpoint = svc.path || svc.endpoint || svc.url || '';
+            const methodColor = method === 'POST' ? 'text-amber-400 bg-amber-500/10' : 'text-emerald-400 bg-emerald-500/10';
+
+            html += '<div class="card-glow rounded-xl p-5 transition">';
+            html += '  <div class="flex items-start justify-between mb-2">';
+            html += '    <h3 class="text-white font-medium text-sm">' + escapeHtml(name) + '</h3>';
+            if (price) {
+              html += '    <span class="text-brand-400 text-sm font-mono shrink-0 ml-2">' + escapeHtml(typeof price === 'string' ? price : '$' + price) + '</span>';
+            }
+            html += '  </div>';
+            if (desc) {
+              html += '  <p class="text-gray-500 text-xs mb-3">' + escapeHtml(desc) + '</p>';
+            }
+            html += '  <div class="flex items-center gap-2">';
+            html += '    <span class="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold ' + methodColor + '">' + method + '</span>';
+            html += '    <code class="text-xs text-gray-600 font-mono truncate">' + escapeHtml(endpoint) + '</code>';
+            html += '  </div>';
+            html += '</div>';
+          });
+
+          html += '</div>';
+          section.innerHTML = html;
+          container.appendChild(section);
+        });
+
+        if (serviceList.length === 0) {
+          container.innerHTML = '<div class="text-center text-gray-500 py-8">No services listed in manifest</div>';
+        }
+
+        // MCP config
+        const baseUrl = data.baseUrl || data.base_url || data.gateway?.baseUrl || window.location.origin;
+        const mcpUrl = data.mcp?.url || data.mcpUrl || (baseUrl + '/mcp');
+        const mcpConfig = {
+          "mcpServers": {
+            "x402-gateway": {
+              "url": mcpUrl
+            }
+          }
+        };
+        document.getElementById('mcp-config').textContent = JSON.stringify(mcpConfig, null, 2);
+
+      } catch (err) {
+        loading.classList.add('hidden');
+        errorBanner.classList.remove('hidden');
+        errorBanner.textContent = 'Failed to fetch /.well-known/x402.json — ' + err.message;
+      }
+    }
+
+    loadDiscovery();
+  </script>
+
+</body>
+</html>
