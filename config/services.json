@@ -293,6 +293,146 @@
         "provider": "amadeus",
         "baseUrl": "https://api.amadeus.com/v1/shopping/flight-dates"
       }
+    },
+    {
+      "id": "nft-metadata",
+      "name": "NFT Metadata",
+      "description": "Get NFT name, description, image, traits, and collection info by chain, contract, and token ID",
+      "price": "$0.005",
+      "method": "GET",
+      "path": "/api/nft/metadata",
+      "mimeType": "application/json",
+      "category": "crypto",
+      "upstream": {
+        "provider": "opensea",
+        "baseUrl": "https://api.opensea.io/api/v2"
+      }
+    },
+    {
+      "id": "nft-ownership",
+      "name": "NFT Ownership",
+      "description": "Get the current owner address of an NFT by chain, contract, and token ID",
+      "price": "$0.005",
+      "method": "GET",
+      "path": "/api/nft/ownership",
+      "mimeType": "application/json",
+      "category": "crypto",
+      "upstream": {
+        "provider": "opensea",
+        "baseUrl": "https://api.opensea.io/api/v2"
+      }
+    },
+    {
+      "id": "nft-collection",
+      "name": "NFT Collection",
+      "description": "Get collection name, description, stats, and floor price by chain and contract address",
+      "price": "$0.005",
+      "method": "GET",
+      "path": "/api/nft/collection",
+      "mimeType": "application/json",
+      "category": "crypto",
+      "upstream": {
+        "provider": "opensea",
+        "baseUrl": "https://api.opensea.io/api/v2"
+      }
+    },
+    {
+      "id": "ens-resolve",
+      "name": "ENS Resolve",
+      "description": "Resolve an ENS name (e.g. vitalik.eth) to an Ethereum address",
+      "price": "$0.001",
+      "method": "GET",
+      "path": "/api/ens/resolve",
+      "mimeType": "application/json",
+      "category": "crypto",
+      "upstream": {
+        "provider": "ethereum-rpc",
+        "baseUrl": "https://cloudflare-eth.com"
+      }
+    },
+    {
+      "id": "ens-reverse",
+      "name": "ENS Reverse Lookup",
+      "description": "Look up the ENS name for an Ethereum address (returns null if none set)",
+      "price": "$0.001",
+      "method": "GET",
+      "path": "/api/ens/reverse",
+      "mimeType": "application/json",
+      "category": "crypto",
+      "upstream": {
+        "provider": "ethereum-rpc",
+        "baseUrl": "https://cloudflare-eth.com"
+      }
+    },
+    {
+      "id": "llm-haiku",
+      "name": "Claude 3.5 Haiku",
+      "description": "Fast, affordable LLM inference via Claude 3.5 Haiku — good for simple tasks and high-volume use",
+      "price": "$0.01",
+      "method": "POST",
+      "path": "/api/llm/haiku",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": {
+        "provider": "openrouter",
+        "baseUrl": "https://openrouter.ai/api/v1"
+      }
+    },
+    {
+      "id": "llm-sonnet",
+      "name": "Claude 3.5 Sonnet",
+      "description": "Advanced LLM inference via Claude 3.5 Sonnet — best for complex reasoning and coding",
+      "price": "$0.05",
+      "method": "POST",
+      "path": "/api/llm/sonnet",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": {
+        "provider": "openrouter",
+        "baseUrl": "https://openrouter.ai/api/v1"
+      }
+    },
+    {
+      "id": "llm-gpt4o-mini",
+      "name": "GPT-4o Mini",
+      "description": "Lightweight LLM inference via GPT-4o Mini — fast and cost-effective for simple tasks",
+      "price": "$0.005",
+      "method": "POST",
+      "path": "/api/llm/gpt4o-mini",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": {
+        "provider": "openrouter",
+        "baseUrl": "https://openrouter.ai/api/v1"
+      }
+    },
+    {
+      "id": "llm-llama",
+      "name": "Llama 3.1 70B",
+      "description": "Open-source LLM inference via Llama 3.1 70B Instruct — great for general-purpose tasks",
+      "price": "$0.003",
+      "method": "POST",
+      "path": "/api/llm/llama",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": {
+        "provider": "openrouter",
+        "baseUrl": "https://openrouter.ai/api/v1"
+      }
+    },
+    {
+      "id": "embeddings",
+      "name": "Text Embeddings",
+      "description": "Generate text embeddings using OpenAI text-embedding-3-small — for semantic search, clustering, RAG",
+      "price": "$0.001",
+      "method": "POST",
+      "path": "/api/embeddings",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": {
+        "provider": "openrouter",
+        "baseUrl": "https://openrouter.ai/api/v1"
+      }
     }
   ]
 }

@@ -18,6 +18,9 @@ import cryptoRouter from "./apis/crypto.js";
 import blockchainRouter from "./apis/blockchain.js";
 import ipfsRouter from "./apis/ipfs.js";
 import travelRouter from "./apis/travel.js";
+import nftRouter from "./apis/nft.js";
+import ensRouter from "./apis/ens.js";
+import llmRouter from "./apis/llm.js";
 import dashboardRouter from "./apis/dashboard.js";
 import megaethFacilitator from "./facilitator/index.js";
 import { initFal } from "./providers/fal.js";
@@ -283,6 +286,9 @@ app.use(cryptoRouter);
 app.use(blockchainRouter);
 app.use(ipfsRouter);
 app.use(travelRouter);
+app.use(nftRouter);
+app.use(ensRouter);
+app.use(llmRouter);
 
 // --- Global error handler (must be after all routes) ---
 // Express 4 async middleware can throw unhandled rejections that hang requests.
