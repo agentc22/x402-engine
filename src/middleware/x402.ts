@@ -1,4 +1,5 @@
 import type { Request, Response, NextFunction, RequestHandler } from "express";
+import crypto from "crypto";
 import { paymentMiddleware, x402ResourceServer } from "@x402/express";
 import { ExactEvmScheme } from "@x402/evm/exact/server";
 import { ExactSvmScheme } from "@x402/svm/exact/server";
@@ -12,11 +13,14 @@ import { priceStringToTokenAmount } from "../lib/validation.js";
 
 /**
  * Converts a decimal USD amount to USDm token units (18 decimals).
- * Uses string-based arithmetic — no floating-point precision issues.
+ * Rounds to 6 decimal places first to eliminate IEEE 754 float noise.
+ * e.g. 0.03 in float is 0.02999999999999999889 — rounding to 6 dp gives "0.030000"
+ * which then converts cleanly to 30000000000000000 via string arithmetic.
  */
 function usdToUsdm(amount: number): string {
-  // amount comes from the SDK as a number, convert to string carefully
-  const str = amount.toFixed(20).replace(/0+$/, "").replace(/\.$/, "");
+  // Round to 6 dp to kill float noise (our prices have at most 3 dp)
+  const rounded = Math.round(amount * 1e6) / 1e6;
+  const str = rounded.toFixed(6);
   return priceStringToTokenAmount(str, MEGAETH_CONFIG.stablecoin.decimals).toString();
 }
 
@@ -65,10 +69,13 @@ export function createPaymentMiddleware(): RequestHandler {
 export function devBypassMiddleware(): RequestHandler {
   return (req: Request, _res: Response, next: NextFunction): void => {
     // SECURITY: dev bypass is completely disabled in production
+    const bypassHeader = req.headers["x-dev-bypass"] as string | undefined;
     if (
       config.isDev &&
       config.devBypassSecret &&
-      req.headers["x-dev-bypass"] === config.devBypassSecret
+      bypassHeader &&
+      bypassHeader.length === config.devBypassSecret.length &&
+      crypto.timingSafeEqual(Buffer.from(bypassHeader), Buffer.from(config.devBypassSecret))
     ) {
       (req as any).devBypassed = true;
     }

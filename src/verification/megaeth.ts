@@ -181,9 +181,12 @@ export function verifyTransferLogs(
   }
 
   if (totalToRecipient < expectedAmount) {
+    console.warn(
+      `[megaeth-verify] Insufficient payment: got=${totalToRecipient} expected=${expectedAmount} diff=${expectedAmount - totalToRecipient} payer=${payer}`,
+    );
     return {
       valid: false,
-      error: "Insufficient payment amount",
+      error: `Insufficient payment amount (got ${totalToRecipient}, need ${expectedAmount})`,
     };
   }
 
