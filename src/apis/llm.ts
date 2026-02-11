@@ -4,41 +4,54 @@ import { logRequest } from "../db/ledger.js";
 
 const router = Router();
 
-const MODELS: Record<string, { model: string; serviceId: string }> = {
+interface ModelConfig {
+  model: string;
+  serviceId: string;
+  reasoning?: boolean; // reasoning models need higher token limits (reasoning eats into max_tokens)
+}
+
+const MODELS: Record<string, ModelConfig> = {
   // OpenAI
   "gpt-4o": { model: "openai/gpt-4o", serviceId: "llm-gpt-4o" },
   "gpt-4o-mini": { model: "openai/gpt-4o-mini", serviceId: "llm-gpt-4o-mini" },
   "gpt-4.1": { model: "openai/gpt-4.1", serviceId: "llm-gpt-4.1" },
   "gpt-4.1-mini": { model: "openai/gpt-4.1-mini", serviceId: "llm-gpt-4.1-mini" },
-  "gpt-5": { model: "openai/gpt-5", serviceId: "llm-gpt-5" },
-  "gpt-5-mini": { model: "openai/gpt-5-mini", serviceId: "llm-gpt-5-mini" },
-  "o3": { model: "openai/o3", serviceId: "llm-o3" },
-  "o4-mini": { model: "openai/o4-mini", serviceId: "llm-o4-mini" },
+  "gpt-5": { model: "openai/gpt-5", serviceId: "llm-gpt-5", reasoning: true },
+  "gpt-5-mini": { model: "openai/gpt-5-mini", serviceId: "llm-gpt-5-mini", reasoning: true },
+  "o3": { model: "openai/o3", serviceId: "llm-o3", reasoning: true },
+  "o4-mini": { model: "openai/o4-mini", serviceId: "llm-o4-mini", reasoning: true },
   // Anthropic
   "claude-opus": { model: "anthropic/claude-opus-4.6", serviceId: "llm-claude-opus" },
   "claude-sonnet": { model: "anthropic/claude-sonnet-4.5", serviceId: "llm-claude-sonnet" },
   "claude-haiku": { model: "anthropic/claude-haiku-4.5", serviceId: "llm-claude-haiku" },
   // Google
-  "gemini-pro": { model: "google/gemini-2.5-pro", serviceId: "llm-gemini-pro" },
+  "gemini-pro": { model: "google/gemini-2.5-pro", serviceId: "llm-gemini-pro", reasoning: true },
   "gemini-flash": { model: "google/gemini-2.5-flash", serviceId: "llm-gemini-flash" },
   // DeepSeek
   "deepseek": { model: "deepseek/deepseek-chat", serviceId: "llm-deepseek" },
-  "deepseek-r1": { model: "deepseek/deepseek-r1", serviceId: "llm-deepseek-r1" },
+  "deepseek-r1": { model: "deepseek/deepseek-r1", serviceId: "llm-deepseek-r1", reasoning: true },
   // Meta
   "llama": { model: "meta-llama/llama-3.3-70b-instruct", serviceId: "llm-llama" },
   // xAI
   "grok": { model: "x-ai/grok-4", serviceId: "llm-grok" },
   // Qwen
-  "qwen": { model: "qwen/qwen3-235b-a22b", serviceId: "llm-qwen" },
+  "qwen": { model: "qwen/qwen3-235b-a22b", serviceId: "llm-qwen", reasoning: true },
   // Mistral
   "mistral": { model: "mistralai/mistral-large-2512", serviceId: "llm-mistral" },
   // Perplexity (search-augmented)
   "perplexity": { model: "perplexity/sonar-pro", serviceId: "llm-perplexity" },
 };
 
+// Reasoning models burn tokens on chain-of-thought before generating content.
+// On OpenRouter, reasoning tokens count against max_tokens, so we need higher
+// defaults and caps to ensure non-empty output.
+const TOKEN_DEFAULTS = { default: 1024, max: 4096 } as const;
+const TOKEN_REASONING = { default: 4096, max: 16384 } as const;
+
 function chatHandler(slug: string) {
-  const { model, serviceId } = MODELS[slug];
+  const { model, serviceId, reasoning } = MODELS[slug];
   const endpoint = `/api/llm/${slug}`;
+  const limits = reasoning ? TOKEN_REASONING : TOKEN_DEFAULTS;
 
   return async (req: Request, res: Response) => {
     const { messages, max_tokens } = req.body || {};
@@ -64,7 +77,7 @@ function chatHandler(slug: string) {
       return;
     }
 
-    const maxTokens = Math.min(Math.max(parseInt(max_tokens) || 1024, 1), 4096);
+    const maxTokens = Math.min(Math.max(parseInt(max_tokens) || limits.default, 1), limits.max);
 
     const start = Date.now();
     let upstreamStatus = 0;
