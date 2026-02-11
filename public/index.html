@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>x402engine — Pay-per-call APIs for AI Agents</title>
-  <meta name="description" content="31 production APIs behind HTTP 402 micropayments. Pay with USDC on Base, USDm on MegaETH, or USDC on Solana. No API keys, no subscriptions — just stablecoins.">
+  <meta name="description" content="28 production APIs behind HTTP 402 micropayments. Pay with USDC on Base, USDm on MegaETH, or USDC on Solana. No API keys, no subscriptions — just stablecoins.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -59,7 +59,7 @@
     <div class="max-w-4xl mx-auto px-6 text-center">
       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-600/10 border border-brand-500/20 text-brand-400 text-xs font-medium mb-6">
         <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-        31 APIs live on mainnet
+        28 APIs live
       </div>
       <h1 class="text-4xl sm:text-6xl font-bold text-white leading-tight mb-6">
         Pay-per-call APIs<br>
@@ -207,7 +207,7 @@
   <section id="services" class="py-20 bg-surface-900/50">
     <div class="max-w-6xl mx-auto px-6">
       <div class="text-center mb-12">
-        <h2 class="text-3xl font-bold text-white mb-3">31 APIs, five categories</h2>
+        <h2 class="text-3xl font-bold text-white mb-3">28 APIs, five categories</h2>
         <p class="text-gray-400 max-w-xl mx-auto">Production-grade endpoints backed by best-in-class providers. All priced for micropayments.</p>
       </div>
 
@@ -410,30 +410,6 @@
             </div>
             <p class="text-gray-500 text-sm mb-3">Address &rarr; ENS name</p>
             <code class="text-xs text-gray-600 font-mono">GET /api/ens/reverse</code>
-          </div>
-          <div class="card-glow rounded-xl p-5 transition">
-            <div class="flex items-start justify-between mb-2">
-              <h3 class="text-white font-medium">NFT Metadata</h3>
-              <span class="price-tag text-brand-400 text-sm font-mono">$0.005</span>
-            </div>
-            <p class="text-gray-500 text-sm mb-3">Name, image, traits, collection</p>
-            <code class="text-xs text-gray-600 font-mono">GET /api/nft/metadata</code>
-          </div>
-          <div class="card-glow rounded-xl p-5 transition">
-            <div class="flex items-start justify-between mb-2">
-              <h3 class="text-white font-medium">NFT Ownership</h3>
-              <span class="price-tag text-brand-400 text-sm font-mono">$0.005</span>
-            </div>
-            <p class="text-gray-500 text-sm mb-3">Current owner of any NFT</p>
-            <code class="text-xs text-gray-600 font-mono">GET /api/nft/ownership</code>
-          </div>
-          <div class="card-glow rounded-xl p-5 transition">
-            <div class="flex items-start justify-between mb-2">
-              <h3 class="text-white font-medium">NFT Collection</h3>
-              <span class="price-tag text-brand-400 text-sm font-mono">$0.005</span>
-            </div>
-            <p class="text-gray-500 text-sm mb-3">Collection stats, floor price</p>
-            <code class="text-xs text-gray-600 font-mono">GET /api/nft/collection</code>
           </div>
         </div>
       </div>
@@ -656,9 +632,6 @@
             <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/ipfs/get</td><td class="py-2.5 px-5 text-right text-brand-400">$0.001</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">1000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">10<sup>15</sup></td></tr>
             <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/ens/resolve</td><td class="py-2.5 px-5 text-right text-brand-400">$0.001</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">1000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">10<sup>15</sup></td></tr>
             <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/ens/reverse</td><td class="py-2.5 px-5 text-right text-brand-400">$0.001</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">1000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">10<sup>15</sup></td></tr>
-            <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/nft/metadata</td><td class="py-2.5 px-5 text-right text-brand-400">$0.005</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">5000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">5×10<sup>15</sup></td></tr>
-            <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/nft/ownership</td><td class="py-2.5 px-5 text-right text-brand-400">$0.005</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">5000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">5×10<sup>15</sup></td></tr>
-            <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/nft/collection</td><td class="py-2.5 px-5 text-right text-brand-400">$0.005</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">5000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">5×10<sup>15</sup></td></tr>
             <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/llm/haiku</td><td class="py-2.5 px-5 text-right text-brand-400">$0.01</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">10000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">10<sup>16</sup></td></tr>
             <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/llm/sonnet</td><td class="py-2.5 px-5 text-right text-brand-400">$0.05</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">50000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">5×10<sup>16</sup></td></tr>
             <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/llm/gpt4o-mini</td><td class="py-2.5 px-5 text-right text-brand-400">$0.005</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">5000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">5×10<sup>15</sup></td></tr>
