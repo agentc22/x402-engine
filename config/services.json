@@ -365,60 +365,224 @@
       }
     },
     {
-      "id": "llm-haiku",
-      "name": "Claude 3.5 Haiku",
-      "description": "Fast, affordable LLM inference via Claude 3.5 Haiku — good for simple tasks and high-volume use",
-      "price": "$0.01",
+      "id": "llm-gpt-4o",
+      "name": "GPT-4o",
+      "description": "OpenAI's flagship multimodal model — strong all-around for text, vision, and reasoning",
+      "price": "$0.04",
       "method": "POST",
-      "path": "/api/llm/haiku",
+      "path": "/api/llm/gpt-4o",
       "mimeType": "application/json",
       "category": "compute",
-      "upstream": {
-        "provider": "openrouter",
-        "baseUrl": "https://openrouter.ai/api/v1"
-      }
+      "upstream": { "provider": "openrouter", "baseUrl": "https://openrouter.ai/api/v1" }
     },
     {
-      "id": "llm-sonnet",
-      "name": "Claude 3.5 Sonnet",
-      "description": "Advanced LLM inference via Claude 3.5 Sonnet — best for complex reasoning and coding",
-      "price": "$0.05",
-      "method": "POST",
-      "path": "/api/llm/sonnet",
-      "mimeType": "application/json",
-      "category": "compute",
-      "upstream": {
-        "provider": "openrouter",
-        "baseUrl": "https://openrouter.ai/api/v1"
-      }
-    },
-    {
-      "id": "llm-gpt4o-mini",
+      "id": "llm-gpt-4o-mini",
       "name": "GPT-4o Mini",
-      "description": "Lightweight LLM inference via GPT-4o Mini — fast and cost-effective for simple tasks",
+      "description": "Fast, affordable GPT-4o variant — great for simple tasks and high-volume use",
+      "price": "$0.003",
+      "method": "POST",
+      "path": "/api/llm/gpt-4o-mini",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": { "provider": "openrouter", "baseUrl": "https://openrouter.ai/api/v1" }
+    },
+    {
+      "id": "llm-gpt-4.1",
+      "name": "GPT-4.1",
+      "description": "OpenAI GPT-4.1 — improved coding, instruction following, and long context",
+      "price": "$0.03",
+      "method": "POST",
+      "path": "/api/llm/gpt-4.1",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": { "provider": "openrouter", "baseUrl": "https://openrouter.ai/api/v1" }
+    },
+    {
+      "id": "llm-gpt-4.1-mini",
+      "name": "GPT-4.1 Mini",
+      "description": "Compact GPT-4.1 — fast and cost-effective with strong coding and instruction following",
+      "price": "$0.006",
+      "method": "POST",
+      "path": "/api/llm/gpt-4.1-mini",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": { "provider": "openrouter", "baseUrl": "https://openrouter.ai/api/v1" }
+    },
+    {
+      "id": "llm-gpt-5",
+      "name": "GPT-5",
+      "description": "OpenAI's most capable model — best for complex reasoning, analysis, and generation",
+      "price": "$0.035",
+      "method": "POST",
+      "path": "/api/llm/gpt-5",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": { "provider": "openrouter", "baseUrl": "https://openrouter.ai/api/v1" }
+    },
+    {
+      "id": "llm-gpt-5-mini",
+      "name": "GPT-5 Mini",
+      "description": "Compact GPT-5 — strong reasoning at lower cost, good for everyday tasks",
+      "price": "$0.007",
+      "method": "POST",
+      "path": "/api/llm/gpt-5-mini",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": { "provider": "openrouter", "baseUrl": "https://openrouter.ai/api/v1" }
+    },
+    {
+      "id": "llm-o3",
+      "name": "OpenAI o3",
+      "description": "OpenAI's reasoning model — excels at math, science, and multi-step problem solving",
+      "price": "$0.03",
+      "method": "POST",
+      "path": "/api/llm/o3",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": { "provider": "openrouter", "baseUrl": "https://openrouter.ai/api/v1" }
+    },
+    {
+      "id": "llm-o4-mini",
+      "name": "OpenAI o4 Mini",
+      "description": "Fast reasoning model — strong at math and coding with lower latency than o3",
+      "price": "$0.02",
+      "method": "POST",
+      "path": "/api/llm/o4-mini",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": { "provider": "openrouter", "baseUrl": "https://openrouter.ai/api/v1" }
+    },
+    {
+      "id": "llm-claude-opus",
+      "name": "Claude Opus 4.6",
+      "description": "Anthropic's most powerful model — best for complex analysis, coding, and extended thinking",
+      "price": "$0.09",
+      "method": "POST",
+      "path": "/api/llm/claude-opus",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": { "provider": "openrouter", "baseUrl": "https://openrouter.ai/api/v1" }
+    },
+    {
+      "id": "llm-claude-sonnet",
+      "name": "Claude Sonnet 4.5",
+      "description": "Anthropic's balanced model — excellent coding, reasoning, and creative writing",
+      "price": "$0.06",
+      "method": "POST",
+      "path": "/api/llm/claude-sonnet",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": { "provider": "openrouter", "baseUrl": "https://openrouter.ai/api/v1" }
+    },
+    {
+      "id": "llm-claude-haiku",
+      "name": "Claude Haiku 4.5",
+      "description": "Anthropic's fastest model — affordable and quick for simple tasks and high throughput",
+      "price": "$0.02",
+      "method": "POST",
+      "path": "/api/llm/claude-haiku",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": { "provider": "openrouter", "baseUrl": "https://openrouter.ai/api/v1" }
+    },
+    {
+      "id": "llm-gemini-pro",
+      "name": "Gemini 2.5 Pro",
+      "description": "Google's most capable model — strong at reasoning, coding, and multimodal tasks",
+      "price": "$0.035",
+      "method": "POST",
+      "path": "/api/llm/gemini-pro",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": { "provider": "openrouter", "baseUrl": "https://openrouter.ai/api/v1" }
+    },
+    {
+      "id": "llm-gemini-flash",
+      "name": "Gemini 2.5 Flash",
+      "description": "Google's fast model — great balance of speed, quality, and cost for everyday tasks",
+      "price": "$0.009",
+      "method": "POST",
+      "path": "/api/llm/gemini-flash",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": { "provider": "openrouter", "baseUrl": "https://openrouter.ai/api/v1" }
+    },
+    {
+      "id": "llm-deepseek",
+      "name": "DeepSeek V3",
+      "description": "DeepSeek's flagship chat model — strong open-source reasoning and coding at low cost",
       "price": "$0.005",
       "method": "POST",
-      "path": "/api/llm/gpt4o-mini",
+      "path": "/api/llm/deepseek",
       "mimeType": "application/json",
       "category": "compute",
-      "upstream": {
-        "provider": "openrouter",
-        "baseUrl": "https://openrouter.ai/api/v1"
-      }
+      "upstream": { "provider": "openrouter", "baseUrl": "https://openrouter.ai/api/v1" }
+    },
+    {
+      "id": "llm-deepseek-r1",
+      "name": "DeepSeek R1",
+      "description": "DeepSeek's reasoning model — chain-of-thought reasoning competitive with o3 at fraction of cost",
+      "price": "$0.01",
+      "method": "POST",
+      "path": "/api/llm/deepseek-r1",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": { "provider": "openrouter", "baseUrl": "https://openrouter.ai/api/v1" }
     },
     {
       "id": "llm-llama",
-      "name": "Llama 3.1 70B",
-      "description": "Open-source LLM inference via Llama 3.1 70B Instruct — great for general-purpose tasks",
-      "price": "$0.003",
+      "name": "Llama 3.3 70B",
+      "description": "Meta's open-source model — great general-purpose performance at very low cost",
+      "price": "$0.002",
       "method": "POST",
       "path": "/api/llm/llama",
       "mimeType": "application/json",
       "category": "compute",
-      "upstream": {
-        "provider": "openrouter",
-        "baseUrl": "https://openrouter.ai/api/v1"
-      }
+      "upstream": { "provider": "openrouter", "baseUrl": "https://openrouter.ai/api/v1" }
+    },
+    {
+      "id": "llm-grok",
+      "name": "Grok 4",
+      "description": "xAI's most capable model — strong reasoning and real-time knowledge",
+      "price": "$0.06",
+      "method": "POST",
+      "path": "/api/llm/grok",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": { "provider": "openrouter", "baseUrl": "https://openrouter.ai/api/v1" }
+    },
+    {
+      "id": "llm-qwen",
+      "name": "Qwen3 235B",
+      "description": "Alibaba's flagship open model — excellent multilingual and coding capabilities",
+      "price": "$0.004",
+      "method": "POST",
+      "path": "/api/llm/qwen",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": { "provider": "openrouter", "baseUrl": "https://openrouter.ai/api/v1" }
+    },
+    {
+      "id": "llm-mistral",
+      "name": "Mistral Large 3",
+      "description": "Mistral's flagship model — strong European AI with great multilingual support",
+      "price": "$0.006",
+      "method": "POST",
+      "path": "/api/llm/mistral",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": { "provider": "openrouter", "baseUrl": "https://openrouter.ai/api/v1" }
+    },
+    {
+      "id": "llm-perplexity",
+      "name": "Perplexity Sonar Pro",
+      "description": "Search-augmented LLM — answers grounded in real-time web search with citations",
+      "price": "$0.06",
+      "method": "POST",
+      "path": "/api/llm/perplexity",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": { "provider": "openrouter", "baseUrl": "https://openrouter.ai/api/v1" }
     },
     {
       "id": "embeddings",

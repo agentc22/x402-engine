@@ -5,10 +5,35 @@ import { logRequest } from "../db/ledger.js";
 const router = Router();
 
 const MODELS: Record<string, { model: string; serviceId: string }> = {
-  haiku: { model: "anthropic/claude-3.5-haiku", serviceId: "llm-haiku" },
-  sonnet: { model: "anthropic/claude-3.5-sonnet", serviceId: "llm-sonnet" },
-  "gpt4o-mini": { model: "openai/gpt-4o-mini", serviceId: "llm-gpt4o-mini" },
-  llama: { model: "meta-llama/llama-3.1-70b-instruct", serviceId: "llm-llama" },
+  // OpenAI
+  "gpt-4o": { model: "openai/gpt-4o", serviceId: "llm-gpt-4o" },
+  "gpt-4o-mini": { model: "openai/gpt-4o-mini", serviceId: "llm-gpt-4o-mini" },
+  "gpt-4.1": { model: "openai/gpt-4.1", serviceId: "llm-gpt-4.1" },
+  "gpt-4.1-mini": { model: "openai/gpt-4.1-mini", serviceId: "llm-gpt-4.1-mini" },
+  "gpt-5": { model: "openai/gpt-5", serviceId: "llm-gpt-5" },
+  "gpt-5-mini": { model: "openai/gpt-5-mini", serviceId: "llm-gpt-5-mini" },
+  "o3": { model: "openai/o3", serviceId: "llm-o3" },
+  "o4-mini": { model: "openai/o4-mini", serviceId: "llm-o4-mini" },
+  // Anthropic
+  "claude-opus": { model: "anthropic/claude-opus-4.6", serviceId: "llm-claude-opus" },
+  "claude-sonnet": { model: "anthropic/claude-sonnet-4.5", serviceId: "llm-claude-sonnet" },
+  "claude-haiku": { model: "anthropic/claude-haiku-4.5", serviceId: "llm-claude-haiku" },
+  // Google
+  "gemini-pro": { model: "google/gemini-2.5-pro", serviceId: "llm-gemini-pro" },
+  "gemini-flash": { model: "google/gemini-2.5-flash", serviceId: "llm-gemini-flash" },
+  // DeepSeek
+  "deepseek": { model: "deepseek/deepseek-chat", serviceId: "llm-deepseek" },
+  "deepseek-r1": { model: "deepseek/deepseek-r1", serviceId: "llm-deepseek-r1" },
+  // Meta
+  "llama": { model: "meta-llama/llama-3.3-70b-instruct", serviceId: "llm-llama" },
+  // xAI
+  "grok": { model: "x-ai/grok-4", serviceId: "llm-grok" },
+  // Qwen
+  "qwen": { model: "qwen/qwen3-235b-a22b", serviceId: "llm-qwen" },
+  // Mistral
+  "mistral": { model: "mistralai/mistral-large-2512", serviceId: "llm-mistral" },
+  // Perplexity (search-augmented)
+  "perplexity": { model: "perplexity/sonar-pro", serviceId: "llm-perplexity" },
 };
 
 function chatHandler(slug: string) {

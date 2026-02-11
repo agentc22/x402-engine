@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>API Documentation — x402engine</title>
-  <meta name="description" content="Complete API reference for the x402engine. 31 endpoints, payment integration guides, and code examples.">
+  <meta name="description" content="Complete API reference for the x402engine. 47 endpoints including 20 LLMs, payment integration guides, and code examples.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -97,10 +97,7 @@
         </div>
         <div>
           <div class="mt-6 mb-2 text-xs text-gray-600 uppercase tracking-wider font-medium px-3">LLM & AI</div>
-          <a href="#llm-haiku" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Claude Haiku</a>
-          <a href="#llm-sonnet" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Claude Sonnet</a>
-          <a href="#llm-gpt4o-mini" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">GPT-4o Mini</a>
-          <a href="#llm-llama" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Llama 70B</a>
+          <a href="#llm-models" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">All Models (20)</a>
           <a href="#embeddings" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Embeddings</a>
         </div>
         <div>
@@ -948,13 +945,13 @@ Content-Type: application/json
         <hr class="border-white/5 mb-16">
         <h2 class="text-xl font-bold text-gray-500 uppercase tracking-wider mb-8">LLM & AI</h2>
 
-        <section id="llm-haiku" class="mb-14">
+        <section id="llm-models" class="mb-14">
           <div class="flex items-center gap-3 mb-4">
             <span class="method-post px-2 py-0.5 rounded text-xs font-bold">POST</span>
-            <h3 class="text-lg font-semibold text-white">/api/llm/haiku</h3>
-            <span class="text-brand-400 text-sm font-mono ml-auto">$0.01</span>
+            <h3 class="text-lg font-semibold text-white">/api/llm/{model}</h3>
           </div>
-          <p class="text-gray-400 text-sm mb-4">Chat completion via Claude 3.5 Haiku. Fast and affordable for simple tasks.</p>
+          <p class="text-gray-400 text-sm mb-4">Chat completion via 20 models from OpenAI, Anthropic, Google, DeepSeek, Meta, xAI, Qwen, Mistral, and Perplexity. All models use the same request/response format.</p>
+
           <div class="overflow-x-auto mb-4">
             <table class="w-full text-sm">
               <thead><tr class="border-b border-white/5"><th class="text-left py-2 text-gray-500 font-medium">Field</th><th class="text-left py-2 text-gray-500 font-medium">Type</th><th class="text-left py-2 text-gray-500 font-medium">Description</th></tr></thead>
@@ -964,8 +961,9 @@ Content-Type: application/json
               </tbody>
             </table>
           </div>
-          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
-            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">POST /api/llm/haiku
+
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden mb-6">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">POST /api/llm/claude-sonnet
 {
   "messages": [{"role": "user", "content": "Explain x402 in one sentence"}],
   "max_tokens": 100
@@ -974,37 +972,39 @@ Content-Type: application/json
 <span class="text-gray-500">// Response</span>
 {
   "content": "x402 is a protocol that enables...",
-  "model": "anthropic/claude-3.5-haiku",
+  "model": "anthropic/claude-sonnet-4.5",
   "usage": {"prompt_tokens": 12, "completion_tokens": 24, "total_tokens": 36}
 }</code></pre>
           </div>
-        </section>
 
-        <section id="llm-sonnet" class="mb-14">
-          <div class="flex items-center gap-3 mb-4">
-            <span class="method-post px-2 py-0.5 rounded text-xs font-bold">POST</span>
-            <h3 class="text-lg font-semibold text-white">/api/llm/sonnet</h3>
-            <span class="text-brand-400 text-sm font-mono ml-auto">$0.05</span>
+          <h4 class="text-white text-sm font-semibold mb-3">Available Models</h4>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead><tr class="border-b border-white/5"><th class="text-left py-2 text-gray-500 font-medium">Endpoint</th><th class="text-left py-2 text-gray-500 font-medium">Model</th><th class="text-right py-2 text-gray-500 font-medium">Price</th></tr></thead>
+              <tbody class="text-gray-300">
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/gpt-4o</td><td class="py-1.5 text-xs text-gray-400">GPT-4o</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.04</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/gpt-4o-mini</td><td class="py-1.5 text-xs text-gray-400">GPT-4o Mini</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.003</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/gpt-4.1</td><td class="py-1.5 text-xs text-gray-400">GPT-4.1</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.03</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/gpt-4.1-mini</td><td class="py-1.5 text-xs text-gray-400">GPT-4.1 Mini</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.006</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/gpt-5</td><td class="py-1.5 text-xs text-gray-400">GPT-5</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.035</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/gpt-5-mini</td><td class="py-1.5 text-xs text-gray-400">GPT-5 Mini</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.007</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/o3</td><td class="py-1.5 text-xs text-gray-400">o3 (reasoning)</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.03</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/o4-mini</td><td class="py-1.5 text-xs text-gray-400">o4 Mini (reasoning)</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.02</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/claude-opus</td><td class="py-1.5 text-xs text-gray-400">Claude Opus 4.6</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.09</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/claude-sonnet</td><td class="py-1.5 text-xs text-gray-400">Claude Sonnet 4.5</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.06</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/claude-haiku</td><td class="py-1.5 text-xs text-gray-400">Claude Haiku 4.5</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.02</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/gemini-pro</td><td class="py-1.5 text-xs text-gray-400">Gemini 2.5 Pro</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.035</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/gemini-flash</td><td class="py-1.5 text-xs text-gray-400">Gemini 2.5 Flash</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.009</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/deepseek</td><td class="py-1.5 text-xs text-gray-400">DeepSeek V3</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.005</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/deepseek-r1</td><td class="py-1.5 text-xs text-gray-400">DeepSeek R1 (reasoning)</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.01</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/llama</td><td class="py-1.5 text-xs text-gray-400">Llama 3.3 70B</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.002</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/grok</td><td class="py-1.5 text-xs text-gray-400">Grok 4</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.06</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/qwen</td><td class="py-1.5 text-xs text-gray-400">Qwen3 235B</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.004</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/mistral</td><td class="py-1.5 text-xs text-gray-400">Mistral Large 3</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.006</td></tr>
+                <tr><td class="py-1.5 font-mono text-xs">/api/llm/perplexity</td><td class="py-1.5 text-xs text-gray-400">Perplexity Sonar Pro (search)</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.06</td></tr>
+              </tbody>
+            </table>
           </div>
-          <p class="text-gray-400 text-sm mb-4">Chat completion via Claude 3.5 Sonnet. Best for complex reasoning and coding tasks. Same request/response format as Haiku.</p>
-        </section>
-
-        <section id="llm-gpt4o-mini" class="mb-14">
-          <div class="flex items-center gap-3 mb-4">
-            <span class="method-post px-2 py-0.5 rounded text-xs font-bold">POST</span>
-            <h3 class="text-lg font-semibold text-white">/api/llm/gpt4o-mini</h3>
-            <span class="text-brand-400 text-sm font-mono ml-auto">$0.005</span>
-          </div>
-          <p class="text-gray-400 text-sm mb-4">Chat completion via GPT-4o Mini. Lightweight and cost-effective. Same request/response format as Haiku.</p>
-        </section>
-
-        <section id="llm-llama" class="mb-14">
-          <div class="flex items-center gap-3 mb-4">
-            <span class="method-post px-2 py-0.5 rounded text-xs font-bold">POST</span>
-            <h3 class="text-lg font-semibold text-white">/api/llm/llama</h3>
-            <span class="text-brand-400 text-sm font-mono ml-auto">$0.003</span>
-          </div>
-          <p class="text-gray-400 text-sm mb-4">Chat completion via Llama 3.1 70B Instruct. Open-source, general-purpose. Same request/response format as Haiku.</p>
         </section>
 
         <section id="embeddings" class="mb-14">

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>x402engine — Pay-per-call APIs for AI Agents</title>
-  <meta name="description" content="28 production APIs behind HTTP 402 micropayments. Pay with USDC on Base, USDm on MegaETH, or USDC on Solana. No API keys, no subscriptions — just stablecoins.">
+  <meta name="description" content="47 production APIs behind HTTP 402 micropayments. 20 LLMs from OpenAI, Anthropic, Google, DeepSeek, Meta, xAI, Qwen, Mistral, and Perplexity. Pay with USDC on Base, USDm on MegaETH, or USDC on Solana. No API keys, no subscriptions — just stablecoins.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -59,7 +59,7 @@
     <div class="max-w-4xl mx-auto px-6 text-center">
       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-600/10 border border-brand-500/20 text-brand-400 text-xs font-medium mb-6">
         <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-        28 APIs live
+        47 APIs live — 20 LLMs
       </div>
       <h1 class="text-4xl sm:text-6xl font-bold text-white leading-tight mb-6">
         Pay-per-call APIs<br>
@@ -207,55 +207,144 @@
   <section id="services" class="py-20 bg-surface-900/50">
     <div class="max-w-6xl mx-auto px-6">
       <div class="text-center mb-12">
-        <h2 class="text-3xl font-bold text-white mb-3">28 APIs, five categories</h2>
+        <h2 class="text-3xl font-bold text-white mb-3">47 APIs, five categories</h2>
         <p class="text-gray-400 max-w-xl mx-auto">Production-grade endpoints backed by best-in-class providers. All priced for micropayments.</p>
       </div>
 
       <!-- LLM & AI -->
       <div class="mb-10">
         <div class="flex items-center gap-3 mb-4">
-          <span class="px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-400 text-xs font-medium">LLM &amp; AI</span>
+          <span class="px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-400 text-xs font-medium">LLM &amp; AI — 20 models</span>
         </div>
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <div class="card-glow rounded-xl p-5 transition">
-            <div class="flex items-start justify-between mb-2">
-              <h3 class="text-white font-medium">Claude 3.5 Haiku</h3>
-              <span class="price-tag text-brand-400 text-sm font-mono">$0.01</span>
-            </div>
-            <p class="text-gray-500 text-sm mb-3">Fast, affordable chat completion</p>
-            <code class="text-xs text-gray-600 font-mono">POST /api/llm/haiku</code>
+        <p class="text-gray-500 text-sm mb-4">All models via OpenRouter. Same request format, same payment flow — just pick a model.</p>
+
+        <!-- OpenAI -->
+        <div class="mb-3"><span class="text-gray-500 text-xs font-medium uppercase tracking-wider">OpenAI</span></div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+          <div class="card-glow rounded-xl p-4 transition">
+            <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">GPT-4o</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.04</span></div>
+            <p class="text-gray-500 text-xs mb-2">Flagship multimodal</p>
+            <code class="text-[10px] text-gray-600 font-mono">/api/llm/gpt-4o</code>
           </div>
-          <div class="card-glow rounded-xl p-5 transition">
-            <div class="flex items-start justify-between mb-2">
-              <h3 class="text-white font-medium">Claude 3.5 Sonnet</h3>
-              <span class="price-tag text-brand-400 text-sm font-mono">$0.05</span>
-            </div>
-            <p class="text-gray-500 text-sm mb-3">Complex reasoning &amp; coding</p>
-            <code class="text-xs text-gray-600 font-mono">POST /api/llm/sonnet</code>
+          <div class="card-glow rounded-xl p-4 transition">
+            <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">GPT-4o Mini</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.003</span></div>
+            <p class="text-gray-500 text-xs mb-2">Fast &amp; affordable</p>
+            <code class="text-[10px] text-gray-600 font-mono">/api/llm/gpt-4o-mini</code>
           </div>
-          <div class="card-glow rounded-xl p-5 transition">
-            <div class="flex items-start justify-between mb-2">
-              <h3 class="text-white font-medium">GPT-4o Mini</h3>
-              <span class="price-tag text-brand-400 text-sm font-mono">$0.005</span>
-            </div>
-            <p class="text-gray-500 text-sm mb-3">Lightweight &amp; cost-effective</p>
-            <code class="text-xs text-gray-600 font-mono">POST /api/llm/gpt4o-mini</code>
+          <div class="card-glow rounded-xl p-4 transition">
+            <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">GPT-4.1</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.03</span></div>
+            <p class="text-gray-500 text-xs mb-2">Coding &amp; long context</p>
+            <code class="text-[10px] text-gray-600 font-mono">/api/llm/gpt-4.1</code>
           </div>
-          <div class="card-glow rounded-xl p-5 transition">
-            <div class="flex items-start justify-between mb-2">
-              <h3 class="text-white font-medium">Llama 3.1 70B</h3>
-              <span class="price-tag text-brand-400 text-sm font-mono">$0.003</span>
-            </div>
-            <p class="text-gray-500 text-sm mb-3">Open-source, general-purpose</p>
-            <code class="text-xs text-gray-600 font-mono">POST /api/llm/llama</code>
+          <div class="card-glow rounded-xl p-4 transition">
+            <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">GPT-4.1 Mini</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.006</span></div>
+            <p class="text-gray-500 text-xs mb-2">Compact 4.1</p>
+            <code class="text-[10px] text-gray-600 font-mono">/api/llm/gpt-4.1-mini</code>
           </div>
-          <div class="card-glow rounded-xl p-5 transition">
-            <div class="flex items-start justify-between mb-2">
-              <h3 class="text-white font-medium">Text Embeddings</h3>
-              <span class="price-tag text-brand-400 text-sm font-mono">$0.001</span>
-            </div>
-            <p class="text-gray-500 text-sm mb-3">1536-dim vectors for search &amp; RAG</p>
-            <code class="text-xs text-gray-600 font-mono">POST /api/embeddings</code>
+          <div class="card-glow rounded-xl p-4 transition">
+            <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">GPT-5</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.035</span></div>
+            <p class="text-gray-500 text-xs mb-2">Most capable</p>
+            <code class="text-[10px] text-gray-600 font-mono">/api/llm/gpt-5</code>
+          </div>
+          <div class="card-glow rounded-xl p-4 transition">
+            <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">GPT-5 Mini</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.007</span></div>
+            <p class="text-gray-500 text-xs mb-2">Compact GPT-5</p>
+            <code class="text-[10px] text-gray-600 font-mono">/api/llm/gpt-5-mini</code>
+          </div>
+          <div class="card-glow rounded-xl p-4 transition">
+            <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">o3</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.03</span></div>
+            <p class="text-gray-500 text-xs mb-2">Reasoning model</p>
+            <code class="text-[10px] text-gray-600 font-mono">/api/llm/o3</code>
+          </div>
+          <div class="card-glow rounded-xl p-4 transition">
+            <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">o4 Mini</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.02</span></div>
+            <p class="text-gray-500 text-xs mb-2">Fast reasoning</p>
+            <code class="text-[10px] text-gray-600 font-mono">/api/llm/o4-mini</code>
+          </div>
+        </div>
+
+        <!-- Anthropic -->
+        <div class="mb-3"><span class="text-gray-500 text-xs font-medium uppercase tracking-wider">Anthropic</span></div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+          <div class="card-glow rounded-xl p-4 transition">
+            <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">Claude Opus 4.6</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.09</span></div>
+            <p class="text-gray-500 text-xs mb-2">Most powerful</p>
+            <code class="text-[10px] text-gray-600 font-mono">/api/llm/claude-opus</code>
+          </div>
+          <div class="card-glow rounded-xl p-4 transition">
+            <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">Claude Sonnet 4.5</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.06</span></div>
+            <p class="text-gray-500 text-xs mb-2">Balanced &amp; versatile</p>
+            <code class="text-[10px] text-gray-600 font-mono">/api/llm/claude-sonnet</code>
+          </div>
+          <div class="card-glow rounded-xl p-4 transition">
+            <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">Claude Haiku 4.5</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.02</span></div>
+            <p class="text-gray-500 text-xs mb-2">Fast &amp; affordable</p>
+            <code class="text-[10px] text-gray-600 font-mono">/api/llm/claude-haiku</code>
+          </div>
+        </div>
+
+        <!-- Google, DeepSeek, Meta -->
+        <div class="mb-3"><span class="text-gray-500 text-xs font-medium uppercase tracking-wider">Google / DeepSeek / Meta</span></div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+          <div class="card-glow rounded-xl p-4 transition">
+            <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">Gemini 2.5 Pro</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.035</span></div>
+            <p class="text-gray-500 text-xs mb-2">Google's best</p>
+            <code class="text-[10px] text-gray-600 font-mono">/api/llm/gemini-pro</code>
+          </div>
+          <div class="card-glow rounded-xl p-4 transition">
+            <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">Gemini 2.5 Flash</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.009</span></div>
+            <p class="text-gray-500 text-xs mb-2">Speed + quality</p>
+            <code class="text-[10px] text-gray-600 font-mono">/api/llm/gemini-flash</code>
+          </div>
+          <div class="card-glow rounded-xl p-4 transition">
+            <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">DeepSeek V3</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.005</span></div>
+            <p class="text-gray-500 text-xs mb-2">Open-source powerhouse</p>
+            <code class="text-[10px] text-gray-600 font-mono">/api/llm/deepseek</code>
+          </div>
+          <div class="card-glow rounded-xl p-4 transition">
+            <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">DeepSeek R1</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.01</span></div>
+            <p class="text-gray-500 text-xs mb-2">Chain-of-thought reasoning</p>
+            <code class="text-[10px] text-gray-600 font-mono">/api/llm/deepseek-r1</code>
+          </div>
+          <div class="card-glow rounded-xl p-4 transition">
+            <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">Llama 3.3 70B</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.002</span></div>
+            <p class="text-gray-500 text-xs mb-2">Open-source, low cost</p>
+            <code class="text-[10px] text-gray-600 font-mono">/api/llm/llama</code>
+          </div>
+        </div>
+
+        <!-- xAI, Qwen, Mistral, Perplexity -->
+        <div class="mb-3"><span class="text-gray-500 text-xs font-medium uppercase tracking-wider">xAI / Qwen / Mistral / Perplexity</span></div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+          <div class="card-glow rounded-xl p-4 transition">
+            <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">Grok 4</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.06</span></div>
+            <p class="text-gray-500 text-xs mb-2">xAI reasoning</p>
+            <code class="text-[10px] text-gray-600 font-mono">/api/llm/grok</code>
+          </div>
+          <div class="card-glow rounded-xl p-4 transition">
+            <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">Qwen3 235B</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.004</span></div>
+            <p class="text-gray-500 text-xs mb-2">Multilingual &amp; coding</p>
+            <code class="text-[10px] text-gray-600 font-mono">/api/llm/qwen</code>
+          </div>
+          <div class="card-glow rounded-xl p-4 transition">
+            <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">Mistral Large 3</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.006</span></div>
+            <p class="text-gray-500 text-xs mb-2">European flagship</p>
+            <code class="text-[10px] text-gray-600 font-mono">/api/llm/mistral</code>
+          </div>
+          <div class="card-glow rounded-xl p-4 transition">
+            <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">Perplexity Sonar</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.06</span></div>
+            <p class="text-gray-500 text-xs mb-2">Search-augmented</p>
+            <code class="text-[10px] text-gray-600 font-mono">/api/llm/perplexity</code>
+          </div>
+        </div>
+
+        <!-- Embeddings -->
+        <div class="mb-3"><span class="text-gray-500 text-xs font-medium uppercase tracking-wider">Embeddings</span></div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <div class="card-glow rounded-xl p-4 transition">
+            <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">Text Embeddings</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.001</span></div>
+            <p class="text-gray-500 text-xs mb-2">1536-dim vectors for RAG</p>
+            <code class="text-[10px] text-gray-600 font-mono">/api/embeddings</code>
           </div>
         </div>
       </div>
@@ -632,10 +721,26 @@
             <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/ipfs/get</td><td class="py-2.5 px-5 text-right text-brand-400">$0.001</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">1000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">10<sup>15</sup></td></tr>
             <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/ens/resolve</td><td class="py-2.5 px-5 text-right text-brand-400">$0.001</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">1000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">10<sup>15</sup></td></tr>
             <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/ens/reverse</td><td class="py-2.5 px-5 text-right text-brand-400">$0.001</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">1000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">10<sup>15</sup></td></tr>
-            <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/llm/haiku</td><td class="py-2.5 px-5 text-right text-brand-400">$0.01</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">10000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">10<sup>16</sup></td></tr>
-            <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/llm/sonnet</td><td class="py-2.5 px-5 text-right text-brand-400">$0.05</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">50000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">5×10<sup>16</sup></td></tr>
-            <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/llm/gpt4o-mini</td><td class="py-2.5 px-5 text-right text-brand-400">$0.005</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">5000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">5×10<sup>15</sup></td></tr>
-            <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/llm/llama</td><td class="py-2.5 px-5 text-right text-brand-400">$0.003</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">3000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">3×10<sup>15</sup></td></tr>
+            <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/llm/gpt-4o</td><td class="py-2.5 px-5 text-right text-brand-400">$0.04</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">40000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">4×10<sup>16</sup></td></tr>
+            <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/llm/gpt-4o-mini</td><td class="py-2.5 px-5 text-right text-brand-400">$0.003</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">3000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">3×10<sup>15</sup></td></tr>
+            <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/llm/gpt-4.1</td><td class="py-2.5 px-5 text-right text-brand-400">$0.03</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">30000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">3×10<sup>16</sup></td></tr>
+            <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/llm/gpt-4.1-mini</td><td class="py-2.5 px-5 text-right text-brand-400">$0.006</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">6000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">6×10<sup>15</sup></td></tr>
+            <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/llm/gpt-5</td><td class="py-2.5 px-5 text-right text-brand-400">$0.035</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">35000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">3.5×10<sup>16</sup></td></tr>
+            <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/llm/gpt-5-mini</td><td class="py-2.5 px-5 text-right text-brand-400">$0.007</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">7000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">7×10<sup>15</sup></td></tr>
+            <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/llm/o3</td><td class="py-2.5 px-5 text-right text-brand-400">$0.03</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">30000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">3×10<sup>16</sup></td></tr>
+            <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/llm/o4-mini</td><td class="py-2.5 px-5 text-right text-brand-400">$0.02</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">20000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">2×10<sup>16</sup></td></tr>
+            <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/llm/claude-opus</td><td class="py-2.5 px-5 text-right text-brand-400">$0.09</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">90000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">9×10<sup>16</sup></td></tr>
+            <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/llm/claude-sonnet</td><td class="py-2.5 px-5 text-right text-brand-400">$0.06</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">60000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">6×10<sup>16</sup></td></tr>
+            <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/llm/claude-haiku</td><td class="py-2.5 px-5 text-right text-brand-400">$0.02</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">20000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">2×10<sup>16</sup></td></tr>
+            <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/llm/gemini-pro</td><td class="py-2.5 px-5 text-right text-brand-400">$0.035</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">35000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">3.5×10<sup>16</sup></td></tr>
+            <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/llm/gemini-flash</td><td class="py-2.5 px-5 text-right text-brand-400">$0.009</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">9000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">9×10<sup>15</sup></td></tr>
+            <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/llm/deepseek</td><td class="py-2.5 px-5 text-right text-brand-400">$0.005</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">5000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">5×10<sup>15</sup></td></tr>
+            <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/llm/deepseek-r1</td><td class="py-2.5 px-5 text-right text-brand-400">$0.01</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">10000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">10<sup>16</sup></td></tr>
+            <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/llm/llama</td><td class="py-2.5 px-5 text-right text-brand-400">$0.002</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">2000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">2×10<sup>15</sup></td></tr>
+            <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/llm/grok</td><td class="py-2.5 px-5 text-right text-brand-400">$0.06</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">60000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">6×10<sup>16</sup></td></tr>
+            <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/llm/qwen</td><td class="py-2.5 px-5 text-right text-brand-400">$0.004</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">4000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">4×10<sup>15</sup></td></tr>
+            <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/llm/mistral</td><td class="py-2.5 px-5 text-right text-brand-400">$0.006</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">6000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">6×10<sup>15</sup></td></tr>
+            <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/llm/perplexity</td><td class="py-2.5 px-5 text-right text-brand-400">$0.06</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">60000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">6×10<sup>16</sup></td></tr>
             <tr class="hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/embeddings</td><td class="py-2.5 px-5 text-right text-brand-400">$0.001</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">1000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">10<sup>15</sup></td></tr>
           </tbody>
         </table>
