@@ -3,6 +3,7 @@ import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
 import type { Server } from "http";
+import crypto from "crypto";
 import { v4 as uuidv4 } from "uuid";
 import { config } from "./config.js";
 import { initDatabase, checkDatabase, getPoolStats, shutdownDatabase } from "./db/ledger.js";
@@ -21,6 +22,9 @@ import travelRouter from "./apis/travel.js";
 import nftRouter from "./apis/nft.js";
 import ensRouter from "./apis/ens.js";
 import llmRouter from "./apis/llm.js";
+import webRouter from "./apis/web.js";
+import ttsRouter from "./apis/tts.js";
+import txRouter from "./apis/tx.js";
 import dashboardRouter from "./apis/dashboard.js";
 import megaethFacilitator from "./facilitator/index.js";
 import { initFal } from "./providers/fal.js";
@@ -29,6 +33,7 @@ import { initIpfs } from "./providers/ipfs.js";
 import { initAmadeus } from "./providers/amadeus.js";
 import { checkMegaETHConnection } from "./verification/megaeth.js";
 import { keyPool } from "./lib/key-pool.js";
+import { mountMcp } from "./mcp.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -68,7 +73,26 @@ app.get("/health", freeEndpointLimiter, (_req, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
 
-app.get("/health/deep", expensiveEndpointLimiter, async (_req, res) => {
+app.get("/health/deep", expensiveEndpointLimiter, async (req, res) => {
+  // Require Authorization: Bearer <DASHBOARD_SECRET> for internal stats
+  const authHeader = req.headers.authorization as string | undefined;
+  const token = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null;
+  if (
+    !config.dashboardSecret || !token ||
+    token.length !== config.dashboardSecret.length ||
+    !crypto.timingSafeEqual(Buffer.from(token), Buffer.from(config.dashboardSecret))
+  ) {
+    // Return basic health without internals
+    const [dbOk, megaethOk] = await Promise.all([checkDatabase(), checkMegaETHConnection()]);
+    const healthy = dbOk && megaethOk;
+    res.status(healthy ? 200 : 503).json({
+      status: healthy ? "ok" : "degraded",
+      timestamp: new Date().toISOString(),
+      checks: { database: dbOk ? "ok" : "down", megaethRpc: megaethOk ? "ok" : "down" },
+    });
+    return;
+  }
+
   const [dbOk, megaethOk] = await Promise.all([
     checkDatabase(),
     checkMegaETHConnection(),
@@ -141,6 +165,7 @@ function buildDiscoveryResponse() {
     },
     hint: "MegaETH (eip155:4326) offers ~10ms confirmation — the fastest option for latency-sensitive agents. Payments use USDm (18 decimals) and are verified on-chain instantly via eth_sendRawTransactionSync.",
     mcp: {
+      remote: "https://x402engine.app/mcp",
       npm: "x402engine-mcp",
       install: "npx -y x402engine-mcp",
       github: "https://github.com/agentc22/x402engine-mcp",
@@ -205,6 +230,9 @@ app.get("/api/services/:id", freeEndpointLimiter, (req, res) => {
     paymentOptions: routes[routeKey]?.accepts ?? [],
   });
 });
+
+// MCP endpoint (free, before payment middleware)
+mountMcp(app);
 
 // Dashboard (auth-protected, before payment middleware)
 app.use(dashboardRouter);
@@ -289,6 +317,9 @@ app.use(travelRouter);
 app.use(nftRouter);
 app.use(ensRouter);
 app.use(llmRouter);
+app.use(webRouter);
+app.use(ttsRouter);
+app.use(txRouter);
 
 // --- Global error handler (must be after all routes) ---
 // Express 4 async middleware can throw unhandled rejections that hang requests.
@@ -333,8 +364,8 @@ async function main() {
     console.log(`  Deep health: http://localhost:${config.port}/health/deep`);
     console.log(`  Discovery: http://localhost:${config.port}/.well-known/x402.json`);
     console.log(`  Services: http://localhost:${config.port}/api/services`);
-    if (config.isDev) {
-      console.log(`  Dev bypass: set X-DEV-BYPASS header to skip payments`);
+    if (config.isDev && config.devBypassSecret) {
+      console.warn(`  ⚠️  DEV BYPASS ACTIVE — payments can be skipped with X-DEV-BYPASS header`);
     }
   });
 }

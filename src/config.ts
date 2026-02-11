@@ -25,8 +25,8 @@ function csvKeys(pluralKey: string, singularKey: string): string[] {
 
 export const config = {
   port: parseInt(optional("PORT", "3402"), 10),
-  nodeEnv: optional("NODE_ENV", "development"),
-  isDev: optional("NODE_ENV", "development") === "development",
+  nodeEnv: optional("NODE_ENV", "production"),
+  isDev: optional("NODE_ENV", "production") === "development",
 
   payToEvm: required("PAY_TO_EVM"),
   payToSolana: optional("PAY_TO_SOLANA", ""),
@@ -57,7 +57,14 @@ export const config = {
     amadeusSecret: csvKeys("AMADEUS_API_SECRETS", "AMADEUS_API_SECRET"),
     alchemy: csvKeys("ALCHEMY_API_KEYS", "ALCHEMY_API_KEY"),
     openrouter: csvKeys("OPENROUTER_API_KEYS", "OPENROUTER_API_KEY"),
+    firecrawl: csvKeys("FIRECRAWL_API_KEYS", "FIRECRAWL_API_KEY"),
+    openai: csvKeys("OPENAI_API_KEYS", "OPENAI_API_KEY"),
+    elevenlabs: csvKeys("ELEVENLABS_API_KEYS", "ELEVENLABS_API_KEY"),
+    tenderly: csvKeys("TENDERLY_API_KEYS", "TENDERLY_API_KEY"),
   },
+
+  tenderlyAccount: optional("TENDERLY_ACCOUNT", ""),
+  tenderlyProject: optional("TENDERLY_PROJECT", ""),
 
   // Keep singular accessors for backward compatibility (first key or empty)
   falApiKey: optional("FAL_API_KEY", ""),

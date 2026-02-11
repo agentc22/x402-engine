@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>x402engine — Pay-per-call APIs for AI Agents</title>
-  <meta name="description" content="47 production APIs behind HTTP 402 micropayments. 20 LLMs from OpenAI, Anthropic, Google, DeepSeek, Meta, xAI, Qwen, Mistral, and Perplexity. Pay with USDC on Base, USDm on MegaETH, or USDC on Solana. No API keys, no subscriptions — just stablecoins.">
+  <meta name="description" content="52 production APIs behind HTTP 402 micropayments. 20 LLMs, web search, web scraping, TTS, and transaction simulation. Pay with USDC on Base, USDm on MegaETH, or USDC on Solana. No API keys, no subscriptions — just stablecoins.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -59,7 +59,7 @@
     <div class="max-w-4xl mx-auto px-6 text-center">
       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-600/10 border border-brand-500/20 text-brand-400 text-xs font-medium mb-6">
         <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-        47 APIs live — 20 LLMs
+        52 APIs live — 20 LLMs
       </div>
       <h1 class="text-4xl sm:text-6xl font-bold text-white leading-tight mb-6">
         Pay-per-call APIs<br>
@@ -207,7 +207,7 @@
   <section id="services" class="py-20 bg-surface-900/50">
     <div class="max-w-6xl mx-auto px-6">
       <div class="text-center mb-12">
-        <h2 class="text-3xl font-bold text-white mb-3">47 APIs, five categories</h2>
+        <h2 class="text-3xl font-bold text-white mb-3">52 APIs, six categories</h2>
         <p class="text-gray-400 max-w-xl mx-auto">Production-grade endpoints backed by best-in-class providers. All priced for micropayments.</p>
       </div>
 
@@ -395,6 +395,22 @@
             <p class="text-gray-500 text-sm mb-3">Deepgram Nova-3 with diarization</p>
             <code class="text-xs text-gray-600 font-mono">POST /api/transcribe</code>
           </div>
+          <div class="card-glow rounded-xl p-5 transition">
+            <div class="flex items-start justify-between mb-2">
+              <h3 class="text-white font-medium">TTS (OpenAI)</h3>
+              <span class="price-tag text-brand-400 text-sm font-mono">$0.01</span>
+            </div>
+            <p class="text-gray-500 text-sm mb-3">6 voices, HD quality, multiple formats</p>
+            <code class="text-xs text-gray-600 font-mono">POST /api/tts/openai</code>
+          </div>
+          <div class="card-glow rounded-xl p-5 transition">
+            <div class="flex items-start justify-between mb-2">
+              <h3 class="text-white font-medium">TTS (ElevenLabs)</h3>
+              <span class="price-tag text-brand-400 text-sm font-mono">$0.02</span>
+            </div>
+            <p class="text-gray-500 text-sm mb-3">Ultra-realistic, multilingual voices</p>
+            <code class="text-xs text-gray-600 font-mono">POST /api/tts/elevenlabs</code>
+          </div>
         </div>
       </div>
 
@@ -499,6 +515,39 @@
             </div>
             <p class="text-gray-500 text-sm mb-3">Address &rarr; ENS name</p>
             <code class="text-xs text-gray-600 font-mono">GET /api/ens/reverse</code>
+          </div>
+          <div class="card-glow rounded-xl p-5 transition">
+            <div class="flex items-start justify-between mb-2">
+              <h3 class="text-white font-medium">TX Simulation</h3>
+              <span class="price-tag text-brand-400 text-sm font-mono">$0.01</span>
+            </div>
+            <p class="text-gray-500 text-sm mb-3">Simulate EVM txs via Tenderly</p>
+            <code class="text-xs text-gray-600 font-mono">POST /api/tx/simulate</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- Web -->
+      <div class="mb-10">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-medium">Web</span>
+        </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="card-glow rounded-xl p-5 transition">
+            <div class="flex items-start justify-between mb-2">
+              <h3 class="text-white font-medium">Web Scrape</h3>
+              <span class="price-tag text-brand-400 text-sm font-mono">$0.005</span>
+            </div>
+            <p class="text-gray-500 text-sm mb-3">Clean markdown from any URL</p>
+            <code class="text-xs text-gray-600 font-mono">GET /api/web/scrape</code>
+          </div>
+          <div class="card-glow rounded-xl p-5 transition">
+            <div class="flex items-start justify-between mb-2">
+              <h3 class="text-white font-medium">Web Screenshot</h3>
+              <span class="price-tag text-brand-400 text-sm font-mono">$0.01</span>
+            </div>
+            <p class="text-gray-500 text-sm mb-3">Capture any URL as base64 image</p>
+            <code class="text-xs text-gray-600 font-mono">GET /api/web/screenshot</code>
           </div>
         </div>
       </div>
@@ -741,7 +790,12 @@
             <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/llm/qwen</td><td class="py-2.5 px-5 text-right text-brand-400">$0.004</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">4000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">4×10<sup>15</sup></td></tr>
             <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/llm/mistral</td><td class="py-2.5 px-5 text-right text-brand-400">$0.006</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">6000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">6×10<sup>15</sup></td></tr>
             <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/llm/perplexity</td><td class="py-2.5 px-5 text-right text-brand-400">$0.06</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">60000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">6×10<sup>16</sup></td></tr>
-            <tr class="hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/embeddings</td><td class="py-2.5 px-5 text-right text-brand-400">$0.001</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">1000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">10<sup>15</sup></td></tr>
+            <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/embeddings</td><td class="py-2.5 px-5 text-right text-brand-400">$0.001</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">1000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">10<sup>15</sup></td></tr>
+            <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/web/scrape</td><td class="py-2.5 px-5 text-right text-brand-400">$0.005</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">5000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">5×10<sup>15</sup></td></tr>
+            <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/web/screenshot</td><td class="py-2.5 px-5 text-right text-brand-400">$0.01</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">10000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">10<sup>16</sup></td></tr>
+            <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/tts/openai</td><td class="py-2.5 px-5 text-right text-brand-400">$0.01</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">10000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">10<sup>16</sup></td></tr>
+            <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/tts/elevenlabs</td><td class="py-2.5 px-5 text-right text-brand-400">$0.02</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">20000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">2×10<sup>16</sup></td></tr>
+            <tr class="hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/tx/simulate</td><td class="py-2.5 px-5 text-right text-brand-400">$0.01</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">10000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">10<sup>16</sup></td></tr>
           </tbody>
         </table>
       </div>

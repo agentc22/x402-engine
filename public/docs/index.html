@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>API Documentation — x402engine</title>
-  <meta name="description" content="Complete API reference for the x402engine. 47 endpoints including 20 LLMs, payment integration guides, and code examples.">
+  <meta name="description" content="Complete API reference for the x402engine. 52 endpoints including 20 LLMs, web search, TTS, and transaction simulation. Payment integration guides and code examples.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -86,6 +86,7 @@
           <a href="#nft-metadata" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">NFT Metadata</a>
           <a href="#nft-ownership" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">NFT Ownership</a>
           <a href="#nft-collection" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">NFT Collection</a>
+          <a href="#tx-simulate" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">TX Simulation</a>
         </div>
         <div>
           <h4 class="text-gray-500 font-medium uppercase text-xs tracking-wider mb-2 px-3">Compute</h4>
@@ -94,6 +95,13 @@
           <a href="#image-text" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Text-in-Image</a>
           <a href="#code-run" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Code Execution</a>
           <a href="#transcribe" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Transcription</a>
+          <a href="#tts-openai" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">TTS (OpenAI)</a>
+          <a href="#tts-elevenlabs" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">TTS (ElevenLabs)</a>
+        </div>
+        <div>
+          <h4 class="text-gray-500 font-medium uppercase text-xs tracking-wider mb-2 px-3">Web</h4>
+          <a href="#web-scrape" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Web Scrape</a>
+          <a href="#web-screenshot" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Web Screenshot</a>
         </div>
         <div>
           <div class="mt-6 mb-2 text-xs text-gray-600 uppercase tracking-wider font-medium px-3">LLM & AI</div>
@@ -115,7 +123,7 @@
         <!-- Overview -->
         <section id="overview" class="mb-16">
           <h1 class="text-3xl font-bold text-white mb-4">API Documentation</h1>
-          <p class="text-gray-400 leading-relaxed mb-4">The x402engine exposes 31 production APIs behind <a href="https://www.x402.org" class="text-brand-400 hover:underline">x402 micropayments</a>. Every endpoint returns <code class="text-xs bg-white/5 px-1.5 py-0.5 rounded">402 Payment Required</code> until a valid stablecoin payment is attached to the request.</p>
+          <p class="text-gray-400 leading-relaxed mb-4">The x402engine exposes 52 production APIs behind <a href="https://www.x402.org" class="text-brand-400 hover:underline">x402 micropayments</a>. Every endpoint returns <code class="text-xs bg-white/5 px-1.5 py-0.5 rounded">402 Payment Required</code> until a valid stablecoin payment is attached to the request.</p>
           <div class="card-glow rounded-xl p-5 space-y-2 text-sm">
             <div class="flex items-start gap-3">
               <span class="text-brand-400 mt-0.5">Base URL</span>
@@ -1035,6 +1043,172 @@ POST /api/embeddings
 
 <span class="text-gray-500">// Response (batch)</span>
 { "embeddings": [[0.012, ...], [-0.005, ...]] }</code></pre>
+          </div>
+        </section>
+
+        <!-- Web Search -->
+        <hr class="border-white/5 mb-16">
+        <h2 class="text-2xl font-bold text-white mb-8">Web</h2>
+
+        <section id="web-scrape" class="mb-14">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="method-get px-2 py-0.5 rounded text-xs font-bold">GET</span>
+            <h3 class="text-lg font-semibold text-white">/api/web/scrape</h3>
+            <span class="text-brand-400 text-sm font-mono ml-auto">$0.005</span>
+          </div>
+          <p class="text-gray-400 text-sm mb-4">Scrape any URL and get clean markdown content. Powered by Firecrawl.</p>
+          <div class="overflow-x-auto mb-4">
+            <table class="w-full text-sm">
+              <thead><tr class="border-b border-white/5"><th class="text-left py-2 text-gray-500 font-medium">Param</th><th class="text-left py-2 text-gray-500 font-medium">Type</th><th class="text-left py-2 text-gray-500 font-medium">Description</th></tr></thead>
+              <tbody class="text-gray-300">
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">url <span class="param-required">required</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">URL to scrape</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">formats <span class="param-optional">optional</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">Comma-separated: markdown, html, text (default: markdown)</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">GET /api/web/scrape?url=https://example.com
+
+<span class="text-gray-500">// Response</span>
+{
+  "content": "# Example Domain\n\nThis domain is for use in...",
+  "markdown": "# Example Domain\n\nThis domain is for use in...",
+  "metadata": { "title": "Example Domain", "statusCode": 200 }
+}</code></pre>
+          </div>
+        </section>
+
+        <section id="web-screenshot" class="mb-14">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="method-get px-2 py-0.5 rounded text-xs font-bold">GET</span>
+            <h3 class="text-lg font-semibold text-white">/api/web/screenshot</h3>
+            <span class="text-brand-400 text-sm font-mono ml-auto">$0.01</span>
+          </div>
+          <p class="text-gray-400 text-sm mb-4">Capture a screenshot of any URL. Returns a base64-encoded image.</p>
+          <div class="overflow-x-auto mb-4">
+            <table class="w-full text-sm">
+              <thead><tr class="border-b border-white/5"><th class="text-left py-2 text-gray-500 font-medium">Param</th><th class="text-left py-2 text-gray-500 font-medium">Type</th><th class="text-left py-2 text-gray-500 font-medium">Description</th></tr></thead>
+              <tbody class="text-gray-300">
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">url <span class="param-required">required</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">URL to screenshot</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">full_page <span class="param-optional">optional</span></td><td class="py-2 text-xs">boolean</td><td class="py-2 text-xs text-gray-400">Capture full page (default: false)</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">GET /api/web/screenshot?url=https://example.com&full_page=true
+
+<span class="text-gray-500">// Response</span>
+{
+  "screenshot": "iVBORw0KGgoAAAANSUhEUgAA...",  <span class="text-gray-500">// base64 PNG</span>
+  "metadata": { "title": "Example Domain", "statusCode": 200 }
+}</code></pre>
+          </div>
+        </section>
+
+        <!-- TTS -->
+        <hr class="border-white/5 mb-16">
+        <h2 class="text-2xl font-bold text-white mb-8">Text-to-Speech</h2>
+
+        <section id="tts-openai" class="mb-14">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="method-post px-2 py-0.5 rounded text-xs font-bold">POST</span>
+            <h3 class="text-lg font-semibold text-white">/api/tts/openai</h3>
+            <span class="text-brand-400 text-sm font-mono ml-auto">$0.01</span>
+          </div>
+          <p class="text-gray-400 text-sm mb-4">Convert text to speech using OpenAI TTS. Returns base64-encoded audio.</p>
+          <div class="overflow-x-auto mb-4">
+            <table class="w-full text-sm">
+              <thead><tr class="border-b border-white/5"><th class="text-left py-2 text-gray-500 font-medium">Field</th><th class="text-left py-2 text-gray-500 font-medium">Type</th><th class="text-left py-2 text-gray-500 font-medium">Description</th></tr></thead>
+              <tbody class="text-gray-300">
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">text <span class="param-required">required</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">Text to speak (max 4096 chars)</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">voice <span class="param-optional">optional</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">alloy, echo, fable, onyx, nova, shimmer (default: alloy)</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">model <span class="param-optional">optional</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">tts-1 or tts-1-hd (default: tts-1)</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">format <span class="param-optional">optional</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">mp3, opus, aac, flac, wav, pcm (default: mp3)</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">POST /api/tts/openai
+{ "text": "Hello, I am an AI agent.", "voice": "nova", "model": "tts-1-hd" }
+
+<span class="text-gray-500">// Response</span>
+{
+  "audio": "//uQxAAAAAANIAAAAAExB...",  <span class="text-gray-500">// base64 audio</span>
+  "format": "mp3",
+  "model": "tts-1-hd"
+}</code></pre>
+          </div>
+        </section>
+
+        <section id="tts-elevenlabs" class="mb-14">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="method-post px-2 py-0.5 rounded text-xs font-bold">POST</span>
+            <h3 class="text-lg font-semibold text-white">/api/tts/elevenlabs</h3>
+            <span class="text-brand-400 text-sm font-mono ml-auto">$0.02</span>
+          </div>
+          <p class="text-gray-400 text-sm mb-4">Premium text-to-speech with ElevenLabs. Ultra-realistic voices with multilingual support.</p>
+          <div class="overflow-x-auto mb-4">
+            <table class="w-full text-sm">
+              <thead><tr class="border-b border-white/5"><th class="text-left py-2 text-gray-500 font-medium">Field</th><th class="text-left py-2 text-gray-500 font-medium">Type</th><th class="text-left py-2 text-gray-500 font-medium">Description</th></tr></thead>
+              <tbody class="text-gray-300">
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">text <span class="param-required">required</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">Text to speak (max 5000 chars)</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">voice_id <span class="param-optional">optional</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">ElevenLabs voice ID (default: Rachel)</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">model_id <span class="param-optional">optional</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">Model ID (default: eleven_multilingual_v2)</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">format <span class="param-optional">optional</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">mp3_44100_128, pcm_16000, etc. (default: mp3_44100_128)</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">POST /api/tts/elevenlabs
+{ "text": "Welcome to x402engine.", "voice_id": "21m00Tcm4TlvDq8ikWAM" }
+
+<span class="text-gray-500">// Response</span>
+{
+  "audio": "//uQxAAAAAANIAAAAAExB...",  <span class="text-gray-500">// base64 audio</span>
+  "format": "mp3_44100_128"
+}</code></pre>
+          </div>
+        </section>
+
+        <!-- Transaction Simulation -->
+        <hr class="border-white/5 mb-16">
+
+        <section id="tx-simulate" class="mb-14">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="method-post px-2 py-0.5 rounded text-xs font-bold">POST</span>
+            <h3 class="text-lg font-semibold text-white">/api/tx/simulate</h3>
+            <span class="text-brand-400 text-sm font-mono ml-auto">$0.01</span>
+          </div>
+          <p class="text-gray-400 text-sm mb-4">Simulate EVM transactions before sending. Get gas estimates, execution traces, and revert reasons via Tenderly.</p>
+          <div class="overflow-x-auto mb-4">
+            <table class="w-full text-sm">
+              <thead><tr class="border-b border-white/5"><th class="text-left py-2 text-gray-500 font-medium">Field</th><th class="text-left py-2 text-gray-500 font-medium">Type</th><th class="text-left py-2 text-gray-500 font-medium">Description</th></tr></thead>
+              <tbody class="text-gray-300">
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">network_id <span class="param-required">required</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">Chain ID (e.g. "1" for mainnet, "8453" for Base)</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">from <span class="param-required">required</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">Sender address (0x...)</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">to <span class="param-required">required</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">Recipient/contract address (0x...)</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">value <span class="param-optional">optional</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">ETH value in wei</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">data <span class="param-optional">optional</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">Calldata hex (0x...)</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">gas <span class="param-optional">optional</span></td><td class="py-2 text-xs">number</td><td class="py-2 text-xs text-gray-400">Gas limit override</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">POST /api/tx/simulate
+{
+  "network_id": "1",
+  "from": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
+  "to": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+  "data": "0xa9059cbb000000000000000000000000..."
+}
+
+<span class="text-gray-500">// Response</span>
+{
+  "success": true,
+  "gasUsed": 51234,
+  "logs": [...],
+  "trace": { "type": "CALL", "from": "0x...", "to": "0x...", ... }
+}</code></pre>
           </div>
         </section>
 

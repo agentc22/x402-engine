@@ -597,6 +597,76 @@
         "provider": "openrouter",
         "baseUrl": "https://openrouter.ai/api/v1"
       }
+    },
+    {
+      "id": "web-scrape",
+      "name": "Web Scrape",
+      "description": "Scrape any URL and get clean markdown content — ideal for extracting readable text from web pages",
+      "price": "$0.005",
+      "method": "GET",
+      "path": "/api/web/scrape",
+      "mimeType": "application/json",
+      "category": "web",
+      "upstream": {
+        "provider": "firecrawl",
+        "baseUrl": "https://api.firecrawl.dev/v1"
+      }
+    },
+    {
+      "id": "web-screenshot",
+      "name": "Web Screenshot",
+      "description": "Capture a screenshot of any URL — returns base64-encoded image, supports full-page capture",
+      "price": "$0.01",
+      "method": "GET",
+      "path": "/api/web/screenshot",
+      "mimeType": "application/json",
+      "category": "web",
+      "upstream": {
+        "provider": "firecrawl",
+        "baseUrl": "https://api.firecrawl.dev/v1"
+      }
+    },
+    {
+      "id": "tts-openai",
+      "name": "Text-to-Speech (OpenAI)",
+      "description": "Convert text to natural speech using OpenAI TTS — 6 voices, HD quality option, multiple audio formats",
+      "price": "$0.01",
+      "method": "POST",
+      "path": "/api/tts/openai",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": {
+        "provider": "openai",
+        "baseUrl": "https://api.openai.com/v1/audio/speech"
+      }
+    },
+    {
+      "id": "tts-elevenlabs",
+      "name": "Text-to-Speech (ElevenLabs)",
+      "description": "Premium text-to-speech with ElevenLabs — ultra-realistic voices, multilingual support, custom voice IDs",
+      "price": "$0.02",
+      "method": "POST",
+      "path": "/api/tts/elevenlabs",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": {
+        "provider": "elevenlabs",
+        "baseUrl": "https://api.elevenlabs.io/v1/text-to-speech"
+      }
+    },
+    {
+      "id": "tx-simulate",
+      "name": "Transaction Simulation",
+      "description": "Simulate EVM transactions before sending — get gas estimates, execution traces, and revert reasons",
+      "price": "$0.01",
+      "method": "POST",
+      "path": "/api/tx/simulate",
+      "mimeType": "application/json",
+      "category": "crypto",
+      "upstream": {
+        "provider": "tenderly",
+        "baseUrl": "https://api.tenderly.co"
+      }
     }
   ]
 }
