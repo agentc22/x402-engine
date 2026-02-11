@@ -67,15 +67,25 @@ export async function chatCompletion(
   model: string,
   messages: Array<{ role: string; content: string }>,
   maxTokens: number = 1024,
-): Promise<{ content: string; model: string; usage: any }> {
+  reasoning?: boolean,
+): Promise<{ content: string; model: string; usage: any; reasoning_content?: string }> {
+  // Reasoning models use max_completion_tokens (covers reasoning + output).
+  // Sending max_tokens to reasoning models caps output only, and the reasoning
+  // chain consumes it all — leaving empty content.
+  const tokenParam = reasoning
+    ? { max_completion_tokens: maxTokens }
+    : { max_tokens: maxTokens };
+
   const data = await openrouterFetch("/chat/completions", {
     model,
     messages,
-    max_tokens: maxTokens,
+    ...tokenParam,
   });
 
+  const choice = data.choices?.[0]?.message;
   return {
-    content: data.choices?.[0]?.message?.content ?? "",
+    content: choice?.content ?? "",
+    reasoning_content: choice?.reasoning_content || undefined,
     model: data.model,
     usage: data.usage,
   };

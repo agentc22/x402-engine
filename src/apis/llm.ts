@@ -46,7 +46,7 @@ const MODELS: Record<string, ModelConfig> = {
 // On OpenRouter, reasoning tokens count against max_tokens, so we need higher
 // defaults and caps to ensure non-empty output.
 const TOKEN_DEFAULTS = { default: 1024, max: 4096 } as const;
-const TOKEN_REASONING = { default: 4096, max: 16384 } as const;
+const TOKEN_REASONING = { default: 16384, max: 65536 } as const;
 
 function chatHandler(slug: string) {
   const { model, serviceId, reasoning } = MODELS[slug];
@@ -83,7 +83,7 @@ function chatHandler(slug: string) {
     let upstreamStatus = 0;
 
     try {
-      const result = await chatCompletion(model, messages, maxTokens);
+      const result = await chatCompletion(model, messages, maxTokens, reasoning);
       upstreamStatus = 200;
       res.json(result);
     } catch (err: any) {
