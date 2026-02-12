@@ -1,0 +1,141 @@
+{
+  "name": "x402engine",
+  "description": "Pay-per-call API gateway for AI agents. 52 tools including image generation, LLM inference, code execution, audio transcription, crypto data, wallet analytics, NFT data, ENS, IPFS, web scraping, travel search, and transaction simulation. All via HTTP 402 micropayments with USDC and USDm.",
+  "url": "https://x402-gateway-production.up.railway.app",
+  "version": "3.0.0",
+  "protocol": "a2a",
+  "capabilities": {
+    "tools": true,
+    "streaming": false
+  },
+  "authentication": {
+    "schemes": ["x402"]
+  },
+  "defaultInputModes": ["application/json"],
+  "defaultOutputModes": ["application/json"],
+  "skills": [
+    {
+      "id": "image-generation",
+      "name": "Image Generation",
+      "description": "Generate images using AI (fast, quality, and text-in-image tiers). Prices: $0.015-$0.12 per image.",
+      "tags": ["image", "generation", "ai"],
+      "examples": ["Generate a photo of a sunset over mountains", "Create a logo with the text 'Hello World'"]
+    },
+    {
+      "id": "llm-inference",
+      "name": "LLM Inference",
+      "description": "Access 14+ LLM models including GPT-4o, GPT-5, Claude Opus 4.6, Gemini 2.5, DeepSeek, Llama, Grok, Qwen, Mistral, and Perplexity. Prices: $0.002-$0.09 per request.",
+      "tags": ["llm", "inference", "gpt", "claude", "gemini"],
+      "examples": ["Ask GPT-5 to summarize this document", "Get Claude Opus to review this code"]
+    },
+    {
+      "id": "code-execution",
+      "name": "Code Execution",
+      "description": "Execute code in a sandboxed environment. Supports Python, JavaScript, Bash, R, Ruby, Go, and Rust. Price: $0.005 per execution.",
+      "tags": ["code", "execution", "sandbox", "python", "javascript"],
+      "examples": ["Run this Python script", "Execute a data analysis in R"]
+    },
+    {
+      "id": "audio",
+      "name": "Audio Processing",
+      "description": "Transcribe audio to text (Deepgram Nova-3) and generate speech from text (OpenAI, ElevenLabs). Prices: $0.01-$0.10.",
+      "tags": ["audio", "transcription", "tts", "speech"],
+      "examples": ["Transcribe this audio file", "Convert this text to speech"]
+    },
+    {
+      "id": "crypto-data",
+      "name": "Crypto Market Data",
+      "description": "Real-time crypto prices, market data, historical charts, trending coins, and search. Prices: $0.001-$0.003.",
+      "tags": ["crypto", "market", "price", "bitcoin", "ethereum"],
+      "examples": ["Get the current price of Bitcoin", "Show trending cryptocurrencies"]
+    },
+    {
+      "id": "wallet-analytics",
+      "name": "Wallet Analytics",
+      "description": "Token balances, transaction history, P&L analysis, token prices, and metadata for any blockchain wallet. Prices: $0.002-$0.01.",
+      "tags": ["wallet", "blockchain", "defi", "analytics"],
+      "examples": ["Show token balances for 0x123...", "Analyze P&L for this wallet"]
+    },
+    {
+      "id": "nft",
+      "name": "NFT Data",
+      "description": "NFT metadata, ownership history, and collection statistics. Price: $0.005 per query.",
+      "tags": ["nft", "metadata", "collection"],
+      "examples": ["Get metadata for this NFT", "Show collection stats for BAYC"]
+    },
+    {
+      "id": "ens",
+      "name": "ENS Resolution",
+      "description": "Resolve ENS names to addresses and reverse lookup. Price: $0.001.",
+      "tags": ["ens", "ethereum", "domain"],
+      "examples": ["Resolve vitalik.eth", "What ENS name does 0x123... have?"]
+    },
+    {
+      "id": "ipfs",
+      "name": "IPFS Storage",
+      "description": "Pin JSON data to IPFS and retrieve content by CID. Prices: $0.001-$0.01.",
+      "tags": ["ipfs", "storage", "decentralized"],
+      "examples": ["Pin this JSON to IPFS", "Retrieve content from IPFS CID"]
+    },
+    {
+      "id": "web",
+      "name": "Web Scraping & Screenshots",
+      "description": "Scrape web page content and capture screenshots. Prices: $0.005-$0.01.",
+      "tags": ["web", "scrape", "screenshot"],
+      "examples": ["Scrape the content of this URL", "Take a screenshot of this website"]
+    },
+    {
+      "id": "travel",
+      "name": "Travel Search",
+      "description": "Search flights, hotels, airports, and find cheapest travel dates. Price: $0.005-$0.01.",
+      "tags": ["travel", "flights", "hotels", "booking"],
+      "examples": ["Find flights from NYC to London", "Search hotels in Tokyo"]
+    },
+    {
+      "id": "transaction-simulation",
+      "name": "Transaction Simulation",
+      "description": "Simulate EVM transactions to preview outcomes before execution. Price: $0.01.",
+      "tags": ["transaction", "simulation", "evm"],
+      "examples": ["Simulate this swap transaction", "Preview what happens if I send this tx"]
+    },
+    {
+      "id": "embeddings",
+      "name": "Text Embeddings",
+      "description": "Generate text embeddings for semantic search and similarity. Price: $0.001.",
+      "tags": ["embeddings", "semantic", "search"],
+      "examples": ["Generate embeddings for this text"]
+    }
+  ],
+  "provider": {
+    "organization": "x402engine",
+    "url": "https://x402engine.app"
+  },
+  "payment": {
+    "protocol": "x402",
+    "networks": [
+      {
+        "name": "Base",
+        "chainId": 8453,
+        "token": "USDC",
+        "confirmation": "~2s"
+      },
+      {
+        "name": "Solana",
+        "token": "USDC",
+        "confirmation": "~400ms"
+      },
+      {
+        "name": "MegaETH",
+        "chainId": 4326,
+        "token": "USDm",
+        "confirmation": "~10ms"
+      }
+    ]
+  },
+  "mcp": {
+    "npm": "x402engine-mcp",
+    "install": "npx -y x402engine-mcp",
+    "remote": "https://x402engine.app/mcp",
+    "github": "https://github.com/agentc22/x402engine-mcp"
+  }
+}

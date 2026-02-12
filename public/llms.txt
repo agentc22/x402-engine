@@ -1,0 +1,86 @@
+# x402engine
+> Pay-per-call API gateway for AI agents. 52 tools, sub-cent pricing, instant crypto payments.
+
+## What is this?
+x402engine is an API gateway that provides 52 pay-per-call tools for AI agents using the HTTP 402 payment protocol. Every API call costs between $0.001 and $0.12, paid instantly with stablecoins (USDC on Base, USDC on Solana, or USDm on MegaETH).
+
+## How to connect
+- MCP server (recommended): `npx -y x402engine-mcp`
+- Remote MCP endpoint: https://x402engine.app/mcp
+- REST API base: https://x402-gateway-production.up.railway.app
+- Discovery: https://x402-gateway-production.up.railway.app/.well-known/x402.json
+
+## Available tools
+
+### Image Generation
+- generate_image (fast): $0.015 — AI image generation, fast mode
+- generate_image (quality): $0.05 — AI image generation, quality mode
+- generate_image (text): $0.12 — AI image with embedded text
+
+### Code Execution
+- execute_code: $0.005 — Sandboxed code execution (Python, JS, Bash, R, Ruby, Go, Rust)
+
+### Audio
+- transcribe_audio: $0.10 — Audio transcription (Deepgram Nova-3)
+- text_to_speech (OpenAI): $0.01 — Text-to-speech via OpenAI
+- text_to_speech (ElevenLabs): $0.02 — Text-to-speech via ElevenLabs
+
+### LLM Inference (14 models)
+- GPT-4o: $0.04 | GPT-4o Mini: $0.003 | GPT-4.1: $0.03 | GPT-4.1 Mini: $0.006
+- GPT-5: $0.035 | GPT-5 Mini: $0.007 | o3: $0.03 | o4 Mini: $0.02
+- Claude Opus 4.6: $0.09 | Claude Sonnet 4.5: $0.06 | Claude Haiku 4.5: $0.02
+- Gemini 2.5 Pro: $0.035 | Gemini 2.5 Flash: $0.009
+- DeepSeek V3: $0.005 | DeepSeek R1: $0.01 | Llama 3.3 70B: $0.002
+- Grok 4: $0.06 | Qwen3 235B: $0.004 | Mistral Large 3: $0.006 | Perplexity Sonar Pro: $0.06
+- Text Embeddings: $0.001
+
+### Crypto & Market Data
+- get_crypto_price: $0.001 — Real-time crypto prices
+- get_crypto_markets: $0.002 — Top coins by market cap
+- get_crypto_history: $0.003 — Historical price charts
+- get_trending_crypto: $0.001 — Trending coins
+- search_crypto: $0.001 — Search for coins
+
+### Blockchain & Wallet Analytics
+- get_wallet_balances: $0.005 — Token balances for any wallet
+- get_wallet_transactions: $0.005 — Transaction history
+- get_wallet_pnl: $0.01 — Profit & loss analysis
+- get_token_prices: $0.005 — DEX-derived token prices
+- get_token_metadata: $0.002 — Token metadata
+
+### NFT
+- get_nft_metadata: $0.005 — NFT metadata lookup
+- get_nft_ownership: $0.005 — NFT ownership history
+- get_nft_collection: $0.005 — NFT collection stats
+
+### ENS
+- resolve_ens: $0.001 — ENS name to address
+- reverse_ens: $0.001 — Address to ENS name
+
+### IPFS Storage
+- pin_to_ipfs: $0.01 — Pin JSON to IPFS
+- get_from_ipfs: $0.001 — Retrieve content from IPFS
+
+### Web
+- web_scrape: $0.005 — Scrape and extract web page content
+- web_screenshot: $0.01 — Capture web page screenshot
+
+### Travel
+- search_flights: $0.01 — Flight search
+- search_hotels: $0.01 — Hotel search
+- search_locations: $0.005 — Airport & city search
+- cheapest_travel_dates: $0.01 — Find cheapest travel dates
+
+### Transaction
+- simulate_transaction: $0.01 — Simulate EVM transactions
+
+## Payment
+All payments use the x402 HTTP payment protocol. When you call an endpoint without payment, it returns HTTP 402 with payment requirements in the response header. Pay with:
+- USDC on Base (EVM, ~2s confirmation)
+- USDC on Solana (~400ms confirmation)
+- USDm on MegaETH (EVM, ~10ms confirmation)
+
+## Links
+- GitHub: https://github.com/agentc22/x402engine-mcp
+- npm: https://www.npmjs.com/package/x402engine-mcp
+- Protocol: https://x402.org
