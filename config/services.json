@@ -387,20 +387,17 @@
       },
       "parameters": {
         "body": {
+          "chain": {
+            "type": "string",
+            "required": true,
+            "description": "Chain name (ethereum, polygon, base, arbitrum, etc.)",
+            "example": "ethereum"
+          },
           "address": {
             "type": "string",
             "required": true,
             "description": "Wallet address",
-            "example": "0x..."
-          },
-          "chains": {
-            "type": "array",
-            "required": false,
-            "description": "List of chains to query",
-            "example": [
-              "ethereum",
-              "polygon"
-            ]
+            "example": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb"
           }
         }
       }
@@ -1351,23 +1348,29 @@
       },
       "parameters": {
         "body": {
+          "network_id": {
+            "type": "string",
+            "required": true,
+            "description": "Network ID (1=mainnet, 8453=Base, 10=Optimism, etc.)",
+            "example": "8453"
+          },
           "from": {
             "type": "string",
             "required": true,
             "description": "Sender address",
-            "example": "0x..."
+            "example": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb"
           },
           "to": {
             "type": "string",
             "required": true,
-            "description": "Recipient address",
-            "example": "0x..."
+            "description": "Recipient/contract address",
+            "example": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
           },
           "data": {
             "type": "string",
             "required": false,
-            "description": "Transaction data",
-            "example": "0x..."
+            "description": "Transaction calldata (hex string)",
+            "example": "0x"
           },
           "value": {
             "type": "string",
@@ -1375,7 +1378,7 @@
             "description": "ETH value in wei",
             "example": "0"
           },
-          "chain": {
+          "gas": {
             "type": "string",
             "required": false,
             "description": "Chain name",
