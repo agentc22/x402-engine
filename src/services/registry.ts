@@ -69,16 +69,14 @@ export function buildRoutesConfig(): RoutesConfig {
 
       accepts.push({
         scheme: "exact",
-        price: svc.price,  // SDK needs this for parsing
         network: evmNetwork,
         asset: baseChain.stablecoin.address,
         amount: baseAmount,
         payTo: config.payToEvm,
         maxTimeoutSeconds: 300,
         extra: {
-          name: "Permit2",  // EIP-712 domain name for Permit2
-          version: "1",      // EIP-712 domain version
-          decimals: baseChain.stablecoin.decimals,
+          name: "USD Coin",   // EIP-712 domain name (must match on-chain token name)
+          version: "2",        // EIP-712 domain version
         },
       });
 
@@ -86,29 +84,32 @@ export function buildRoutesConfig(): RoutesConfig {
       const megaAmount = priceStringToTokenAmount(svc.price, MEGAETH_CONFIG.stablecoin.decimals).toString();
       accepts.push({
         scheme: "exact",
-        price: svc.price,  // SDK needs this for parsing
         network: NETWORKS.megaeth,
         asset: MEGAETH_CONFIG.stablecoin.address,
         amount: megaAmount,
         payTo: config.payToEvm,
         maxTimeoutSeconds: 300,
         extra: {
-          name: "Permit2",  // EIP-712 domain name
-          version: "1",      // EIP-712 domain version
-          decimals: MEGAETH_CONFIG.stablecoin.decimals,
+          name: "USDm",      // EIP-712 domain name (must match on-chain token name)
+          version: "2",       // EIP-712 domain version
         },
       });
     }
 
-    // Solana (keep simple format for now)
+    // Solana
     if (config.payToSolana) {
       const solNetwork = isDev ? NETWORKS.solanaDevnet : NETWORKS.solana;
+      const solAmount = priceStringToTokenAmount(svc.price, 6).toString();  // USDC is 6 decimals
       accepts.push({
         scheme: "exact",
-        price: svc.price,
         network: solNetwork,
+        asset: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",  // Solana USDC
+        amount: solAmount,
         payTo: config.payToSolana,
         maxTimeoutSeconds: 300,
+        extra: {
+          feePayer: "GVJJ7rdGiXr5xaYbRwRbjfaJL7fmwRygFi1H6aGqDveb",  // Fee payer address
+        },
       });
     }
 
