@@ -74,7 +74,8 @@ export function buildRoutesConfig(): RoutesConfig {
         payTo: config.payToEvm,
         maxTimeoutSeconds: 300,
         extra: {
-          name: baseChain.stablecoin.symbol,
+          name: "Permit2",  // EIP-712 domain name for Permit2
+          version: "1",      // EIP-712 domain version
           decimals: baseChain.stablecoin.decimals,
         },
       });
@@ -89,7 +90,8 @@ export function buildRoutesConfig(): RoutesConfig {
         payTo: config.payToEvm,
         maxTimeoutSeconds: 300,
         extra: {
-          name: MEGAETH_CONFIG.stablecoin.symbol,
+          name: "Permit2",  // EIP-712 domain name
+          version: "1",      // EIP-712 domain version
           decimals: MEGAETH_CONFIG.stablecoin.decimals,
         },
       });
