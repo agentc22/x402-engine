@@ -25,6 +25,7 @@ export interface ServiceDefinition {
   mimeType: string;
   category?: string;
   upstream: ServiceUpstream;
+  parameters?: any;
 }
 
 interface ServicesFile {
