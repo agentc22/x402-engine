@@ -12,6 +12,7 @@ import { MEGAETH_CONFIG, BASE_CONFIG, BASE_SEPOLIA_CONFIG } from "./config/chain
 import { createPaymentMiddleware, devBypassMiddleware } from "./middleware/x402.js";
 import { megaethPaymentMiddleware } from "./middleware/payment.js";
 import { enriched402Middleware } from "./middleware/payment-402.js";
+import { debugRoutes } from "./debug-routes.js";
 import { freeEndpointLimiter, paidEndpointLimiter, expensiveEndpointLimiter } from "./middleware/rate-limit.js";
 import imageRouter from "./apis/image.js";
 import codeRouter from "./apis/code.js";
@@ -73,6 +74,8 @@ app.use(express.json({ limit: "1mb" }));
 app.get("/health", freeEndpointLimiter, (_req, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
+
+app.get("/debug/routes", debugRoutes);
 
 app.get("/health/deep", expensiveEndpointLimiter, async (req, res) => {
   // Require Authorization: Bearer <DASHBOARD_SECRET> for internal stats
