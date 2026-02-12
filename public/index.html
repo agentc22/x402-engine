@@ -90,9 +90,12 @@
 <span class="text-brand-400">HTTP/1.1 402 Payment Required</span>
 <span class="text-gray-500"># Response includes payment instructions — your agent pays automatically</span>
 
-<span class="text-gray-500">$</span> <span class="text-gray-500"># With x402 fetch wrapper, it's one line:</span>
-<span class="text-emerald-400">import</span> { wrapFetchWithPayment } <span class="text-emerald-400">from</span> <span class="text-amber-300">"@x402/fetch"</span>;
-<span class="text-emerald-400">const</span> paidFetch = wrapFetchWithPayment(fetch, wallet);
+<span class="text-gray-500">$</span> <span class="text-gray-500"># With x402 client, payments are automatic:</span>
+<span class="text-emerald-400">import</span> { wrapFetchWithPayment, x402Client } <span class="text-emerald-400">from</span> <span class="text-amber-300">"@x402/fetch"</span>;
+<span class="text-emerald-400">import</span> { registerExactEvmScheme } <span class="text-emerald-400">from</span> <span class="text-amber-300">"@x402/evm/exact/client"</span>;
+<span class="text-emerald-400">const</span> client = <span class="text-emerald-400">new</span> x402Client();
+registerExactEvmScheme(client, { signer: account, networks: [<span class="text-amber-300">"eip155:8453"</span>] });
+<span class="text-emerald-400">const</span> paidFetch = wrapFetchWithPayment(fetch, client);
 <span class="text-emerald-400">const</span> data = <span class="text-emerald-400">await</span> paidFetch(<span class="text-amber-300">"https://x402-gateway-production.up.railway.app/api/crypto/price?ids=bitcoin"</span>);</code></pre>
         </div>
       </div>
@@ -864,17 +867,17 @@
         <div class="flex items-center gap-2 px-4 py-2.5 bg-white/[0.03] border-b border-white/5">
           <span class="text-xs text-gray-500 font-mono">TypeScript</span>
         </div>
-        <pre class="p-6 overflow-x-auto"><code class="text-sm text-gray-300"><span class="text-emerald-400">import</span> { wrapFetchWithPayment } <span class="text-emerald-400">from</span> <span class="text-amber-300">"@x402/fetch"</span>;
-<span class="text-emerald-400">import</span> { createWalletClient, http } <span class="text-emerald-400">from</span> <span class="text-amber-300">"viem"</span>;
+        <pre class="p-6 overflow-x-auto"><code class="text-sm text-gray-300"><span class="text-emerald-400">import</span> { wrapFetchWithPayment, x402Client } <span class="text-emerald-400">from</span> <span class="text-amber-300">"@x402/fetch"</span>;
+<span class="text-emerald-400">import</span> { registerExactEvmScheme } <span class="text-emerald-400">from</span> <span class="text-amber-300">"@x402/evm/exact/client"</span>;
 <span class="text-emerald-400">import</span> { privateKeyToAccount } <span class="text-emerald-400">from</span> <span class="text-amber-300">"viem/accounts"</span>;
-<span class="text-emerald-400">import</span> { base } <span class="text-emerald-400">from</span> <span class="text-amber-300">"viem/chains"</span>;
 
-<span class="text-gray-500">// 1. Create a wallet (needs USDC on Base)</span>
+<span class="text-gray-500">// 1. Create account and x402 client (needs USDC on Base)</span>
 <span class="text-emerald-400">const</span> account = privateKeyToAccount(<span class="text-amber-300">"0xYOUR_PRIVATE_KEY"</span>);
-<span class="text-emerald-400">const</span> wallet = createWalletClient({ account, chain: base, transport: http() });
+<span class="text-emerald-400">const</span> client = <span class="text-emerald-400">new</span> x402Client();
+registerExactEvmScheme(client, { signer: account, networks: [<span class="text-amber-300">"eip155:8453"</span>] });
 
 <span class="text-gray-500">// 2. Wrap fetch — it handles 402 negotiation automatically</span>
-<span class="text-emerald-400">const</span> paidFetch = wrapFetchWithPayment(fetch, wallet);
+<span class="text-emerald-400">const</span> paidFetch = wrapFetchWithPayment(fetch, client);
 
 <span class="text-gray-500">// 3. Call any endpoint — payment happens transparently</span>
 <span class="text-emerald-400">const</span> res = <span class="text-emerald-400">await</span> paidFetch(

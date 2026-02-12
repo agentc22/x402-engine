@@ -152,7 +152,7 @@
             <div class="flex items-center px-4 py-2 bg-white/[0.03] border-b border-white/5">
               <span class="text-xs text-gray-500 font-mono">bash</span>
             </div>
-            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">npm install @x402/fetch viem</code></pre>
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">npm install @x402/fetch @x402/evm viem</code></pre>
           </div>
 
           <p class="text-gray-400 mb-4">Make your first paid call with TypeScript:</p>
@@ -160,21 +160,24 @@
             <div class="flex items-center px-4 py-2 bg-white/[0.03] border-b border-white/5">
               <span class="text-xs text-gray-500 font-mono">TypeScript</span>
             </div>
-            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300"><span class="text-emerald-400">import</span> { wrapFetchWithPayment } <span class="text-emerald-400">from</span> <span class="text-amber-300">"@x402/fetch"</span>;
-<span class="text-emerald-400">import</span> { createWalletClient, http } <span class="text-emerald-400">from</span> <span class="text-amber-300">"viem"</span>;
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300"><span class="text-emerald-400">import</span> { wrapFetchWithPayment, x402Client } <span class="text-emerald-400">from</span> <span class="text-amber-300">"@x402/fetch"</span>;
+<span class="text-emerald-400">import</span> { registerExactEvmScheme } <span class="text-emerald-400">from</span> <span class="text-amber-300">"@x402/evm/exact/client"</span>;
 <span class="text-emerald-400">import</span> { privateKeyToAccount } <span class="text-emerald-400">from</span> <span class="text-amber-300">"viem/accounts"</span>;
-<span class="text-emerald-400">import</span> { base } <span class="text-emerald-400">from</span> <span class="text-amber-300">"viem/chains"</span>;
 
-<span class="text-gray-500">// Create a wallet with USDC on Base</span>
+<span class="text-gray-500">// Create account from private key</span>
 <span class="text-emerald-400">const</span> account = privateKeyToAccount(process.env.PRIVATE_KEY <span class="text-emerald-400">as</span> <span class="text-amber-300">`0x${string}`</span>);
-<span class="text-emerald-400">const</span> wallet = createWalletClient({
-  account,
-  chain: base,
-  transport: http(),
+
+<span class="text-gray-500">// Initialize x402 client and register EVM payment scheme</span>
+<span class="text-emerald-400">const</span> client = <span class="text-emerald-400">new</span> x402Client();
+registerExactEvmScheme(client, {
+  signer: account,
+  networks: [<span class="text-amber-300">"eip155:8453"</span>], <span class="text-gray-500">// Base mainnet</span>
 });
 
 <span class="text-gray-500">// Wrap native fetch — handles 402 negotiation automatically</span>
-<span class="text-emerald-400">const</span> paidFetch = wrapFetchWithPayment(fetch, wallet);
+<span class="text-emerald-400">const</span> paidFetch = wrapFetchWithPayment(fetch, client, {
+  paymentRequirementsSelector: (accepts) =&gt; accepts.find(a =&gt; a.network === <span class="text-amber-300">"eip155:8453"</span>),
+});
 
 <span class="text-gray-500">// Call any endpoint — payment is transparent</span>
 <span class="text-emerald-400">const</span> BASE = <span class="text-amber-300">"https://x402-gateway-production.up.railway.app"</span>;
