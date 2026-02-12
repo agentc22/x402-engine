@@ -206,6 +206,14 @@ console.log(<span class="text-emerald-400">await</span> balances.json());</code>
               <li>Engine verifies the payment, calls the upstream API, and returns data</li>
             </ol>
           </div>
+
+          <div class="mt-6 rounded-xl border border-brand-500/20 bg-brand-500/5 p-4 text-sm">
+            <h4 class="text-brand-400 font-semibold mb-2">💡 Test All Endpoints</h4>
+            <p class="text-gray-300 mb-2">Want to test all 52 endpoints at once? Download our comprehensive test suite:</p>
+            <pre class="bg-white/5 rounded px-3 py-2 text-xs overflow-x-auto"><code>curl -O https://x402-gateway-production.up.railway.app/test-all-endpoints.mjs
+TEST_PRIVATE_KEY=0x... node test-all-endpoints.mjs</code></pre>
+            <p class="text-gray-400 text-xs mt-2">Includes proper parameters and examples for every endpoint category.</p>
+          </div>
         </section>
 
         <!-- Payment Flow -->
