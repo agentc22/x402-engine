@@ -21,8 +21,8 @@ import transcribeRouter from "./apis/transcribe.js";
 import cryptoRouter from "./apis/crypto.js";
 import blockchainRouter from "./apis/blockchain.js";
 import ipfsRouter from "./apis/ipfs.js";
-import travelRouter from "./apis/travel.js";
-import nftRouter from "./apis/nft.js";
+// import travelRouter from "./apis/travel.js";  // Disabled: Missing Amadeus API keys
+// import nftRouter from "./apis/nft.js";        // Disabled: Temporarily removed
 import ensRouter from "./apis/ens.js";
 import llmRouter from "./apis/llm.js";
 import webRouter from "./apis/web.js";
@@ -335,8 +335,8 @@ app.use(codeRouter);
 app.use(cryptoRouter);
 app.use(blockchainRouter);
 app.use(ipfsRouter);
-app.use(travelRouter);
-app.use(nftRouter);
+// app.use(travelRouter);  // Disabled: Missing Amadeus API keys
+// app.use(nftRouter);     // Disabled: Temporarily removed
 app.use(ensRouter);
 app.use(llmRouter);
 app.use(webRouter);
