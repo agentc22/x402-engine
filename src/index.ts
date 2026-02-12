@@ -12,6 +12,7 @@ import { MEGAETH_CONFIG, BASE_CONFIG, BASE_SEPOLIA_CONFIG } from "./config/chain
 import { createPaymentMiddleware, devBypassMiddleware } from "./middleware/x402.js";
 import { megaethPaymentMiddleware } from "./middleware/payment.js";
 import { enriched402Middleware } from "./middleware/payment-402.js";
+import { requestTimeoutMiddleware } from "./middleware/timeout.js";
 import { debugRoutes } from "./debug-routes.js";
 import { freeEndpointLimiter, paidEndpointLimiter, expensiveEndpointLimiter } from "./middleware/rate-limit.js";
 import imageRouter from "./apis/image.js";
@@ -64,6 +65,9 @@ app.use((_req, res, next) => {
 
 // --- Global body limit: 1MB (route-specific overrides below) ---
 app.use(express.json({ limit: "1mb" }));
+
+// --- Request timeout middleware (30s hard limit) ---
+app.use(requestTimeoutMiddleware());
 
 // --- Static site (landing page + docs) ---
 // Mounted after API routes to avoid unnecessary fs.stat on API requests

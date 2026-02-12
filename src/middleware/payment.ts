@@ -113,20 +113,52 @@ export function megaethPaymentMiddleware(): RequestHandler {
 
       const txHash = decoded.payload?.txHash as string | undefined;
       if (!txHash || !txHash.startsWith("0x")) {
+        console.log(
+          `[megaeth-payment] Missing txHash in payment header`,
+          `path=${req.path}`,
+          `network=${decoded.accepted?.network}`,
+          `hint=MegaETH requires on-chain transfer with txHash, not Permit2 signature`
+        );
         res.status(402).json({
           x402Version: 2,
           error: "MegaETH payments require a txHash in the payload",
+          hint: "MegaETH uses on-chain transfers, not Permit2. The standard @x402/fetch SDK only supports Permit2. Use Base (eip155:8453) instead, or implement custom MegaETH payment construction.",
+          network: NETWORKS.megaeth,
         });
         return;
       }
 
       const proof: PaymentProof = { txHash: txHash as `0x${string}` };
 
-      const result = await verifyMegaETHPayment(
+      // Verify with 20s timeout to prevent hangs on slow RPC
+      const verifyPromise = verifyMegaETHPayment(
         proof,
         expectedAmount,
         expectedRecipient,
       );
+
+      const timeoutPromise = new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error("MegaETH verification timeout (20s)")), 20_000)
+      );
+
+      let result;
+      try {
+        result = await Promise.race([verifyPromise, timeoutPromise]);
+      } catch (err: any) {
+        const verifyMs = Date.now() - start;
+        console.error(
+          `[megaeth-payment] Verification timeout or error`,
+          `txHash=${truncateHash(txHash)}`,
+          `elapsed=${verifyMs}ms`,
+          `error=${err.message}`
+        );
+        res.status(503).json({
+          error: "Payment verification timeout",
+          message: "MegaETH RPC did not respond in time",
+          retryable: true,
+        });
+        return;
+      }
 
       const verifyMs = Date.now() - start;
 
