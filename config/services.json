@@ -724,42 +724,6 @@
       }
     },
     {
-      "id": "llm-o1-mini",
-      "name": "OpenAI o1-mini",
-      "description": "Compact reasoning model — fast and cost-effective with strong math and coding abilities",
-      "price": "$0.02",
-      "method": "POST",
-      "path": "/api/llm/o1-mini",
-      "mimeType": "application/json",
-      "category": "compute",
-      "upstream": {
-        "provider": "openrouter",
-        "baseUrl": "https://openrouter.ai/api/v1"
-      },
-      "parameters": {
-        "body": {
-          "messages": {
-            "type": "array",
-            "required": true,
-            "description": "Array of message objects with role and content",
-            "example": [
-              {
-                "role": "user",
-                "content": "Hello"
-              }
-            ]
-          },
-          "max_tokens": {
-            "type": "number",
-            "required": false,
-            "description": "Maximum tokens to generate (reasoning models use more)",
-            "example": 16384,
-            "default": 16384
-          }
-        }
-      }
-    },
-    {
       "id": "llm-claude-opus",
       "name": "Claude Opus 4.6",
       "description": "Anthropic's most powerful model — best for complex analysis, coding, and extended thinking",

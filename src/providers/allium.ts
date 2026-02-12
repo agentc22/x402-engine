@@ -22,7 +22,7 @@ async function alliumPost(path: string, body: unknown, query?: Record<string, st
       "X-API-KEY": key,
     },
     body: JSON.stringify(body),
-    signal: AbortSignal.timeout(30_000),
+    signal: AbortSignal.timeout(60_000),
   });
 
   if (!res.ok) {
@@ -54,7 +54,7 @@ async function alliumGet(path: string, query?: Record<string, string>): Promise<
       "Content-Type": "application/json",
       "X-API-KEY": key,
     },
-    signal: AbortSignal.timeout(30_000),
+    signal: AbortSignal.timeout(60_000),
   });
 
   if (!res.ok) {

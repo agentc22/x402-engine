@@ -56,6 +56,16 @@ function getTimeoutForPath(path: string): number {
     return 60_000;
   }
 
+  // Wallet P&L: 60 seconds (complex calculation over transaction history)
+  if (path === "/api/wallet/pnl") {
+    return 60_000;
+  }
+
+  // IPFS: 60 seconds (gateway can be slow)
+  if (path.startsWith("/api/ipfs/")) {
+    return 60_000;
+  }
+
   // Standard endpoints: 30 seconds (crypto, blockchain, web, etc.)
   return 30_000;
 }
