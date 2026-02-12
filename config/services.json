@@ -22,19 +22,25 @@
             "description": "Text description of image to generate",
             "example": "a red sports car"
           },
-          "image_size": {
-            "type": "string",
-            "required": false,
-            "description": "Output size",
-            "example": "square_hd",
-            "default": "square_hd"
-          },
-          "num_images": {
+          "width": {
             "type": "number",
             "required": false,
-            "description": "Number of images (1-4)",
-            "example": 1,
-            "default": 1
+            "description": "Image width in pixels (256-2048)",
+            "example": 1024,
+            "default": 1024
+          },
+          "height": {
+            "type": "number",
+            "required": false,
+            "description": "Image height in pixels (256-2048)",
+            "example": 1024,
+            "default": 1024
+          },
+          "seed": {
+            "type": "number",
+            "required": false,
+            "description": "Random seed for reproducibility",
+            "example": 42
           }
         }
       }
@@ -60,12 +66,25 @@
             "description": "Text description of image to generate",
             "example": "a sunset over mountains"
           },
-          "image_size": {
-            "type": "string",
+          "width": {
+            "type": "number",
             "required": false,
-            "description": "Output size",
-            "example": "landscape_16_9",
-            "default": "landscape_4_3"
+            "description": "Image width in pixels (256-2048)",
+            "example": 1024,
+            "default": 1024
+          },
+          "height": {
+            "type": "number",
+            "required": false,
+            "description": "Image height in pixels (256-2048)",
+            "example": 1024,
+            "default": 1024
+          },
+          "seed": {
+            "type": "number",
+            "required": false,
+            "description": "Random seed for reproducibility",
+            "example": 42
           }
         }
       }
@@ -124,9 +143,10 @@
           },
           "language": {
             "type": "string",
-            "required": true,
+            "required": false,
             "description": "Programming language (python, javascript, bash, r)",
-            "example": "python"
+            "example": "python",
+            "default": "python"
           },
           "timeout": {
             "type": "number",
@@ -156,14 +176,20 @@
           "audio_url": {
             "type": "string",
             "required": false,
-            "description": "URL of audio file to transcribe",
+            "description": "URL of audio file to transcribe (provide audio_url OR audio_base64, not both)",
             "example": "https://example.com/audio.mp3"
           },
           "audio_base64": {
             "type": "string",
             "required": false,
-            "description": "Base64-encoded audio data",
-            "example": "data:audio/mp3;base64,..."
+            "description": "Base64-encoded audio data with MIME type prefix (provide audio_url OR audio_base64, not both)",
+            "example": "data:audio/mp3;base64,SGVsbG8="
+          },
+          "audio_mimetype": {
+            "type": "string",
+            "required": false,
+            "description": "MIME type when using audio_base64 (e.g. audio/mp3, audio/wav)",
+            "example": "audio/mp3"
           }
         }
       }
@@ -520,21 +546,21 @@
       },
       "parameters": {
         "body": {
-          "content": {
+          "json": {
             "type": "object",
             "required": false,
-            "description": "JSON content to pin",
+            "description": "JSON object to pin (provide json OR url, not both)",
             "example": {
               "hello": "world"
             }
           },
-          "file_url": {
+          "url": {
             "type": "string",
             "required": false,
-            "description": "URL of file to pin",
+            "description": "URL of file to pin (provide json OR url, not both)",
             "example": "https://example.com/file.jpg"
           },
-          "file_base64": {
+          "name": {
             "type": "string",
             "required": false,
             "description": "Base64-encoded file",
