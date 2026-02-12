@@ -415,3 +415,4 @@ main().catch((err) => {
   console.error("Fatal error:", err);
   process.exit(1);
 });
+// Force rebuild Wed Feb 11 18:37:17 PST 2026
