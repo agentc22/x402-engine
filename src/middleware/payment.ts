@@ -74,7 +74,7 @@ function getRouteRequirements(
   );
   if (!megaethAccept) return null;
 
-  return { amount: megaethAccept.price, payTo: megaethAccept.payTo };
+  return { amount: megaethAccept.amount, payTo: megaethAccept.payTo };
 }
 
 // --- MegaETH direct payment middleware ---
@@ -107,8 +107,8 @@ export function megaethPaymentMiddleware(): RequestHandler {
         return next();
       }
 
-      // String-based price conversion — no floating-point
-      const expectedAmount = priceStringToTokenAmount(routeReq.amount, MEGAETH_CONFIG.stablecoin.decimals);
+      // Amount is already in token units (parsed at route build time)
+      const expectedAmount = BigInt(routeReq.amount);
       const expectedRecipient = routeReq.payTo;
 
       const txHash = decoded.payload?.txHash as string | undefined;

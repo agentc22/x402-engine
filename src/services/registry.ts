@@ -68,6 +68,7 @@ export function buildRoutesConfig(): RoutesConfig {
 
       accepts.push({
         scheme: "exact",
+        price: svc.price,  // SDK needs this for parsing
         network: evmNetwork,
         asset: baseChain.stablecoin.address,
         amount: baseAmount,
@@ -84,6 +85,7 @@ export function buildRoutesConfig(): RoutesConfig {
       const megaAmount = priceStringToTokenAmount(svc.price, MEGAETH_CONFIG.stablecoin.decimals).toString();
       accepts.push({
         scheme: "exact",
+        price: svc.price,  // SDK needs this for parsing
         network: NETWORKS.megaeth,
         asset: MEGAETH_CONFIG.stablecoin.address,
         amount: megaAmount,
