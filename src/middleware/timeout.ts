@@ -40,10 +40,14 @@ export function requestTimeoutMiddleware(): RequestHandler {
 }
 
 function getTimeoutForPath(path: string): number {
+  // LLM endpoints: 120 seconds (reasoning models like o1 can take 60-90s)
+  if (path.startsWith("/api/llm/")) {
+    return 120_000;
+  }
+
   // Compute-heavy endpoints: 90 seconds
   if (
     path.startsWith("/api/image/") ||
-    path.startsWith("/api/llm/") ||
     path.startsWith("/api/tts/") ||
     path.startsWith("/api/transcribe") ||
     path.startsWith("/api/code/")

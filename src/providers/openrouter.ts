@@ -35,7 +35,7 @@ async function openrouterFetch(path: string, body: any): Promise<any> {
         method: "POST",
         headers,
         body: JSON.stringify(body),
-        signal: AbortSignal.timeout(60_000),
+        signal: AbortSignal.timeout(120_000),
       });
 
       if (res.status >= 500 && attempt < MAX_RETRIES) {
