@@ -5,7 +5,7 @@ import { isPublicUrl } from "../lib/validation.js";
 
 const router = Router();
 
-router.post("/api/transcribe", async (req: Request, res: Response) => {
+router.post("/", async (req: Request, res: Response) => {
   const {
     audio_url,
     audio_base64,
