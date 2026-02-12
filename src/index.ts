@@ -218,6 +218,16 @@ app.get("/.well-known/x402.json", freeEndpointLimiter, (_req, res) => {
   res.json(discoveryResponse);
 });
 
+// A2A Agent Card — machine-readable agent discovery (Google A2A protocol)
+app.get("/.well-known/agent.json", freeEndpointLimiter, (_req, res) => {
+  res.sendFile(path.join(__dirname, "../public/.well-known/agent.json"));
+});
+
+// llms.txt — LLM-readable service catalog
+app.get("/llms.txt", freeEndpointLimiter, (_req, res) => {
+  res.type("text/plain").sendFile(path.join(__dirname, "../public/llms.txt"));
+});
+
 app.get("/api/discover", freeEndpointLimiter, (_req, res) => {
   res.json(discoveryResponse);
 });
