@@ -24,6 +24,10 @@ export function enriched402Middleware(): RequestHandler {
     }
 
     // Generate enriched 402 with asset/amount/extra fields
+    console.log(`[enriched-402] Generating 402 for ${routeKey}`);
+    console.log(`[enriched-402] First accept has asset?`, !!route.accepts[0]?.asset);
+    console.log(`[enriched-402] First accept:`, JSON.stringify(route.accepts[0]));
+
     const paymentRequired = {
       x402Version: 2,
       error: "Payment required",
