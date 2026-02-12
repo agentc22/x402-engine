@@ -55,11 +55,13 @@ export function createPaymentMiddleware(): RequestHandler {
   const solNetwork = config.isDev ? NETWORKS.solanaDevnet : NETWORKS.solana;
   server.register(solNetwork, new ExactSvmScheme());
 
-  // Cache routes at startup
+  // Cache routes at startup for logging
   const routes = buildRoutesConfig();
   console.log("  Payment routes configured:", Object.keys(routes as Record<string, unknown>).join(", "));
 
-  return paymentMiddleware(routes, server);
+  // Don't pass routes to SDK - enriched402Middleware handles 402 generation
+  // SDK is only used for payment verification
+  return paymentMiddleware({}, server);
 }
 
 /**
