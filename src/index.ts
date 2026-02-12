@@ -188,6 +188,7 @@ function buildDiscoveryResponse() {
       endpoint: `https://x402-gateway-production.up.railway.app${s.path}`,
       method: s.method,
       category: s.category || "basic",
+      parameters: s.parameters,
     })),
     routes,
   };
