@@ -307,6 +307,22 @@ Content-Type: application/json
           <div class="mt-4 card-glow rounded-xl p-4 text-sm text-gray-400">
             <strong class="text-white">Amount conversion:</strong> <code class="text-xs bg-white/5 px-1 rounded">$0.001</code> = <code class="text-xs bg-white/5 px-1 rounded">1000</code> USDC (6 decimals) = <code class="text-xs bg-white/5 px-1 rounded">1000000000000000</code> USDm (18 decimals)
           </div>
+
+          <div class="mt-4 rounded-xl border border-yellow-500/20 bg-yellow-500/5 p-4 text-sm">
+            <h4 class="text-yellow-400 font-semibold mb-2">⚠️ MegaETH Payment Requirements</h4>
+            <p class="text-gray-300 mb-2">MegaETH uses a different payment verification method than Base:</p>
+            <ul class="text-gray-400 space-y-1 list-disc list-inside ml-2">
+              <li><strong class="text-white">Base:</strong> Uses Permit2 gasless signatures (handled automatically by <code class="text-xs bg-white/5 px-1 rounded">@x402/fetch</code>)</li>
+              <li><strong class="text-white">MegaETH:</strong> Requires an actual on-chain USDm transfer with <code class="text-xs bg-white/5 px-1 rounded">txHash</code> in payment payload</li>
+            </ul>
+            <p class="text-gray-400 mt-3">
+              <strong class="text-white">Current limitation:</strong> The standard <code class="text-xs bg-white/5 px-1 rounded">@x402/fetch</code> SDK only supports Permit2-style payments.
+              MegaETH payments currently require manual transaction construction or will fall back to Base if Base payment succeeds first.
+            </p>
+            <p class="text-gray-400 mt-2">
+              For MegaETH-only payments, use Base as primary network. MegaETH support in the SDK is coming soon.
+            </p>
+          </div>
         </section>
 
         <!-- Discovery -->
