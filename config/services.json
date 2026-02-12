@@ -936,12 +936,12 @@
       }
     },
     {
-      "id": "llm-gpt-4.1",
-      "name": "GPT-4.1",
-      "description": "OpenAI GPT-4.1 — improved coding, instruction following, and long context",
+      "id": "llm-o1",
+      "name": "OpenAI o1",
+      "description": "OpenAI's reasoning model — excels at math, science, coding, and multi-step problem solving",
       "price": "$0.03",
       "method": "POST",
-      "path": "/api/llm/gpt-4.1",
+      "path": "/api/llm/o1",
       "mimeType": "application/json",
       "category": "compute",
       "upstream": {
@@ -964,164 +964,20 @@
           "max_tokens": {
             "type": "number",
             "required": false,
-            "description": "Maximum tokens to generate",
-            "example": 1024,
-            "default": 1024
+            "description": "Maximum tokens to generate (reasoning models use more)",
+            "example": 16384,
+            "default": 16384
           }
         }
       }
     },
     {
-      "id": "llm-gpt-4.1-mini",
-      "name": "GPT-4.1 Mini",
-      "description": "Compact GPT-4.1 — fast and cost-effective with strong coding and instruction following",
-      "price": "$0.006",
-      "method": "POST",
-      "path": "/api/llm/gpt-4.1-mini",
-      "mimeType": "application/json",
-      "category": "compute",
-      "upstream": {
-        "provider": "openrouter",
-        "baseUrl": "https://openrouter.ai/api/v1"
-      },
-      "parameters": {
-        "body": {
-          "messages": {
-            "type": "array",
-            "required": true,
-            "description": "Array of message objects with role and content",
-            "example": [
-              {
-                "role": "user",
-                "content": "Hello"
-              }
-            ]
-          },
-          "max_tokens": {
-            "type": "number",
-            "required": false,
-            "description": "Maximum tokens to generate",
-            "example": 1024,
-            "default": 1024
-          }
-        }
-      }
-    },
-    {
-      "id": "llm-gpt-5",
-      "name": "GPT-5",
-      "description": "OpenAI's most capable model — best for complex reasoning, analysis, and generation",
-      "price": "$0.035",
-      "method": "POST",
-      "path": "/api/llm/gpt-5",
-      "mimeType": "application/json",
-      "category": "compute",
-      "upstream": {
-        "provider": "openrouter",
-        "baseUrl": "https://openrouter.ai/api/v1"
-      },
-      "parameters": {
-        "body": {
-          "messages": {
-            "type": "array",
-            "required": true,
-            "description": "Array of message objects with role and content",
-            "example": [
-              {
-                "role": "user",
-                "content": "Hello"
-              }
-            ]
-          },
-          "max_tokens": {
-            "type": "number",
-            "required": false,
-            "description": "Maximum tokens to generate",
-            "example": 1024,
-            "default": 1024
-          }
-        }
-      }
-    },
-    {
-      "id": "llm-gpt-5-mini",
-      "name": "GPT-5 Mini",
-      "description": "Compact GPT-5 — strong reasoning at lower cost, good for everyday tasks",
-      "price": "$0.007",
-      "method": "POST",
-      "path": "/api/llm/gpt-5-mini",
-      "mimeType": "application/json",
-      "category": "compute",
-      "upstream": {
-        "provider": "openrouter",
-        "baseUrl": "https://openrouter.ai/api/v1"
-      },
-      "parameters": {
-        "body": {
-          "messages": {
-            "type": "array",
-            "required": true,
-            "description": "Array of message objects with role and content",
-            "example": [
-              {
-                "role": "user",
-                "content": "Hello"
-              }
-            ]
-          },
-          "max_tokens": {
-            "type": "number",
-            "required": false,
-            "description": "Maximum tokens to generate",
-            "example": 1024,
-            "default": 1024
-          }
-        }
-      }
-    },
-    {
-      "id": "llm-o3",
-      "name": "OpenAI o3",
-      "description": "OpenAI's reasoning model — excels at math, science, and multi-step problem solving",
-      "price": "$0.03",
-      "method": "POST",
-      "path": "/api/llm/o3",
-      "mimeType": "application/json",
-      "category": "compute",
-      "upstream": {
-        "provider": "openrouter",
-        "baseUrl": "https://openrouter.ai/api/v1"
-      },
-      "parameters": {
-        "body": {
-          "messages": {
-            "type": "array",
-            "required": true,
-            "description": "Array of message objects with role and content",
-            "example": [
-              {
-                "role": "user",
-                "content": "Hello"
-              }
-            ]
-          },
-          "max_tokens": {
-            "type": "number",
-            "required": false,
-            "description": "Maximum tokens to generate",
-            "example": 1024,
-            "default": 1024
-          }
-        }
-      }
-    },
-    {
-      "id": "llm-o4-mini",
-      "name": "OpenAI o4 Mini",
-      "description": "Fast reasoning model — strong at math and coding with lower latency than o3",
+      "id": "llm-o1-mini",
+      "name": "OpenAI o1-mini",
+      "description": "Compact reasoning model — fast and cost-effective with strong math and coding abilities",
       "price": "$0.02",
       "method": "POST",
-      "path": "/api/llm/o4-mini",
+      "path": "/api/llm/o1-mini",
       "mimeType": "application/json",
       "category": "compute",
       "upstream": {
@@ -1144,9 +1000,9 @@
           "max_tokens": {
             "type": "number",
             "required": false,
-            "description": "Maximum tokens to generate",
-            "example": 1024,
-            "default": 1024
+            "description": "Maximum tokens to generate (reasoning models use more)",
+            "example": 16384,
+            "default": 16384
           }
         }
       }

@@ -1,12 +1,14 @@
 import type { Request, Response, NextFunction, RequestHandler } from "express";
 
 /**
- * Request timeout middleware - aborts slow requests after 30 seconds
- * and returns 408 Request Timeout to prevent client hangs.
+ * Request timeout middleware with smart timeouts based on endpoint type.
+ * - Compute-heavy (image, LLM, TTS, transcribe): 90s
+ * - Travel APIs (slow external APIs): 60s
+ * - Standard (crypto, blockchain, web): 30s
  */
 export function requestTimeoutMiddleware(): RequestHandler {
   return (req: Request, res: Response, next: NextFunction) => {
-    const timeout = 30_000; // 30 second hard limit
+    const timeout = getTimeoutForPath(req.path);
     const start = Date.now();
 
     const timer = setTimeout(() => {
@@ -21,7 +23,7 @@ export function requestTimeoutMiddleware(): RequestHandler {
 
         res.status(408).json({
           error: "Request timeout",
-          message: "Request exceeded 30 second limit",
+          message: `Request exceeded ${timeout / 1000} second limit`,
           retryable: true,
           timeout_ms: timeout,
           elapsed_ms: elapsed,
@@ -35,4 +37,25 @@ export function requestTimeoutMiddleware(): RequestHandler {
 
     next();
   };
+}
+
+function getTimeoutForPath(path: string): number {
+  // Compute-heavy endpoints: 90 seconds
+  if (
+    path.startsWith("/api/image/") ||
+    path.startsWith("/api/llm/") ||
+    path.startsWith("/api/tts/") ||
+    path.startsWith("/api/transcribe") ||
+    path.startsWith("/api/code/")
+  ) {
+    return 90_000;
+  }
+
+  // Travel endpoints: 60 seconds (external APIs can be slow)
+  if (path.startsWith("/api/travel/")) {
+    return 60_000;
+  }
+
+  // Standard endpoints: 30 seconds (crypto, blockchain, web, etc.)
+  return 30_000;
 }

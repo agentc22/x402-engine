@@ -14,12 +14,8 @@ const MODELS: Record<string, ModelConfig> = {
   // OpenAI
   "gpt-4o": { model: "openai/gpt-4o", serviceId: "llm-gpt-4o" },
   "gpt-4o-mini": { model: "openai/gpt-4o-mini", serviceId: "llm-gpt-4o-mini" },
-  "gpt-4.1": { model: "openai/gpt-4.1", serviceId: "llm-gpt-4.1" },
-  "gpt-4.1-mini": { model: "openai/gpt-4.1-mini", serviceId: "llm-gpt-4.1-mini" },
-  "gpt-5": { model: "openai/gpt-5", serviceId: "llm-gpt-5", reasoning: true },
-  "gpt-5-mini": { model: "openai/gpt-5-mini", serviceId: "llm-gpt-5-mini", reasoning: true },
-  "o3": { model: "openai/o3", serviceId: "llm-o3", reasoning: true },
-  "o4-mini": { model: "openai/o4-mini", serviceId: "llm-o4-mini", reasoning: true },
+  "o1": { model: "openai/o1", serviceId: "llm-o1", reasoning: true },
+  "o1-mini": { model: "openai/o1-mini", serviceId: "llm-o1-mini", reasoning: true },
   // Anthropic
   "claude-opus": { model: "anthropic/claude-opus-4.6", serviceId: "llm-claude-opus" },
   "claude-sonnet": { model: "anthropic/claude-sonnet-4.5", serviceId: "llm-claude-sonnet" },
@@ -35,9 +31,9 @@ const MODELS: Record<string, ModelConfig> = {
   // xAI
   "grok": { model: "x-ai/grok-4", serviceId: "llm-grok" },
   // Qwen
-  "qwen": { model: "qwen/qwen3-235b-a22b", serviceId: "llm-qwen", reasoning: true },
+  "qwen": { model: "qwen/qwen-2.5-72b-instruct", serviceId: "llm-qwen" },
   // Mistral
-  "mistral": { model: "mistralai/mistral-large-2512", serviceId: "llm-mistral" },
+  "mistral": { model: "mistralai/mistral-large-2", serviceId: "llm-mistral" },
   // Perplexity (search-augmented)
   "perplexity": { model: "perplexity/sonar-pro", serviceId: "llm-perplexity" },
 };
