@@ -23,7 +23,7 @@ import blockchainRouter from "./apis/blockchain.js";
 import ipfsRouter from "./apis/ipfs.js";
 // import travelRouter from "./apis/travel.js";  // Disabled: Missing Amadeus API keys
 // import nftRouter from "./apis/nft.js";        // Disabled: Temporarily removed
-import ensRouter from "./apis/ens.js";
+// import ensRouter from "./apis/ens.js";        // Disabled: Missing Alchemy API key
 import llmRouter from "./apis/llm.js";
 import webRouter from "./apis/web.js";
 import ttsRouter from "./apis/tts.js";
@@ -337,7 +337,7 @@ app.use(blockchainRouter);
 app.use(ipfsRouter);
 // app.use(travelRouter);  // Disabled: Missing Amadeus API keys
 // app.use(nftRouter);     // Disabled: Temporarily removed
-app.use(ensRouter);
+// app.use(ensRouter);     // Disabled: Missing Alchemy API key
 app.use(llmRouter);
 app.use(webRouter);
 app.use(ttsRouter);

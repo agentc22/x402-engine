@@ -591,54 +591,6 @@
       }
     },
     {
-      "id": "ens-resolve",
-      "name": "ENS Resolve",
-      "description": "Resolve an ENS name (e.g. vitalik.eth) to an Ethereum address",
-      "price": "$0.001",
-      "method": "GET",
-      "path": "/api/ens/resolve",
-      "mimeType": "application/json",
-      "category": "crypto",
-      "upstream": {
-        "provider": "ethereum-rpc",
-        "baseUrl": "https://cloudflare-eth.com"
-      },
-      "parameters": {
-        "query": {
-          "name": {
-            "type": "string",
-            "required": true,
-            "description": "ENS name to resolve",
-            "example": "vitalik.eth"
-          }
-        }
-      }
-    },
-    {
-      "id": "ens-reverse",
-      "name": "ENS Reverse Lookup",
-      "description": "Look up the ENS name for an Ethereum address (returns null if none set)",
-      "price": "$0.001",
-      "method": "GET",
-      "path": "/api/ens/reverse",
-      "mimeType": "application/json",
-      "category": "crypto",
-      "upstream": {
-        "provider": "ethereum-rpc",
-        "baseUrl": "https://cloudflare-eth.com"
-      },
-      "parameters": {
-        "query": {
-          "address": {
-            "type": "string",
-            "required": true,
-            "description": "Ethereum address",
-            "example": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
-          }
-        }
-      }
-    },
-    {
       "id": "llm-gpt-4o",
       "name": "GPT-4o",
       "description": "OpenAI's flagship multimodal model — strong all-around for text, vision, and reasoning",

@@ -40,9 +40,9 @@ export function requestTimeoutMiddleware(): RequestHandler {
 }
 
 function getTimeoutForPath(path: string): number {
-  // LLM endpoints: 120 seconds (reasoning models like o1 can take 60-90s)
+  // LLM endpoints: 180 seconds (some models like o1, gemini-pro can be very slow)
   if (path.startsWith("/api/llm/")) {
-    return 120_000;
+    return 180_000;
   }
 
   // Compute-heavy endpoints: 90 seconds
