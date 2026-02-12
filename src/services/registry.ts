@@ -3,7 +3,8 @@ import path from "path";
 import { fileURLToPath } from "url";
 import type { RoutesConfig } from "@x402/core/server";
 import { config } from "../config.js";
-import { MEGAETH_CONFIG } from "../config/chains.js";
+import { MEGAETH_CONFIG, BASE_CONFIG, BASE_SEPOLIA_CONFIG } from "../config/chains.js";
+import { priceStringToTokenAmount } from "../lib/validation.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -52,33 +53,49 @@ const NETWORKS = {
 };
 
 export function buildRoutesConfig(): RoutesConfig {
-  const routes: Record<string, { accepts: { scheme: string; price: string; network: string; payTo: string }[]; description: string; mimeType: string }> = {};
+  const routes: Record<string, { accepts: any[]; description: string; mimeType: string }> = {};
   const isDev = config.isDev;
 
   for (const svc of services) {
     const routeKey = `${svc.method} ${svc.path}`;
-    const accepts: { scheme: string; price: string; network: string; payTo: string }[] = [];
+    const accepts: any[] = [];
 
     // Base (or Base Sepolia in dev)
     if (config.payToEvm) {
       const evmNetwork = isDev ? NETWORKS.baseSepolia : NETWORKS.base;
+      const baseChain = isDev ? BASE_SEPOLIA_CONFIG : BASE_CONFIG;
+      const baseAmount = priceStringToTokenAmount(svc.price, baseChain.stablecoin.decimals).toString();
+
       accepts.push({
         scheme: "exact",
-        price: svc.price,
         network: evmNetwork,
+        asset: baseChain.stablecoin.address,
+        amount: baseAmount,
         payTo: config.payToEvm,
+        maxTimeoutSeconds: 300,
+        extra: {
+          name: baseChain.stablecoin.symbol,
+          decimals: baseChain.stablecoin.decimals,
+        },
       });
 
       // MegaETH — uses same EVM payTo address, custom facilitator handles it
+      const megaAmount = priceStringToTokenAmount(svc.price, MEGAETH_CONFIG.stablecoin.decimals).toString();
       accepts.push({
         scheme: "exact",
-        price: svc.price,
         network: NETWORKS.megaeth,
+        asset: MEGAETH_CONFIG.stablecoin.address,
+        amount: megaAmount,
         payTo: config.payToEvm,
+        maxTimeoutSeconds: 300,
+        extra: {
+          name: MEGAETH_CONFIG.stablecoin.symbol,
+          decimals: MEGAETH_CONFIG.stablecoin.decimals,
+        },
       });
     }
 
-    // Solana
+    // Solana (keep simple format for now)
     if (config.payToSolana) {
       const solNetwork = isDev ? NETWORKS.solanaDevnet : NETWORKS.solana;
       accepts.push({
@@ -86,6 +103,7 @@ export function buildRoutesConfig(): RoutesConfig {
         price: svc.price,
         network: solNetwork,
         payTo: config.payToSolana,
+        maxTimeoutSeconds: 300,
       });
     }
 

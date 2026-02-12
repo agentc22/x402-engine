@@ -11,6 +11,7 @@ import { getAllServices, getService, buildRoutesConfig } from "./services/regist
 import { MEGAETH_CONFIG, BASE_CONFIG, BASE_SEPOLIA_CONFIG } from "./config/chains.js";
 import { createPaymentMiddleware, devBypassMiddleware } from "./middleware/x402.js";
 import { megaethPaymentMiddleware } from "./middleware/payment.js";
+import { enriched402Middleware } from "./middleware/payment-402.js";
 import { freeEndpointLimiter, paidEndpointLimiter, expensiveEndpointLimiter } from "./middleware/rate-limit.js";
 import imageRouter from "./apis/image.js";
 import codeRouter from "./apis/code.js";
@@ -290,7 +291,10 @@ app.use((req, _res, next) => {
   next();
 });
 
-// --- x402 SDK Payment Middleware (Base + Solana) ---
+// --- Enriched 402 Response Middleware (preserves asset/amount fields) ---
+app.use(enriched402Middleware());
+
+// --- x402 SDK Payment Middleware (Base + Solana verification only) ---
 const paymentMw = createPaymentMiddleware();
 
 app.use((req, res, next) => {
