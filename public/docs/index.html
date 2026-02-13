@@ -317,19 +317,69 @@ Content-Type: application/json
           </div>
 
           <div class="mt-4 rounded-xl border border-yellow-500/20 bg-yellow-500/5 p-4 text-sm">
-            <h4 class="text-yellow-400 font-semibold mb-2">⚠️ MegaETH Payment Requirements</h4>
-            <p class="text-gray-300 mb-2">MegaETH uses a different payment verification method than Base:</p>
-            <ul class="text-gray-400 space-y-1 list-disc list-inside ml-2">
-              <li><strong class="text-white">Base:</strong> Uses Permit2 gasless signatures (handled automatically by <code class="text-xs bg-white/5 px-1 rounded">@x402/fetch</code>)</li>
-              <li><strong class="text-white">MegaETH:</strong> Requires an actual on-chain USDm transfer with <code class="text-xs bg-white/5 px-1 rounded">txHash</code> in payment payload</li>
+            <h4 class="text-yellow-400 font-semibold mb-2">⚠️ MegaETH Payment — Beta</h4>
+            <p class="text-gray-300 mb-2">MegaETH payments use a different flow than Base and Solana. The rail and on-chain verifier are live, but <strong class="text-white">reliability is still being hardened</strong> — expect intermittent transfer reverts under concurrent load.</p>
+            <ul class="text-gray-400 space-y-1 list-disc list-inside ml-2 mb-3">
+              <li><strong class="text-white">Base / Solana:</strong> Permit2 gasless signatures, handled automatically by <code class="text-xs bg-white/5 px-1 rounded">@x402/fetch</code></li>
+              <li><strong class="text-white">MegaETH:</strong> Requires an actual on-chain USDm transfer, then include the <code class="text-xs bg-white/5 px-1 rounded">txHash</code> in the payment payload</li>
             </ul>
-            <p class="text-gray-400 mt-3">
-              <strong class="text-white">Current limitation:</strong> The standard <code class="text-xs bg-white/5 px-1 rounded">@x402/fetch</code> SDK only supports Permit2-style payments.
-              MegaETH payments currently require manual transaction construction or will fall back to Base if Base payment succeeds first.
-            </p>
-            <p class="text-gray-400 mt-2">
-              For MegaETH-only payments, use Base as primary network. MegaETH support in the SDK is coming soon.
-            </p>
+          </div>
+
+          <div class="mt-4 rounded-xl border border-brand-500/20 bg-brand-500/5 p-4 text-sm">
+            <h4 class="text-brand-400 font-semibold mb-3">MegaETH Payment Implementation</h4>
+            <p class="text-gray-400 mb-3">The gateway verifies MegaETH payments by fetching the transaction receipt and checking for a USDm Transfer event to the expected recipient. The flow:</p>
+            <ol class="text-gray-400 space-y-1 list-decimal list-inside ml-2 mb-4">
+              <li>Fetch the 402 response to get <code class="text-xs bg-white/5 px-1 rounded">accepts</code> for <code class="text-xs bg-white/5 px-1 rounded">eip155:4326</code></li>
+              <li>Send a USDm ERC-20 <code class="text-xs bg-white/5 px-1 rounded">transfer(payTo, amount)</code> on MegaETH</li>
+              <li>Wait for the transaction receipt (MegaETH confirms in ~10ms)</li>
+              <li>Retry the request with the <code class="text-xs bg-white/5 px-1 rounded">txHash</code> in the x402 payment payload</li>
+            </ol>
+
+            <p class="text-gray-400 mb-2"><strong class="text-white">Example (viem):</strong></p>
+            <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden mb-4">
+              <pre class="p-4 overflow-x-auto"><code class="text-xs text-gray-300"><span class="text-emerald-400">import</span> { createWalletClient, createPublicClient, http, getAddress, parseGwei } <span class="text-emerald-400">from</span> <span class="text-amber-300">'viem'</span>;
+
+<span class="text-gray-500">// MegaETH chain config</span>
+<span class="text-emerald-400">const</span> megaeth = {
+  id: <span class="text-amber-300">4326</span>,
+  name: <span class="text-amber-300">'MegaETH'</span>,
+  nativeCurrency: { name: <span class="text-amber-300">'Ether'</span>, symbol: <span class="text-amber-300">'ETH'</span>, decimals: <span class="text-amber-300">18</span> },
+  rpcUrls: { default: { http: [<span class="text-amber-300">'https://mainnet.megaeth.com/rpc'</span>] } },
+};
+
+<span class="text-gray-500">// USDm token: 0xFAfDdbb3FC76884949..., 18 decimals</span>
+<span class="text-gray-500">// $0.005 = 5000000000000000 (5e15)</span>
+
+<span class="text-emerald-400">const</span> txHash = <span class="text-emerald-400">await</span> walletClient.writeContract({
+  address: usdmAddress,              <span class="text-gray-500">// from accepts.asset</span>
+  abi: erc20TransferAbi,
+  functionName: <span class="text-amber-300">'transfer'</span>,
+  args: [accepts.payTo, BigInt(accepts.amount)],
+  maxFeePerGas: parseGwei(<span class="text-amber-300">'0.001'</span>),  <span class="text-gray-500">// MegaETH base fee is stable</span>
+  maxPriorityFeePerGas: <span class="text-amber-300">0n</span>,
+  gas: <span class="text-amber-300">200_000n</span>,
+  chain: megaeth,
+  account,
+});
+
+<span class="text-gray-500">// IMPORTANT: wait for receipt before using the txHash</span>
+<span class="text-emerald-400">const</span> receipt = <span class="text-emerald-400">await</span> publicClient.waitForTransactionReceipt({
+  hash: txHash, timeout: <span class="text-amber-300">5000</span>,
+});
+<span class="text-emerald-400">if</span> (receipt.status !== <span class="text-amber-300">'success'</span>) <span class="text-emerald-400">throw new</span> Error(<span class="text-amber-300">`Transfer reverted: ${txHash}`</span>);
+
+<span class="text-gray-500">// Include txHash in the x402 payment payload</span>
+<span class="text-emerald-400">const</span> payment = { x402Version: <span class="text-amber-300">2</span>, payload: { txHash } };</code></pre>
+            </div>
+
+            <p class="text-gray-400 mb-2"><strong class="text-white">Concurrency:</strong> If sending multiple MegaETH payments in parallel, serialize the <code class="text-xs bg-white/5 px-1 rounded">writeContract</code> + <code class="text-xs bg-white/5 px-1 rounded">waitForTransactionReceipt</code> calls with a mutex. Without this, concurrent calls fetch the same nonce from <code class="text-xs bg-white/5 px-1 rounded">getTransactionCount</code> and all but one will fail with "nonce too low".</p>
+
+            <p class="text-gray-400 mt-3"><strong class="text-white">Common errors:</strong></p>
+            <ul class="text-gray-400 space-y-1 list-disc list-inside ml-2">
+              <li><code class="text-xs bg-white/5 px-1 rounded">Transaction reverted</code> — the USDm transfer failed on-chain. Check wallet balance, gas params, and token address.</li>
+              <li><code class="text-xs bg-white/5 px-1 rounded">Transaction not found</code> — the receipt wasn't available. Wait for the receipt before sending the txHash.</li>
+              <li><code class="text-xs bg-white/5 px-1 rounded">Transaction already used</code> — replay protection. Each txHash can only be used for one payment.</li>
+            </ul>
           </div>
         </section>
 
