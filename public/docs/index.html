@@ -381,6 +381,44 @@ Content-Type: application/json
               <li><code class="text-xs bg-white/5 px-1 rounded">Transaction already used</code> — replay protection. Each txHash can only be used for one payment.</li>
             </ul>
           </div>
+
+          <div class="mt-4 rounded-xl border border-brand-500/20 bg-brand-500/5 p-4 text-sm">
+            <h4 class="text-brand-400 font-semibold mb-3">Solana Payment Notes</h4>
+            <p class="text-gray-400 mb-3">Solana payments use the <code class="text-xs bg-white/5 px-1 rounded">@x402/svm</code> SDK with the Coinbase CDP facilitator. The SDK handles transaction construction automatically, but there are important considerations for reliability:</p>
+
+            <p class="text-gray-400 mb-2"><strong class="text-white">SDK version:</strong> Use <code class="text-xs bg-white/5 px-1 rounded">@x402/svm@2.2.0</code>. Version 2.3.0 adds a Memo instruction that the CDP facilitator does not yet support, causing all payments to be rejected.</p>
+
+            <p class="text-gray-400 mb-2"><strong class="text-white">Example (@x402/fetch + @x402/svm):</strong></p>
+            <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden mb-4">
+              <pre class="p-4 overflow-x-auto"><code class="text-xs text-gray-300"><span class="text-emerald-400">import</span> { x402Client, wrapFetchWithPayment } <span class="text-emerald-400">from</span> <span class="text-amber-300">'@x402/fetch'</span>;
+<span class="text-emerald-400">import</span> { ExactSvmScheme } <span class="text-emerald-400">from</span> <span class="text-amber-300">'@x402/svm'</span>;      <span class="text-gray-500">// v2.2.0</span>
+<span class="text-emerald-400">import</span> { createKeyPairSignerFromBytes } <span class="text-emerald-400">from</span> <span class="text-amber-300">'@solana/kit'</span>;
+
+<span class="text-emerald-400">const</span> signer = <span class="text-emerald-400">await</span> createKeyPairSignerFromBytes(keypairBytes);
+<span class="text-emerald-400">const</span> scheme = <span class="text-emerald-400">new</span> ExactSvmScheme(signer);
+
+<span class="text-emerald-400">const</span> client = <span class="text-emerald-400">new</span> x402Client().register(<span class="text-amber-300">'solana:*'</span>, scheme);
+<span class="text-emerald-400">const</span> paidFetch = wrapFetchWithPayment(fetch, client);
+
+<span class="text-gray-500">// Use paidFetch like normal fetch — payment is automatic</span>
+<span class="text-emerald-400">const</span> res = <span class="text-emerald-400">await</span> paidFetch(<span class="text-amber-300">'https://x402engine.app/api/crypto/price?ids=bitcoin'</span>);
+console.log(<span class="text-emerald-400">await</span> res.json());</code></pre>
+            </div>
+
+            <p class="text-gray-400 mb-2"><strong class="text-white">Rate limiting:</strong> The Solana public RPC (<code class="text-xs bg-white/5 px-1 rounded">api.mainnet-beta.solana.com</code>) has a strict rate limit (~10 req/s). Each payment payload creation makes 3-5 RPC calls internally. If sending multiple payments concurrently:</p>
+            <ul class="text-gray-400 space-y-1 list-disc list-inside ml-2 mb-3">
+              <li>Serialize <code class="text-xs bg-white/5 px-1 rounded">createPaymentPayload</code> calls with a mutex and <strong class="text-white">at least 1s cooldown</strong> between calls</li>
+              <li>Retry on HTTP 429 with exponential backoff (3s, 6s, 9s)</li>
+              <li>Or use a dedicated RPC endpoint (Helius, Alchemy) with higher limits</li>
+            </ul>
+
+            <p class="text-gray-400 mb-2"><strong class="text-white">Common errors:</strong></p>
+            <ul class="text-gray-400 space-y-1 list-disc list-inside ml-2">
+              <li><code class="text-xs bg-white/5 px-1 rounded">HTTP error (429): Too Many Requests</code> — Solana RPC rate limit hit during payload creation. Add cooldown between calls and retry with backoff.</li>
+              <li><code class="text-xs bg-white/5 px-1 rounded">transaction_simulation_failed: Custom:1</code> — Insufficient USDC balance. Check wallet balance before creating the payment.</li>
+              <li><code class="text-xs bg-white/5 px-1 rounded">No matching payment requirements</code> — feePayer mismatch between client and server. Use <code class="text-xs bg-white/5 px-1 rounded">@x402/svm@2.2.0</code> and ensure the feePayer from the 402 response is used.</li>
+            </ul>
+          </div>
         </section>
 
         <!-- Discovery -->
