@@ -399,6 +399,8 @@ Content-Type: application/json
 
             <p class="text-gray-400 mb-2"><strong class="text-white">SDK version:</strong> Use <code class="text-xs bg-white/5 px-1 rounded">@x402/svm@2.2.0</code>. Version 2.3.0 adds a Memo instruction that the CDP facilitator does not yet support, causing all payments to be rejected.</p>
 
+            <p class="text-gray-400 mb-2"><strong class="text-white">Wallet requirements:</strong> Your Solana wallet needs two things: <strong class="text-white">USDC</strong> (SPL token) to cover the <code class="text-xs bg-white/5 px-1 rounded">accepts.amount</code> from the 402 response, and a small amount of <strong class="text-white">SOL</strong> for transaction fees (~0.000005 SOL per payment). If either is missing, you'll get confusing "payment required" loops where the code looks correct but the transaction silently fails simulation.</p>
+
             <p class="text-gray-400 mb-2"><strong class="text-white">Example (@x402/fetch + @x402/svm):</strong></p>
             <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden mb-4">
               <pre class="p-4 overflow-x-auto"><code class="text-xs text-gray-300"><span class="text-emerald-400">import</span> { x402Client, wrapFetchWithPayment } <span class="text-emerald-400">from</span> <span class="text-amber-300">'@x402/fetch'</span>;
@@ -416,11 +418,11 @@ Content-Type: application/json
 console.log(<span class="text-emerald-400">await</span> res.json());</code></pre>
             </div>
 
-            <p class="text-gray-400 mb-2"><strong class="text-white">Rate limiting:</strong> The Solana public RPC (<code class="text-xs bg-white/5 px-1 rounded">api.mainnet-beta.solana.com</code>) has a strict rate limit (~10 req/s). Each payment payload creation makes 3-5 RPC calls internally. If sending multiple payments concurrently:</p>
+            <p class="text-gray-400 mb-2"><strong class="text-white">Rate limiting:</strong> The Solana public RPC (<code class="text-xs bg-white/5 px-1 rounded">api.mainnet-beta.solana.com</code>) has a strict rate limit (~10 req/s). Each <code class="text-xs bg-white/5 px-1 rounded">createPaymentPayload</code> call makes 3-5 RPC calls internally. The 429 errors happen <strong class="text-white">during payment payload creation</strong> (before the paid HTTP request is even sent), so the fix is on the client side:</p>
             <ul class="text-gray-400 space-y-1 list-disc list-inside ml-2 mb-3">
-              <li>Serialize <code class="text-xs bg-white/5 px-1 rounded">createPaymentPayload</code> calls with a mutex and <strong class="text-white">at least 1s cooldown</strong> between calls</li>
+              <li><strong class="text-white">Reduce concurrency</strong> — don't fire many Solana payments in parallel. Serialize with a mutex and <strong class="text-white">at least 1s cooldown</strong> between calls</li>
               <li>Retry on HTTP 429 with exponential backoff (3s, 6s, 9s)</li>
-              <li>Or use a dedicated RPC endpoint (Helius, Alchemy) with higher limits</li>
+              <li>Or <strong class="text-white">use a dedicated RPC endpoint</strong> (Helius, Alchemy, QuickNode) with higher rate limits</li>
             </ul>
 
             <p class="text-gray-400 mb-2"><strong class="text-white">Common errors:</strong></p>
