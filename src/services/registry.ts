@@ -69,6 +69,7 @@ export function buildRoutesConfig(): RoutesConfig {
 
       accepts.push({
         scheme: "exact",
+        price: svc.price,  // SDK server-side needs this for parsePrice()
         network: evmNetwork,
         asset: baseChain.stablecoin.address,
         amount: baseAmount,
@@ -84,6 +85,7 @@ export function buildRoutesConfig(): RoutesConfig {
       const megaAmount = priceStringToTokenAmount(svc.price, MEGAETH_CONFIG.stablecoin.decimals).toString();
       accepts.push({
         scheme: "exact",
+        price: svc.price,  // SDK server-side needs this for parsePrice()
         network: NETWORKS.megaeth,
         asset: MEGAETH_CONFIG.stablecoin.address,
         amount: megaAmount,
@@ -100,15 +102,21 @@ export function buildRoutesConfig(): RoutesConfig {
     if (config.payToSolana) {
       const solNetwork = isDev ? NETWORKS.solanaDevnet : NETWORKS.solana;
       const solAmount = priceStringToTokenAmount(svc.price, 6).toString();  // USDC is 6 decimals
+      // feePayer from CDP facilitator's getSupported() — used in discovery endpoint only.
+      // The SDK middleware dynamically fetches the feePayer from the facilitator for 402 responses.
+      const solFeePayer = isDev
+        ? "BENrLoUbndxoNMUS5JXApGMtNykLjFXXixMtpDwDR9SP"   // devnet (CDP v2)
+        : "GVJJ7rdGiXr5xaYbRwRbjfaJL7fmwRygFi1H6aGqDveb";  // mainnet (CDP v2)
       accepts.push({
         scheme: "exact",
+        price: svc.price,  // SDK server-side needs this for parsePrice()
         network: solNetwork,
-        asset: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",  // Solana USDC
+        asset: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",  // Solana USDC mainnet
         amount: solAmount,
         payTo: config.payToSolana,
         maxTimeoutSeconds: 300,
         extra: {
-          feePayer: "GVJJ7rdGiXr5xaYbRwRbjfaJL7fmwRygFi1H6aGqDveb",  // Fee payer address
+          feePayer: solFeePayer,  // CDP facilitator's fee payer — required by ExactSvmScheme client
         },
       });
     }

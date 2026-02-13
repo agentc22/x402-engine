@@ -11,7 +11,8 @@ import { getAllServices, getService, buildRoutesConfig } from "./services/regist
 import { MEGAETH_CONFIG, BASE_CONFIG, BASE_SEPOLIA_CONFIG } from "./config/chains.js";
 import { createPaymentMiddleware, devBypassMiddleware } from "./middleware/x402.js";
 import { megaethPaymentMiddleware } from "./middleware/payment.js";
-import { enriched402Middleware } from "./middleware/payment-402.js";
+// enriched-402 middleware removed — the SDK generates enriched 402 responses
+// directly from route config + facilitator data (including correct feePayer).
 import { requestTimeoutMiddleware } from "./middleware/timeout.js";
 import { debugRoutes } from "./debug-routes.js";
 import { freeEndpointLimiter, paidEndpointLimiter, expensiveEndpointLimiter } from "./middleware/rate-limit.js";
@@ -309,8 +310,10 @@ app.use((req, _res, next) => {
   next();
 });
 
-// --- Enriched 402 Response Middleware (preserves asset/amount fields) ---
-app.use(enriched402Middleware());
+// NOTE: enriched-402 middleware was removed. The SDK middleware now handles
+// both 402 generation (for unpaid requests) and payment verification.
+// This ensures the feePayer in 402 responses always matches the facilitator's
+// current value, preventing deepEqual mismatches.
 
 // --- x402 SDK Payment Middleware (Base + Solana verification only) ---
 const paymentMw = createPaymentMiddleware();

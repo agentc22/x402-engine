@@ -23,10 +23,17 @@ export function enriched402Middleware(): RequestHandler {
       return next(); // Not a paid route
     }
 
-    // Generate enriched 402 with asset/amount/extra fields
+    // Generate enriched 402 with asset/amount/extra fields.
+    // IMPORTANT: Strip `price` from accepts entries. The SDK's buildPaymentRequirements
+    // doesn't include `price` in its output, so when the client echoes back the full
+    // requirement as `accepted`, the deepEqual check in findMatchingRequirements would
+    // fail if `price` is present in the client's copy but missing from the SDK's copy.
+    const accepts = route.accepts.map((a: any) => {
+      const { price, ...rest } = a;
+      return rest;
+    });
+
     console.log(`[enriched-402] Generating 402 for ${routeKey}`);
-    console.log(`[enriched-402] First accept has asset?`, !!route.accepts[0]?.asset);
-    console.log(`[enriched-402] First accept:`, JSON.stringify(route.accepts[0]));
 
     const paymentRequired = {
       x402Version: 2,
@@ -36,7 +43,7 @@ export function enriched402Middleware(): RequestHandler {
         description: route.description || "API endpoint",
         mimeType: route.mimeType || "application/json",
       },
-      accepts: route.accepts, // Contains asset, amount, maxTimeoutSeconds, extra
+      accepts,
     };
 
     res.status(402)
