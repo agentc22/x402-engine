@@ -316,6 +316,17 @@ Content-Type: application/json
             <strong class="text-white">Amount conversion:</strong> <code class="text-xs bg-white/5 px-1 rounded">$0.001</code> = <code class="text-xs bg-white/5 px-1 rounded">1000</code> USDC (6 decimals) = <code class="text-xs bg-white/5 px-1 rounded">1000000000000000</code> USDm (18 decimals)
           </div>
 
+          <div class="mt-4 rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4 text-sm">
+            <h4 class="text-emerald-400 font-semibold mb-3">Base Payment Notes</h4>
+            <p class="text-gray-400 mb-2"><strong class="text-white">Recommended rail.</strong> Base uses Permit2 gasless signatures — the <code class="text-xs bg-white/5 px-1 rounded">@x402/fetch</code> + <code class="text-xs bg-white/5 px-1 rounded">@x402/evm</code> SDK handles everything automatically. No on-chain transfer needed from the payer, no nonce management, no gas fees.</p>
+            <p class="text-gray-400 mb-2"><strong class="text-white">Concurrency:</strong> Safe to send multiple Base payments in parallel — Permit2 signatures are off-chain and don't conflict.</p>
+            <p class="text-gray-400 mb-2"><strong class="text-white">Common errors:</strong></p>
+            <ul class="text-gray-400 space-y-1 list-disc list-inside ml-2">
+              <li><code class="text-xs bg-white/5 px-1 rounded">insufficient_funds</code> — wallet doesn't have enough USDC on Base. Each endpoint costs $0.001–$0.10 depending on the API.</li>
+              <li><code class="text-xs bg-white/5 px-1 rounded">Permit2 allowance</code> — if using Permit2 for the first time, the SDK may need a one-time USDC approval to the Permit2 contract.</li>
+            </ul>
+          </div>
+
           <div class="mt-4 rounded-xl border border-yellow-500/20 bg-yellow-500/5 p-4 text-sm">
             <h4 class="text-yellow-400 font-semibold mb-2">⚠️ MegaETH Payment — Beta</h4>
             <p class="text-gray-300 mb-2">MegaETH payments use a different flow than Base and Solana. The rail and on-chain verifier are live, but <strong class="text-white">reliability is still being hardened</strong> — expect intermittent transfer reverts under concurrent load.</p>
