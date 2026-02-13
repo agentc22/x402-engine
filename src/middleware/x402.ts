@@ -55,11 +55,44 @@ export function createPaymentMiddleware(): RequestHandler {
   const solNetwork = config.isDev ? NETWORKS.solanaDevnet : NETWORKS.solana;
   server.register(solNetwork, new ExactSvmScheme());
 
+  // Fix: CDP facilitator returns different feePayers for unpaid vs paid request paths,
+  // causing deepEqual mismatch in findMatchingRequirements. Patch to match on core fields
+  // (scheme, network, amount, asset, payTo) and use the client's accepted requirements
+  // (which have the correct feePayer for the Solana transaction they built).
+  const origFind = server.findMatchingRequirements.bind(server);
+  server.findMatchingRequirements = (
+    availableRequirements: any[],
+    paymentPayload: any,
+  ) => {
+    const exact = origFind(availableRequirements, paymentPayload);
+    if (exact) return exact;
+
+    if (paymentPayload.x402Version === 2 && paymentPayload.accepted) {
+      const { accepted } = paymentPayload;
+      const match = availableRequirements.find(
+        (req: any) =>
+          req.scheme === accepted.scheme &&
+          req.network === accepted.network &&
+          req.amount === accepted.amount &&
+          req.asset === accepted.asset &&
+          req.payTo === accepted.payTo,
+      );
+      if (match) {
+        console.log(
+          `[x402] Lenient match for ${accepted.network} (feePayer mismatch: server=${match.extra?.feePayer?.slice(0, 8)} client=${accepted.extra?.feePayer?.slice(0, 8)})`,
+        );
+        // Return client's accepted — has the correct feePayer for the signed transaction
+        return accepted;
+      }
+    }
+    return undefined;
+  };
+
   // Build routes config for SDK verification
   const routes = buildRoutesConfig();
   console.log("  Payment routes configured:", Object.keys(routes as Record<string, unknown>).join(", "));
 
-  // Pass routes to SDK for payment verification (enriched402Middleware handles 402 generation)
+  // Pass routes to SDK for payment verification
   return paymentMiddleware(routes, server);
 }
 
