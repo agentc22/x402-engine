@@ -418,16 +418,10 @@ Content-Type: application/json
 console.log(<span class="text-emerald-400">await</span> res.json());</code></pre>
             </div>
 
-            <p class="text-gray-400 mb-2"><strong class="text-white">Rate limiting:</strong> The Solana public RPC (<code class="text-xs bg-white/5 px-1 rounded">api.mainnet-beta.solana.com</code>) has a strict rate limit (~10 req/s). Each <code class="text-xs bg-white/5 px-1 rounded">createPaymentPayload</code> call makes 3-5 RPC calls internally. The 429 errors happen <strong class="text-white">during payment payload creation</strong> (before the paid HTTP request is even sent), so the fix is on the client side:</p>
-            <ul class="text-gray-400 space-y-1 list-disc list-inside ml-2 mb-3">
-              <li><strong class="text-white">Reduce concurrency</strong> — don't fire many Solana payments in parallel. Serialize with a mutex and <strong class="text-white">at least 1s cooldown</strong> between calls</li>
-              <li>Retry on HTTP 429 with exponential backoff (3s, 6s, 9s)</li>
-              <li>Or <strong class="text-white">use a dedicated RPC endpoint</strong> (Helius, Alchemy, QuickNode) with higher rate limits</li>
-            </ul>
+            <p class="text-gray-400 mb-2"><strong class="text-white">Rate limiting:</strong> The Solana public RPC (<code class="text-xs bg-white/5 px-1 rounded">api.mainnet-beta.solana.com</code>) has a strict rate limit (~10 req/s). If you're making many payments, consider using a dedicated RPC endpoint (Helius, Alchemy, QuickNode) with higher limits.</p>
 
             <p class="text-gray-400 mb-2"><strong class="text-white">Common errors:</strong></p>
             <ul class="text-gray-400 space-y-1 list-disc list-inside ml-2">
-              <li><code class="text-xs bg-white/5 px-1 rounded">HTTP error (429): Too Many Requests</code> — Solana RPC rate limit hit during payload creation. Add cooldown between calls and retry with backoff.</li>
               <li><code class="text-xs bg-white/5 px-1 rounded">transaction_simulation_failed: Custom:1</code> — Insufficient USDC balance. Check wallet balance before creating the payment.</li>
               <li><code class="text-xs bg-white/5 px-1 rounded">No matching payment requirements</code> — feePayer mismatch between client and server. Use <code class="text-xs bg-white/5 px-1 rounded">@x402/svm@2.2.0</code> and ensure the feePayer from the 402 response is used.</li>
             </ul>
