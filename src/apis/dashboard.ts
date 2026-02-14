@@ -34,10 +34,10 @@ router.get("/api/dashboard/stats", authCheck, async (_req, res) => {
       uniquePayersRow,
       dailyRevenueRows,
     ] = await Promise.all([
-      pool.query(`SELECT COUNT(*)::int AS count FROM requests`),
-      pool.query(`SELECT COUNT(*)::int AS count FROM requests WHERE created_at > NOW() - INTERVAL '1 day'`),
-      pool.query(`SELECT COUNT(*)::int AS count FROM requests WHERE created_at > NOW() - INTERVAL '7 days'`),
-      pool.query(`SELECT service, COUNT(*)::int AS count FROM requests GROUP BY service ORDER BY count DESC`),
+      pool.query(`SELECT COUNT(*)::int AS count FROM requests WHERE service != 'megaeth-payment'`),
+      pool.query(`SELECT COUNT(*)::int AS count FROM requests WHERE created_at > NOW() - INTERVAL '1 day' AND service != 'megaeth-payment'`),
+      pool.query(`SELECT COUNT(*)::int AS count FROM requests WHERE created_at > NOW() - INTERVAL '7 days' AND service != 'megaeth-payment'`),
+      pool.query(`SELECT service, COUNT(*)::int AS count FROM requests WHERE service != 'megaeth-payment' GROUP BY service ORDER BY count DESC`),
       pool.query(`SELECT COALESCE(network, 'unknown') AS network, COUNT(*)::int AS count FROM requests WHERE network IS NOT NULL GROUP BY network ORDER BY count DESC`),
       pool.query(`
         SELECT date_trunc('hour', created_at) AS hour, COUNT(*)::int AS count
@@ -56,15 +56,15 @@ router.get("/api/dashboard/stats", authCheck, async (_req, res) => {
       `),
       pool.query(`
         SELECT service, endpoint, payer, network, amount, upstream_status, latency_ms, created_at
-        FROM requests ORDER BY created_at DESC LIMIT 50
+        FROM requests WHERE service != 'megaeth-payment' ORDER BY created_at DESC LIMIT 50
       `),
       pool.query(`
         SELECT COALESCE(network, 'unknown') AS network,
                SUM(CASE WHEN amount IS NOT NULL THEN amount::numeric ELSE 0 END) AS total_raw
-        FROM requests WHERE amount IS NOT NULL
+        FROM requests WHERE amount IS NOT NULL AND service != 'megaeth-payment'
         GROUP BY network
       `),
-      pool.query(`SELECT COUNT(DISTINCT payer)::int AS count FROM requests WHERE payer IS NOT NULL`),
+      pool.query(`SELECT COUNT(DISTINCT payer)::int AS count FROM requests WHERE payer IS NOT NULL AND service != 'megaeth-payment'`),
       pool.query(`
         SELECT date_trunc('day', created_at)::date AS day,
                COALESCE(network, 'unknown') AS network,
