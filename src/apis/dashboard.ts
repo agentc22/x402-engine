@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { getPool } from "../db/ledger.js";
 import { config } from "../config.js";
+import { getAllServices } from "../services/registry.js";
 
 const router = Router();
 
@@ -74,6 +75,36 @@ router.get("/api/dashboard/stats", authCheck, async (_req, res) => {
       `),
     ]);
 
+    // Build cost/price maps from services config
+    const services = getAllServices();
+    const costMap: Record<string, number> = {};
+    const priceMap: Record<string, number> = {};
+    for (const svc of services) {
+      const price = parseFloat(svc.price.replace("$", "")) || 0;
+      const cost = parseFloat((svc.cost || "$0").replace("$", "")) || 0;
+      costMap[svc.id] = cost;
+      priceMap[svc.id] = price;
+    }
+
+    // Compute profit from service call counts
+    let totalCost = 0;
+    let totalPriceRevenue = 0;
+    const serviceProfits: { service: string; count: number; revenue: number; cost: number; profit: number; margin: number }[] = [];
+    for (const row of byServiceRows.rows) {
+      const cost = (costMap[row.service] || 0) * row.count;
+      const rev = (priceMap[row.service] || 0) * row.count;
+      totalCost += cost;
+      totalPriceRevenue += rev;
+      serviceProfits.push({
+        service: row.service,
+        count: row.count,
+        revenue: rev,
+        cost,
+        profit: rev - cost,
+        margin: rev > 0 ? ((rev - cost) / rev) * 100 : 0,
+      });
+    }
+
     // Fetch GitHub stats server-side (avoids CORS issues on client)
     let github = { views: 0, clones: 0, uniqueCloners: 0 };
     try {
@@ -102,6 +133,13 @@ router.get("/api/dashboard/stats", authCheck, async (_req, res) => {
       recent: recentRows.rows,
       revenue: revenueRows.rows,
       github,
+      profit: {
+        totalRevenue: totalPriceRevenue,
+        totalCost,
+        totalProfit: totalPriceRevenue - totalCost,
+        margin: totalPriceRevenue > 0 ? ((totalPriceRevenue - totalCost) / totalPriceRevenue) * 100 : 0,
+        byService: serviceProfits,
+      },
     });
   } catch (err: any) {
     res.status(500).json({ error: err.message });
@@ -237,6 +275,9 @@ async function load() {
     }
     const totalRevenue = (d.revenue || []).reduce((sum, r) => sum + rawToUsd(r.total_raw, r.network), 0);
 
+    // Profit data
+    const p = d.profit || {};
+
     // Cards
     document.getElementById('cards').innerHTML = [
       {l:'Total Requests', v:d.total.toLocaleString()},
@@ -244,10 +285,12 @@ async function load() {
       {l:'Last 7 Days', v:d.last7d.toLocaleString()},
       {l:'Unique Payers', v:d.uniquePayers.toLocaleString()},
       {l:'Total Revenue', v:'$'+totalRevenue.toFixed(2), s:(d.revenue||[]).map(r=>netLabel(r.network)+': $'+rawToUsd(r.total_raw,r.network).toFixed(2)).join(' | ')},
+      {l:'Est. Cost', v:'$'+(p.totalCost||0).toFixed(2), s:'Avg upstream cost per call'},
+      {l:'Est. Profit', v:'$'+(p.totalProfit||0).toFixed(2), s:'Margin: '+(p.margin||0).toFixed(1)+'%', green: (p.totalProfit||0) > 0},
       {l:'NPM Downloads', v:npmAll.downloads.toLocaleString(), s:'This week: '+npmWeek.downloads.toLocaleString()},
       {l:'GitHub (14d)', v:d.github.clones+' clones', s:d.github.uniqueCloners+' unique cloners, '+d.github.views+' views'},
       {l:'Networks', v:d.byNetwork.map(n=>netLabel(n.network)).join(', ') || 'None yet'},
-    ].map(c=>'<div class="card"><div class="label">'+c.l+'</div><div class="value">'+c.v+'</div>'+(c.s?'<div class="sub">'+c.s+'</div>':'')+'</div>').join('');
+    ].map(c=>'<div class="card"><div class="label">'+c.l+'</div><div class="value"'+(c.green?' style="color:#4ade80"':'')+'>'+c.v+'</div>'+(c.s?'<div class="sub">'+c.s+'</div>':'')+'</div>').join('');
 
     // Hourly chart
     const hMax = Math.max(...d.hourly.map(h=>h.count), 1);
@@ -261,10 +304,15 @@ async function load() {
       '<div class="chart-bar" style="height:'+Math.max(4, h.count/dMax*120)+'px" title="'+h.day+': '+h.count+'"></div>'
     ).join('');
 
-    // Service table
+    // Service table with profit breakdown
+    const profitMap = {};
+    (p.byService||[]).forEach(s => { profitMap[s.service] = s; });
     const sMax = Math.max(...d.byService.map(s=>s.count), 1);
-    document.getElementById('serviceTable').innerHTML = '<table><tr><th>Service</th><th>Requests</th><th></th></tr>'
-      + d.byService.map(s=>'<tr><td>'+s.service+'</td><td>'+s.count+'</td><td><div class="bar-wrap"><div class="bar" style="width:'+Math.max(4, s.count/sMax*200)+'px"></div></div></td></tr>').join('')
+    document.getElementById('serviceTable').innerHTML = '<table><tr><th>Service</th><th>Calls</th><th>Revenue</th><th>Cost</th><th>Profit</th><th>Margin</th></tr>'
+      + d.byService.map(s=>{
+        const sp = profitMap[s.service] || {revenue:0,cost:0,profit:0,margin:0};
+        return '<tr><td>'+s.service+'</td><td>'+s.count+'</td><td>$'+sp.revenue.toFixed(2)+'</td><td>$'+sp.cost.toFixed(2)+'</td><td style="color:'+(sp.profit>=0?'#4ade80':'#f66')+'">$'+sp.profit.toFixed(2)+'</td><td>'+sp.margin.toFixed(0)+'%</td></tr>';
+      }).join('')
       + '</table>';
 
     // Payer table

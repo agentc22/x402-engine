@@ -20,6 +20,7 @@ export interface ServiceDefinition {
   name: string;
   description: string;
   price: string;
+  cost?: string;
   method: string;
   path: string;
   mimeType: string;
