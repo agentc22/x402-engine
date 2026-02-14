@@ -440,36 +440,6 @@
       }
     },
     {
-      "id": "wallet-pnl",
-      "name": "Wallet P&L",
-      "description": "Portfolio profit/loss with realized and unrealized P&L per token",
-      "price": "$0.01",
-      "method": "POST",
-      "path": "/api/wallet/pnl",
-      "mimeType": "application/json",
-      "category": "crypto",
-      "upstream": {
-        "provider": "allium",
-        "baseUrl": "https://api.allium.so/api/v1/developer/wallet/pnl"
-      },
-      "parameters": {
-        "body": {
-          "address": {
-            "type": "string",
-            "required": true,
-            "description": "Wallet address",
-            "example": "0x..."
-          },
-          "chain": {
-            "type": "string",
-            "required": false,
-            "description": "Chain name",
-            "example": "ethereum"
-          }
-        }
-      }
-    },
-    {
       "id": "token-prices",
       "name": "Token Prices",
       "description": "Real-time DEX-derived token prices with OHLC data — up to 200 tokens per request",
@@ -1131,6 +1101,294 @@
       }
     },
     {
+      "id": "llm-gpt-5.2",
+      "name": "GPT-5.2",
+      "description": "OpenAI's latest flagship model — top-tier reasoning, coding, and multimodal capabilities",
+      "price": "$0.08",
+      "method": "POST",
+      "path": "/api/llm/gpt-5.2",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": {
+        "provider": "openrouter",
+        "baseUrl": "https://openrouter.ai/api/v1"
+      },
+      "parameters": {
+        "body": {
+          "messages": {
+            "type": "array",
+            "required": true,
+            "description": "Array of message objects with role and content",
+            "example": [
+              {
+                "role": "user",
+                "content": "Hello"
+              }
+            ]
+          },
+          "max_tokens": {
+            "type": "number",
+            "required": false,
+            "description": "Maximum tokens to generate",
+            "example": 1024,
+            "default": 1024
+          }
+        }
+      }
+    },
+    {
+      "id": "llm-gpt-5.2-codex",
+      "name": "GPT-5.2 Codex",
+      "description": "OpenAI's code-specialized reasoning model — optimized for software engineering tasks",
+      "price": "$0.06",
+      "method": "POST",
+      "path": "/api/llm/gpt-5.2-codex",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": {
+        "provider": "openrouter",
+        "baseUrl": "https://openrouter.ai/api/v1"
+      },
+      "parameters": {
+        "body": {
+          "messages": {
+            "type": "array",
+            "required": true,
+            "description": "Array of message objects with role and content",
+            "example": [
+              {
+                "role": "user",
+                "content": "Hello"
+              }
+            ]
+          },
+          "max_tokens": {
+            "type": "number",
+            "required": false,
+            "description": "Maximum tokens to generate (reasoning models use more)",
+            "example": 16384,
+            "default": 16384
+          }
+        }
+      }
+    },
+    {
+      "id": "llm-kimi",
+      "name": "Kimi K2.5",
+      "description": "Moonshot AI's flagship model — strong reasoning and long-context capabilities",
+      "price": "$0.03",
+      "method": "POST",
+      "path": "/api/llm/kimi",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": {
+        "provider": "openrouter",
+        "baseUrl": "https://openrouter.ai/api/v1"
+      },
+      "parameters": {
+        "body": {
+          "messages": {
+            "type": "array",
+            "required": true,
+            "description": "Array of message objects with role and content",
+            "example": [
+              {
+                "role": "user",
+                "content": "Hello"
+              }
+            ]
+          },
+          "max_tokens": {
+            "type": "number",
+            "required": false,
+            "description": "Maximum tokens to generate",
+            "example": 1024,
+            "default": 1024
+          }
+        }
+      }
+    },
+    {
+      "id": "llm-minimax",
+      "name": "MiniMax M2.5",
+      "description": "MiniMax's efficient model — fast and affordable for everyday tasks",
+      "price": "$0.01",
+      "method": "POST",
+      "path": "/api/llm/minimax",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": {
+        "provider": "openrouter",
+        "baseUrl": "https://openrouter.ai/api/v1"
+      },
+      "parameters": {
+        "body": {
+          "messages": {
+            "type": "array",
+            "required": true,
+            "description": "Array of message objects with role and content",
+            "example": [
+              {
+                "role": "user",
+                "content": "Hello"
+              }
+            ]
+          },
+          "max_tokens": {
+            "type": "number",
+            "required": false,
+            "description": "Maximum tokens to generate",
+            "example": 1024,
+            "default": 1024
+          }
+        }
+      }
+    },
+    {
+      "id": "llm-glm",
+      "name": "GLM-5",
+      "description": "Zhipu AI's flagship model — strong multilingual and reasoning performance",
+      "price": "$0.03",
+      "method": "POST",
+      "path": "/api/llm/glm",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": {
+        "provider": "openrouter",
+        "baseUrl": "https://openrouter.ai/api/v1"
+      },
+      "parameters": {
+        "body": {
+          "messages": {
+            "type": "array",
+            "required": true,
+            "description": "Array of message objects with role and content",
+            "example": [
+              {
+                "role": "user",
+                "content": "Hello"
+              }
+            ]
+          },
+          "max_tokens": {
+            "type": "number",
+            "required": false,
+            "description": "Maximum tokens to generate",
+            "example": 1024,
+            "default": 1024
+          }
+        }
+      }
+    },
+    {
+      "id": "llm-grok-code",
+      "name": "Grok Code Fast",
+      "description": "xAI's code-specialized model — fast code generation and analysis",
+      "price": "$0.04",
+      "method": "POST",
+      "path": "/api/llm/grok-code",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": {
+        "provider": "openrouter",
+        "baseUrl": "https://openrouter.ai/api/v1"
+      },
+      "parameters": {
+        "body": {
+          "messages": {
+            "type": "array",
+            "required": true,
+            "description": "Array of message objects with role and content",
+            "example": [
+              {
+                "role": "user",
+                "content": "Hello"
+              }
+            ]
+          },
+          "max_tokens": {
+            "type": "number",
+            "required": false,
+            "description": "Maximum tokens to generate",
+            "example": 1024,
+            "default": 1024
+          }
+        }
+      }
+    },
+    {
+      "id": "llm-seed",
+      "name": "Seed 1.6",
+      "description": "ByteDance's flagship model — competitive reasoning and generation at low cost",
+      "price": "$0.02",
+      "method": "POST",
+      "path": "/api/llm/seed",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": {
+        "provider": "openrouter",
+        "baseUrl": "https://openrouter.ai/api/v1"
+      },
+      "parameters": {
+        "body": {
+          "messages": {
+            "type": "array",
+            "required": true,
+            "description": "Array of message objects with role and content",
+            "example": [
+              {
+                "role": "user",
+                "content": "Hello"
+              }
+            ]
+          },
+          "max_tokens": {
+            "type": "number",
+            "required": false,
+            "description": "Maximum tokens to generate",
+            "example": 1024,
+            "default": 1024
+          }
+        }
+      }
+    },
+    {
+      "id": "llm-devstral",
+      "name": "Devstral 2",
+      "description": "Mistral's code-focused model — optimized for software development and technical tasks",
+      "price": "$0.02",
+      "method": "POST",
+      "path": "/api/llm/devstral",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": {
+        "provider": "openrouter",
+        "baseUrl": "https://openrouter.ai/api/v1"
+      },
+      "parameters": {
+        "body": {
+          "messages": {
+            "type": "array",
+            "required": true,
+            "description": "Array of message objects with role and content",
+            "example": [
+              {
+                "role": "user",
+                "content": "Hello"
+              }
+            ]
+          },
+          "max_tokens": {
+            "type": "number",
+            "required": false,
+            "description": "Maximum tokens to generate",
+            "example": 1024,
+            "default": 1024
+          }
+        }
+      }
+    },
+    {
       "id": "embeddings",
       "name": "Text Embeddings",
       "description": "Generate text embeddings using OpenAI text-embedding-3-small — for semantic search, clustering, RAG",
@@ -1281,6 +1539,54 @@
             "required": false,
             "description": "ElevenLabs voice ID",
             "example": "21m00Tcm4TlvDq8ikWAM"
+          }
+        }
+      }
+    },
+    {
+      "id": "ens-resolve",
+      "name": "ENS Resolve",
+      "description": "Resolve an ENS name to an Ethereum address",
+      "price": "$0.001",
+      "method": "GET",
+      "path": "/api/ens/resolve",
+      "mimeType": "application/json",
+      "category": "crypto",
+      "upstream": {
+        "provider": "ethereum-rpc",
+        "baseUrl": "https://cloudflare-eth.com"
+      },
+      "parameters": {
+        "query": {
+          "name": {
+            "type": "string",
+            "required": true,
+            "description": "ENS name to resolve",
+            "example": "vitalik.eth"
+          }
+        }
+      }
+    },
+    {
+      "id": "ens-reverse",
+      "name": "ENS Reverse Lookup",
+      "description": "Reverse-resolve an Ethereum address to its ENS name",
+      "price": "$0.001",
+      "method": "GET",
+      "path": "/api/ens/reverse",
+      "mimeType": "application/json",
+      "category": "crypto",
+      "upstream": {
+        "provider": "ethereum-rpc",
+        "baseUrl": "https://cloudflare-eth.com"
+      },
+      "parameters": {
+        "query": {
+          "address": {
+            "type": "string",
+            "required": true,
+            "description": "Ethereum address (0x...)",
+            "example": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
           }
         }
       }

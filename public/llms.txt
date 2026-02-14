@@ -1,8 +1,8 @@
 # x402engine
-> Pay-per-call API gateway for AI agents. 52 tools, sub-cent pricing, instant crypto payments.
+> Pay-per-call API gateway for AI agents. 59 tools, sub-cent pricing, instant crypto payments.
 
 ## What is this?
-x402engine is an API gateway that provides 52 pay-per-call tools for AI agents using the HTTP 402 payment protocol. Every API call costs between $0.001 and $0.12, paid instantly with stablecoins (USDC on Base, USDC on Solana, or USDm on MegaETH).
+x402engine is an API gateway that provides 59 pay-per-call tools for AI agents using the HTTP 402 payment protocol. Every API call costs between $0.001 and $0.12, paid instantly with stablecoins (USDC on Base, USDC on Solana, or USDm on MegaETH).
 
 ## How to connect
 - MCP server (recommended): `npx -y x402engine-mcp`
@@ -25,13 +25,16 @@ x402engine is an API gateway that provides 52 pay-per-call tools for AI agents u
 - text_to_speech (OpenAI): $0.01 — Text-to-speech via OpenAI
 - text_to_speech (ElevenLabs): $0.02 — Text-to-speech via ElevenLabs
 
-### LLM Inference (14 models)
+### LLM Inference (28 models)
 - GPT-4o: $0.04 | GPT-4o Mini: $0.003 | GPT-4.1: $0.03 | GPT-4.1 Mini: $0.006
-- GPT-5: $0.035 | GPT-5 Mini: $0.007 | o3: $0.03 | o4 Mini: $0.02
+- GPT-5: $0.035 | GPT-5 Mini: $0.007 | GPT-5.2: $0.08 | GPT-5.2 Codex: $0.06
+- o3: $0.03 | o4 Mini: $0.02 | o1: $0.03
 - Claude Opus 4.6: $0.09 | Claude Sonnet 4.5: $0.06 | Claude Haiku 4.5: $0.02
 - Gemini 2.5 Pro: $0.035 | Gemini 2.5 Flash: $0.009
 - DeepSeek V3: $0.005 | DeepSeek R1: $0.01 | Llama 3.3 70B: $0.002
-- Grok 4: $0.06 | Qwen3 235B: $0.004 | Mistral Large 3: $0.006 | Perplexity Sonar Pro: $0.06
+- Grok 4: $0.06 | Grok Code Fast: $0.04 | Qwen3 235B: $0.004
+- Mistral Large 3: $0.006 | Devstral 2: $0.02 | Perplexity Sonar Pro: $0.06
+- Kimi K2.5: $0.03 | MiniMax M2.5: $0.01 | GLM-5: $0.03 | Seed 1.6: $0.02
 - Text Embeddings: $0.001
 
 ### Crypto & Market Data
@@ -44,7 +47,6 @@ x402engine is an API gateway that provides 52 pay-per-call tools for AI agents u
 ### Blockchain & Wallet Analytics
 - get_wallet_balances: $0.005 — Token balances for any wallet
 - get_wallet_transactions: $0.005 — Transaction history
-- get_wallet_pnl: $0.01 — Profit & loss analysis
 - get_token_prices: $0.005 — DEX-derived token prices
 - get_token_metadata: $0.002 — Token metadata
 

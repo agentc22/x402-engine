@@ -35,6 +35,21 @@ const MODELS: Record<string, ModelConfig> = {
   "mistral": { model: "mistralai/mistral-large", serviceId: "llm-mistral" },
   // Perplexity (search-augmented)
   "perplexity": { model: "perplexity/sonar-pro", serviceId: "llm-perplexity" },
+  // OpenAI (newer)
+  "gpt-5.2": { model: "openai/gpt-5.2", serviceId: "llm-gpt-5.2" },
+  "gpt-5.2-codex": { model: "openai/gpt-5.2-codex", serviceId: "llm-gpt-5.2-codex", reasoning: true },
+  // Moonshot
+  "kimi": { model: "moonshotai/kimi-k2.5", serviceId: "llm-kimi" },
+  // MiniMax
+  "minimax": { model: "minimax/minimax-m2.5", serviceId: "llm-minimax" },
+  // Zhipu
+  "glm": { model: "z-ai/glm-5", serviceId: "llm-glm" },
+  // xAI (code-focused)
+  "grok-code": { model: "x-ai/grok-code-fast-1", serviceId: "llm-grok-code" },
+  // ByteDance
+  "seed": { model: "bytedance-seed/seed-1.6", serviceId: "llm-seed" },
+  // Mistral (code-focused)
+  "devstral": { model: "mistralai/devstral-2-2512", serviceId: "llm-devstral" },
 };
 
 // Reasoning models burn tokens on chain-of-thought before generating content.

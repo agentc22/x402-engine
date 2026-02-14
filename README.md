@@ -37,9 +37,10 @@ MegaETH offers the fastest payment verification at <10ms using `eth_sendRawTrans
 | `/api/crypto/search` | GET | $0.001 | CoinGecko | Search by name/symbol |
 | `/api/wallet/balances` | POST | $0.005 | Allium | Multichain wallet balances |
 | `/api/wallet/transactions` | POST | $0.005 | Allium | Transaction history |
-| `/api/wallet/pnl` | POST | $0.01 | Allium | Portfolio P&L |
 | `/api/token/prices` | POST | $0.005 | Allium | DEX-derived token prices |
 | `/api/token/metadata` | GET | $0.002 | Allium | Token metadata |
+| `/api/ens/resolve` | GET | $0.001 | Ethereum RPC | ENS name to address |
+| `/api/ens/reverse` | GET | $0.001 | Ethereum RPC | Address to ENS name |
 
 ### Storage
 
@@ -179,7 +180,7 @@ src/
     code.ts                 # Code execution sandbox
     transcribe.ts           # Audio transcription
     crypto.ts               # Crypto prices, markets, history (cached)
-    blockchain.ts           # Wallet balances, transactions, P&L, tokens
+    blockchain.ts           # Wallet balances, transactions, tokens
     ipfs.ts                 # IPFS pin and retrieve
   db/
     ledger.ts               # PostgreSQL ledger (batched writes, replay protection)

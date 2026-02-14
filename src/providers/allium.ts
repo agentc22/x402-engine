@@ -82,18 +82,6 @@ export async function getWalletTransactions(
   return alliumPost("/wallet/transactions", addresses);
 }
 
-/** Portfolio P&L for a wallet (realized + unrealized) */
-export async function getWalletPnl(
-  addresses: Array<{ chain: string; address: string }>,
-  minLiquidity?: number,
-  minVolume24h?: number,
-): Promise<any> {
-  const query: Record<string, string> = {};
-  if (minLiquidity !== undefined) query.min_liquidity = String(minLiquidity);
-  if (minVolume24h !== undefined) query.min_volume_24h = String(minVolume24h);
-  return alliumPost("/wallet/pnl", addresses, query);
-}
-
 /** Latest prices for tokens (up to 200 per request) */
 export async function getTokenPrices(
   tokens: Array<{ token_address: string; chain: string }>,

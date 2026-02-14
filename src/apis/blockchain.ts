@@ -2,7 +2,6 @@ import { Router, type Request, type Response } from "express";
 import {
   getWalletBalances,
   getWalletTransactions,
-  getWalletPnl,
   getTokenPrices,
   getAssets,
 } from "../providers/allium.js";
@@ -82,63 +81,6 @@ router.post("/api/wallet/transactions", async (req: Request, res: Response) => {
     logRequest({
       service: "wallet-transactions",
       endpoint: "/api/wallet/transactions",
-      payer: (req as any).x402?.payer,
-      network: (req as any).x402?.network,
-      amount: (req as any).x402?.amount,
-      upstreamStatus,
-      latencyMs: Date.now() - start,
-    });
-  }
-});
-
-router.post("/api/wallet/pnl", async (req: Request, res: Response) => {
-  const { chain, address } = req.body || {};
-  let { min_liquidity, min_volume_24h } = req.body || {};
-
-  if (!chain || !address) {
-    res.status(400).json({ error: "Provide 'chain' and 'address' in request body" });
-    return;
-  }
-  if (!isValidChain(chain)) {
-    res.status(400).json({ error: "Invalid chain name" });
-    return;
-  }
-  if (typeof address !== "string" || address.length > 100) {
-    res.status(400).json({ error: "Invalid address" });
-    return;
-  }
-
-  // Validate numeric params
-  if (min_liquidity !== undefined) {
-    min_liquidity = Number(min_liquidity);
-    if (!Number.isFinite(min_liquidity) || min_liquidity < 0) {
-      res.status(400).json({ error: "min_liquidity must be a non-negative number" });
-      return;
-    }
-  }
-  if (min_volume_24h !== undefined) {
-    min_volume_24h = Number(min_volume_24h);
-    if (!Number.isFinite(min_volume_24h) || min_volume_24h < 0) {
-      res.status(400).json({ error: "min_volume_24h must be a non-negative number" });
-      return;
-    }
-  }
-
-  const start = Date.now();
-  let upstreamStatus = 0;
-
-  try {
-    const data = await getWalletPnl([{ chain, address }], min_liquidity, min_volume_24h);
-    upstreamStatus = 200;
-    res.json(data);
-  } catch (err: any) {
-    upstreamStatus = err.status || 500;
-    res.setHeader("Retry-After", "5");
-    res.status(503).json({ error: "Failed to fetch wallet P&L", retryable: true });
-  } finally {
-    logRequest({
-      service: "wallet-pnl",
-      endpoint: "/api/wallet/pnl",
       payer: (req as any).x402?.payer,
       network: (req as any).x402?.network,
       amount: (req as any).x402?.amount,

@@ -78,7 +78,6 @@
           <a href="#crypto-search" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Coin Search</a>
           <a href="#wallet-balances" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Wallet Balances</a>
           <a href="#wallet-transactions" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Wallet Txns</a>
-          <a href="#wallet-pnl" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Wallet P&amp;L</a>
           <a href="#token-prices" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Token Prices</a>
           <a href="#token-metadata" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Token Metadata</a>
           <a href="#ens-resolve" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">ENS Resolve</a>
@@ -105,7 +104,7 @@
         </div>
         <div>
           <div class="mt-6 mb-2 text-xs text-gray-600 uppercase tracking-wider font-medium px-3">LLM & AI</div>
-          <a href="#llm-models" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">All Models (20)</a>
+          <a href="#llm-models" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">All Models (28)</a>
           <a href="#embeddings" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Embeddings</a>
         </div>
         <div>
@@ -123,7 +122,7 @@
         <!-- Overview -->
         <section id="overview" class="mb-16">
           <h1 class="text-3xl font-bold text-white mb-4">API Documentation</h1>
-          <p class="text-gray-400 leading-relaxed mb-4">The x402engine exposes 38 production APIs behind <a href="https://www.x402.org" class="text-brand-400 hover:underline">x402 micropayments</a>. Every endpoint returns <code class="text-xs bg-white/5 px-1.5 py-0.5 rounded">402 Payment Required</code> until a valid stablecoin payment is attached to the request.</p>
+          <p class="text-gray-400 leading-relaxed mb-4">The x402engine exposes 45 production APIs behind <a href="https://www.x402.org" class="text-brand-400 hover:underline">x402 micropayments</a>. Every endpoint returns <code class="text-xs bg-white/5 px-1.5 py-0.5 rounded">402 Payment Required</code> until a valid stablecoin payment is attached to the request.</p>
           <div class="card-glow rounded-xl p-5 space-y-2 text-sm">
             <div class="flex items-start gap-3">
               <span class="text-brand-400 mt-0.5">Base URL</span>
@@ -662,29 +661,6 @@ Content-Type: application/json
           </div>
         </section>
 
-        <!-- wallet-pnl -->
-        <section id="wallet-pnl" class="mb-14">
-          <div class="flex items-center gap-3 mb-4">
-            <span class="method-post px-2 py-0.5 rounded text-xs font-mono font-bold">POST</span>
-            <code class="text-white text-lg font-mono">/api/wallet/pnl</code>
-            <span class="ml-auto text-brand-400 font-mono text-sm">$0.01</span>
-          </div>
-          <p class="text-gray-400 text-sm mb-4">Portfolio profit/loss with realized and unrealized P&amp;L per token.</p>
-
-          <h4 class="text-white text-sm font-semibold mb-2">Request Body</h4>
-          <div class="overflow-x-auto mb-4">
-            <table class="w-full text-sm">
-              <thead><tr class="border-b border-white/10"><th class="text-left py-2 px-3 text-gray-500 font-medium">Field</th><th class="text-left py-2 px-3 text-gray-500 font-medium">Type</th><th class="text-left py-2 px-3 text-gray-500 font-medium">Description</th></tr></thead>
-              <tbody>
-                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">chain <span class="param-required">required</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400">Chain name</td></tr>
-                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">address <span class="param-required">required</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400">Wallet address</td></tr>
-                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">min_liquidity <span class="param-optional">optional</span></td><td class="py-2 px-3 text-gray-400">number</td><td class="py-2 px-3 text-gray-400">Minimum liquidity filter</td></tr>
-                <tr><td class="py-2 px-3 font-mono text-xs text-white">min_volume_24h <span class="param-optional">optional</span></td><td class="py-2 px-3 text-gray-400">number</td><td class="py-2 px-3 text-gray-400">Minimum 24h volume filter</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
-
         <!-- token-prices -->
         <section id="token-prices" class="mb-14">
           <div class="flex items-center gap-3 mb-4">
@@ -1080,7 +1056,7 @@ Content-Type: application/json
             <span class="method-post px-2 py-0.5 rounded text-xs font-bold">POST</span>
             <h3 class="text-lg font-semibold text-white">/api/llm/{model}</h3>
           </div>
-          <p class="text-gray-400 text-sm mb-4">Chat completion via 20 models from OpenAI, Anthropic, Google, DeepSeek, Meta, xAI, Qwen, Mistral, and Perplexity. All models use the same request/response format.</p>
+          <p class="text-gray-400 text-sm mb-4">Chat completion via 28 models from OpenAI, Anthropic, Google, DeepSeek, Meta, xAI, Qwen, Mistral, Perplexity, Moonshot, MiniMax, Zhipu, and ByteDance. All models use the same request/response format.</p>
 
           <div class="overflow-x-auto mb-4">
             <table class="w-full text-sm">
@@ -1131,7 +1107,15 @@ Content-Type: application/json
                 <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/grok</td><td class="py-1.5 text-xs text-gray-400">Grok 4</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.06</td></tr>
                 <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/qwen</td><td class="py-1.5 text-xs text-gray-400">Qwen3 235B</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.004</td></tr>
                 <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/mistral</td><td class="py-1.5 text-xs text-gray-400">Mistral Large 3</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.006</td></tr>
-                <tr><td class="py-1.5 font-mono text-xs">/api/llm/perplexity</td><td class="py-1.5 text-xs text-gray-400">Perplexity Sonar Pro (search)</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.06</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/perplexity</td><td class="py-1.5 text-xs text-gray-400">Perplexity Sonar Pro (search)</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.06</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/gpt-5.2</td><td class="py-1.5 text-xs text-gray-400">GPT-5.2</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.08</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/gpt-5.2-codex</td><td class="py-1.5 text-xs text-gray-400">GPT-5.2 Codex (reasoning)</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.06</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/kimi</td><td class="py-1.5 text-xs text-gray-400">Kimi K2.5</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.03</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/minimax</td><td class="py-1.5 text-xs text-gray-400">MiniMax M2.5</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.01</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/glm</td><td class="py-1.5 text-xs text-gray-400">GLM-5</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.03</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/grok-code</td><td class="py-1.5 text-xs text-gray-400">Grok Code Fast</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.04</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/seed</td><td class="py-1.5 text-xs text-gray-400">Seed 1.6</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.02</td></tr>
+                <tr><td class="py-1.5 font-mono text-xs">/api/llm/devstral</td><td class="py-1.5 text-xs text-gray-400">Devstral 2</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.02</td></tr>
               </tbody>
             </table>
           </div>
