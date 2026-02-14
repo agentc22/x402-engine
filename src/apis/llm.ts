@@ -49,7 +49,7 @@ const MODELS: Record<string, ModelConfig> = {
   // ByteDance
   "seed": { model: "bytedance-seed/seed-1.6", serviceId: "llm-seed" },
   // Mistral (code-focused)
-  "devstral": { model: "mistralai/devstral-2-2512", serviceId: "llm-devstral" },
+  "devstral": { model: "mistralai/devstral-2512", serviceId: "llm-devstral" },
 };
 
 // Reasoning models burn tokens on chain-of-thought before generating content.

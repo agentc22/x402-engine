@@ -46,6 +46,14 @@ const tests = {
   'llm-claude-haiku': { method: 'POST', url: '/api/llm/claude-haiku', body: { messages: [{ role: 'user', content: 'Say "ok"' }], max_tokens: 5 } },
   'llm-gemini-flash': { method: 'POST', url: '/api/llm/gemini-flash', body: { messages: [{ role: 'user', content: 'Say "ok"' }], max_tokens: 5 } },
   'llm-deepseek-r1': { method: 'POST', url: '/api/llm/deepseek-r1', body: { messages: [{ role: 'user', content: 'Say "ok"' }], max_tokens: 5 } },
+  'llm-gpt-5.2': { method: 'POST', url: '/api/llm/gpt-5.2', body: { messages: [{ role: 'user', content: 'Say "ok"' }], max_tokens: 5 } },
+  'llm-gpt-5.2-codex': { method: 'POST', url: '/api/llm/gpt-5.2-codex', body: { messages: [{ role: 'user', content: 'Say "ok"' }], max_tokens: 5 } },
+  'llm-kimi': { method: 'POST', url: '/api/llm/kimi', body: { messages: [{ role: 'user', content: 'Say "ok"' }], max_tokens: 5 } },
+  'llm-minimax': { method: 'POST', url: '/api/llm/minimax', body: { messages: [{ role: 'user', content: 'Say "ok"' }], max_tokens: 5 } },
+  'llm-glm': { method: 'POST', url: '/api/llm/glm', body: { messages: [{ role: 'user', content: 'Say "ok"' }], max_tokens: 5 } },
+  'llm-grok-code': { method: 'POST', url: '/api/llm/grok-code', body: { messages: [{ role: 'user', content: 'Say "ok"' }], max_tokens: 5 } },
+  'llm-seed': { method: 'POST', url: '/api/llm/seed', body: { messages: [{ role: 'user', content: 'Say "ok"' }], max_tokens: 5 } },
+  'llm-devstral': { method: 'POST', url: '/api/llm/devstral', body: { messages: [{ role: 'user', content: 'Say "ok"' }], max_tokens: 5 } },
 
   // Media & Compute
   'image-fast': { method: 'POST', url: '/api/image/fast', body: { prompt: 'a red circle' } },
