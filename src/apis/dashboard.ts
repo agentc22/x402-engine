@@ -30,6 +30,8 @@ router.get("/api/dashboard/stats", authCheck, async (_req, res) => {
       topPayersRows,
       recentRows,
       revenueRows,
+      uniquePayersRow,
+      dailyRevenueRows,
     ] = await Promise.all([
       pool.query(`SELECT COUNT(*)::int AS count FROM requests`),
       pool.query(`SELECT COUNT(*)::int AS count FROM requests WHERE created_at > NOW() - INTERVAL '1 day'`),
@@ -61,19 +63,45 @@ router.get("/api/dashboard/stats", authCheck, async (_req, res) => {
         FROM requests WHERE amount IS NOT NULL
         GROUP BY network
       `),
+      pool.query(`SELECT COUNT(DISTINCT payer)::int AS count FROM requests WHERE payer IS NOT NULL`),
+      pool.query(`
+        SELECT date_trunc('day', created_at)::date AS day,
+               COALESCE(network, 'unknown') AS network,
+               COUNT(*)::int AS requests,
+               COUNT(DISTINCT payer)::int AS unique_payers
+        FROM requests WHERE created_at > NOW() - INTERVAL '30 days'
+        GROUP BY day, network ORDER BY day
+      `),
     ]);
+
+    // Fetch GitHub stats server-side (avoids CORS issues on client)
+    let github = { views: 0, clones: 0, uniqueCloners: 0 };
+    try {
+      const ghToken = process.env.GITHUB_TOKEN;
+      if (ghToken) {
+        const headers = { Authorization: `token ${ghToken}`, Accept: "application/vnd.github.v3+json" };
+        const [viewsRes, clonesRes] = await Promise.all([
+          fetch("https://api.github.com/repos/agentc22/x402engine-mcp/traffic/views", { headers }).then(r => r.json()).catch(() => ({})),
+          fetch("https://api.github.com/repos/agentc22/x402engine-mcp/traffic/clones", { headers }).then(r => r.json()).catch(() => ({})),
+        ]);
+        github = { views: viewsRes.count || 0, clones: clonesRes.count || 0, uniqueCloners: clonesRes.uniques || 0 };
+      }
+    } catch { /* ignore */ }
 
     res.json({
       total: totalRow.rows[0].count,
       last24h: last24hRow.rows[0].count,
       last7d: last7dRow.rows[0].count,
+      uniquePayers: uniquePayersRow.rows[0].count,
       byService: byServiceRows.rows,
       byNetwork: byNetworkRows.rows,
       hourly: hourlyRows.rows,
       daily: dailyRows.rows,
+      dailyRevenue: dailyRevenueRows.rows,
       topPayers: topPayersRows.rows,
       recent: recentRows.rows,
       revenue: revenueRows.rows,
+      github,
     });
   } catch (err: any) {
     res.status(500).json({ error: err.message });
@@ -199,13 +227,25 @@ async function load() {
     const d = await r.json();
     if (d.error) { document.getElementById('cards').innerHTML = '<div class="card"><div class="value" style="color:#f66">Error</div><div class="label">'+d.error+'</div></div>'; return; }
 
+    // Revenue: convert raw amounts to USD
+    // MegaETH (eip155:4326) USDm = 18 decimals, Base/Solana USDC = 6 decimals
+    function rawToUsd(raw, network) {
+      const n = Number(raw);
+      if (!n) return 0;
+      if (network && network.includes('4326')) return n / 1e18;
+      return n / 1e6;
+    }
+    const totalRevenue = (d.revenue || []).reduce((sum, r) => sum + rawToUsd(r.total_raw, r.network), 0);
+
     // Cards
     document.getElementById('cards').innerHTML = [
       {l:'Total Requests', v:d.total.toLocaleString()},
       {l:'Last 24h', v:d.last24h.toLocaleString()},
       {l:'Last 7 Days', v:d.last7d.toLocaleString()},
-      {l:'Unique Payers', v:d.topPayers.length},
+      {l:'Unique Payers', v:d.uniquePayers.toLocaleString()},
+      {l:'Total Revenue', v:'$'+totalRevenue.toFixed(2), s:(d.revenue||[]).map(r=>netLabel(r.network)+': $'+rawToUsd(r.total_raw,r.network).toFixed(2)).join(' | ')},
       {l:'NPM Downloads', v:npmAll.downloads.toLocaleString(), s:'This week: '+npmWeek.downloads.toLocaleString()},
+      {l:'GitHub (14d)', v:d.github.clones+' clones', s:d.github.uniqueCloners+' unique cloners, '+d.github.views+' views'},
       {l:'Networks', v:d.byNetwork.map(n=>netLabel(n.network)).join(', ') || 'None yet'},
     ].map(c=>'<div class="card"><div class="label">'+c.l+'</div><div class="value">'+c.v+'</div>'+(c.s?'<div class="sub">'+c.s+'</div>':'')+'</div>').join('');
 

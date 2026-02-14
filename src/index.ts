@@ -262,6 +262,20 @@ app.use("/facilitator/megaeth", expensiveEndpointLimiter);
 app.use(megaethFacilitator);
 
 // --- Static site (after free API routes, before payment middleware) ---
+// Inject Umami analytics script into HTML responses if configured
+if (config.umamiWebsiteId) {
+  const umamiTag = `<script defer src="${config.umamiUrl}" data-website-id="${config.umamiWebsiteId}"></script>`;
+  app.use((req, res, next) => {
+    const origSend = res.send.bind(res);
+    res.send = (body: any) => {
+      if (typeof body === "string" && res.getHeader("content-type")?.toString().includes("text/html")) {
+        body = body.replace("</head>", `${umamiTag}\n</head>`);
+      }
+      return origSend(body);
+    };
+    next();
+  });
+}
 app.use(express.static(path.join(__dirname, "../public")));
 
 // --- Rate limit on paid endpoints (secondary guard to payment requirement) ---

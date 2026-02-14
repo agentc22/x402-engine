@@ -66,6 +66,10 @@ export const config = {
   tenderlyAccount: optional("TENDERLY_ACCOUNT", ""),
   tenderlyProject: optional("TENDERLY_PROJECT", ""),
 
+  // Analytics (Umami Cloud)
+  umamiWebsiteId: optional("UMAMI_WEBSITE_ID", ""),
+  umamiUrl: optional("UMAMI_URL", "https://cloud.umami.is/script.js"),
+
   // Keep singular accessors for backward compatibility (first key or empty)
   falApiKey: optional("FAL_API_KEY", ""),
   e2bApiKey: optional("E2B_API_KEY", ""),
