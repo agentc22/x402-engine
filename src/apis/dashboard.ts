@@ -86,15 +86,24 @@ router.get("/api/dashboard/stats", authCheck, async (_req, res) => {
       priceMap[svc.id] = price;
     }
 
-    // Compute profit from service call counts
+    // Compute actual on-chain revenue (from DB amounts, not config prices)
+    function rawToUsd(raw: string | number, network: string): number {
+      const n = Number(raw);
+      if (!n) return 0;
+      if (network && network.includes("4326")) return n / 1e18; // MegaETH USDm = 18 decimals
+      return n / 1e6; // Base/Solana USDC = 6 decimals
+    }
+    const actualRevenue = (revenueRows.rows as any[]).reduce(
+      (sum: number, r: any) => sum + rawToUsd(r.total_raw, r.network), 0
+    );
+
+    // Compute costs from service call counts
     let totalCost = 0;
-    let totalPriceRevenue = 0;
     const serviceProfits: { service: string; count: number; revenue: number; cost: number; profit: number; margin: number }[] = [];
     for (const row of byServiceRows.rows) {
       const cost = (costMap[row.service] || 0) * row.count;
       const rev = (priceMap[row.service] || 0) * row.count;
       totalCost += cost;
-      totalPriceRevenue += rev;
       serviceProfits.push({
         service: row.service,
         count: row.count,
@@ -134,10 +143,10 @@ router.get("/api/dashboard/stats", authCheck, async (_req, res) => {
       revenue: revenueRows.rows,
       github,
       profit: {
-        totalRevenue: totalPriceRevenue,
+        totalRevenue: actualRevenue,
         totalCost,
-        totalProfit: totalPriceRevenue - totalCost,
-        margin: totalPriceRevenue > 0 ? ((totalPriceRevenue - totalCost) / totalPriceRevenue) * 100 : 0,
+        totalProfit: actualRevenue - totalCost,
+        margin: actualRevenue > 0 ? ((actualRevenue - totalCost) / actualRevenue) * 100 : 0,
         byService: serviceProfits,
       },
     });
