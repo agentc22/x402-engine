@@ -1,6 +1,6 @@
 {
   "name": "x402engine",
-  "description": "Pay-per-call API gateway for AI agents. 59 tools including image generation, LLM inference, code execution, audio transcription, crypto data, wallet analytics, NFT data, ENS, IPFS, web scraping, travel search, and transaction simulation. All via HTTP 402 micropayments with USDC and USDm.",
+  "description": "Pay-per-call API gateway for AI agents. 47 tools including image generation, LLM inference (28 models), code execution, audio transcription, crypto data, wallet analytics, ENS, IPFS, web scraping, and transaction simulation. All via HTTP 402 micropayments with USDC and USDm.",
   "url": "https://x402-gateway-production.up.railway.app",
   "version": "3.0.0",
   "protocol": "a2a",

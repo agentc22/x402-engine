@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>API Documentation — x402engine</title>
-  <meta name="description" content="Complete API reference for the x402engine. 38 endpoints including 15 LLMs, web search, TTS, and transaction simulation. Payment integration guides and code examples.">
+  <meta name="description" content="Complete API reference for the x402engine. 47 endpoints including 28 LLMs, web scraping, TTS, code execution, and transaction simulation. Payment integration guides and code examples.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -82,10 +82,7 @@
           <a href="#token-metadata" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Token Metadata</a>
           <a href="#ens-resolve" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">ENS Resolve</a>
           <a href="#ens-reverse" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">ENS Reverse</a>
-          <a href="#nft-metadata" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">NFT Metadata</a>
-          <a href="#nft-ownership" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">NFT Ownership</a>
-          <a href="#nft-collection" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">NFT Collection</a>
-          <a href="#tx-simulate" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">TX Simulation</a>
+<a href="#tx-simulate" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">TX Simulation</a>
         </div>
         <div>
           <h4 class="text-gray-500 font-medium uppercase text-xs tracking-wider mb-2 px-3">Compute</h4>
@@ -122,7 +119,7 @@
         <!-- Overview -->
         <section id="overview" class="mb-16">
           <h1 class="text-3xl font-bold text-white mb-4">API Documentation</h1>
-          <p class="text-gray-400 leading-relaxed mb-4">The x402engine exposes 45 production APIs behind <a href="https://www.x402.org" class="text-brand-400 hover:underline">x402 micropayments</a>. Every endpoint returns <code class="text-xs bg-white/5 px-1.5 py-0.5 rounded">402 Payment Required</code> until a valid stablecoin payment is attached to the request.</p>
+          <p class="text-gray-400 leading-relaxed mb-4">The x402engine exposes 47 production APIs behind <a href="https://www.x402.org" class="text-brand-400 hover:underline">x402 micropayments</a>. Every endpoint returns <code class="text-xs bg-white/5 px-1.5 py-0.5 rounded">402 Payment Required</code> until a valid stablecoin payment is attached to the request.</p>
           <div class="card-glow rounded-xl p-5 space-y-2 text-sm">
             <div class="flex items-start gap-3">
               <span class="text-brand-400 mt-0.5">Base URL</span>
@@ -208,7 +205,7 @@ console.log(<span class="text-emerald-400">await</span> balances.json());</code>
 
           <div class="mt-6 rounded-xl border border-brand-500/20 bg-brand-500/5 p-4 text-sm">
             <h4 class="text-brand-400 font-semibold mb-2">💡 Test All Endpoints</h4>
-            <p class="text-gray-300 mb-2">Want to test all 38 endpoints at once? Download our comprehensive test suite:</p>
+            <p class="text-gray-300 mb-2">Want to test all 47 endpoints at once? Download our comprehensive test suite:</p>
             <pre class="bg-white/5 rounded px-3 py-2 text-xs overflow-x-auto"><code>curl -O https://x402-gateway-production.up.railway.app/test-all-endpoints.mjs
 TEST_PRIVATE_KEY=0x... node test-all-endpoints.mjs</code></pre>
             <p class="text-gray-400 text-xs mt-2">Includes proper parameters and examples for every endpoint category.</p>
@@ -723,6 +720,27 @@ Content-Type: application/json
               </tbody>
             </table>
           </div>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">POST /api/wallet/transactions
+{ "chain": "base", "address": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045" }
+
+<span class="text-gray-500">// Response</span>
+{
+  "transactions": [
+    {
+      "hash": "0xabc...",
+      "block_number": 12345678,
+      "timestamp": "2025-01-15T12:00:00Z",
+      "from": "0xd8dA...",
+      "to": "0x833...",
+      "value": "0",
+      "asset_transfers": [
+        { "token": "USDC", "amount": "100.00", "direction": "out" }
+      ]
+    }
+  ]
+}</code></pre>
+          </div>
         </section>
 
         <!-- token-prices -->
@@ -829,75 +847,6 @@ Content-Type: application/json
   "address": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
   "name": "vitalik.eth"
 }</code></pre>
-          </div>
-        </section>
-
-        <section id="nft-metadata" class="mb-14">
-          <div class="flex items-center gap-3 mb-4">
-            <span class="method-get px-2 py-0.5 rounded text-xs font-bold">GET</span>
-            <h3 class="text-lg font-semibold text-white">/api/nft/metadata</h3>
-            <span class="text-brand-400 text-sm font-mono ml-auto">$0.005</span>
-          </div>
-          <p class="text-gray-400 text-sm mb-4">Get NFT name, description, image, traits, and collection info. Supports Ethereum, Base, Polygon, Arbitrum, Optimism, and Zora.</p>
-          <div class="overflow-x-auto mb-4">
-            <table class="w-full text-sm">
-              <thead><tr class="border-b border-white/5"><th class="text-left py-2 text-gray-500 font-medium">Param</th><th class="text-left py-2 text-gray-500 font-medium">Type</th><th class="text-left py-2 text-gray-500 font-medium">Description</th></tr></thead>
-              <tbody class="text-gray-300">
-                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">chain <span class="param-required">required</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">Chain name (ethereum, base, polygon, arbitrum, optimism, zora)</td></tr>
-                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">contract <span class="param-required">required</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">Contract address (0x...)</td></tr>
-                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">tokenId <span class="param-required">required</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">Token ID (numeric)</td></tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
-            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">GET /api/nft/metadata?chain=ethereum&contract=0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d&tokenId=1
-
-<span class="text-gray-500">// Response</span>
-{
-  "name": "BAYC #1",
-  "description": "...",
-  "image": "https://...",
-  "traits": [{"trait_type": "Background", "value": "Orange"}],
-  "collection": "BoredApeYachtClub",
-  "token_standard": "ERC721"
-}</code></pre>
-          </div>
-        </section>
-
-        <section id="nft-ownership" class="mb-14">
-          <div class="flex items-center gap-3 mb-4">
-            <span class="method-get px-2 py-0.5 rounded text-xs font-bold">GET</span>
-            <h3 class="text-lg font-semibold text-white">/api/nft/ownership</h3>
-            <span class="text-brand-400 text-sm font-mono ml-auto">$0.005</span>
-          </div>
-          <p class="text-gray-400 text-sm mb-4">Get the current owner(s) of an NFT.</p>
-          <div class="overflow-x-auto mb-4">
-            <table class="w-full text-sm">
-              <thead><tr class="border-b border-white/5"><th class="text-left py-2 text-gray-500 font-medium">Param</th><th class="text-left py-2 text-gray-500 font-medium">Type</th><th class="text-left py-2 text-gray-500 font-medium">Description</th></tr></thead>
-              <tbody class="text-gray-300">
-                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">chain <span class="param-required">required</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">Chain name</td></tr>
-                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">contract <span class="param-required">required</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">Contract address</td></tr>
-                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">tokenId <span class="param-required">required</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">Token ID</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
-
-        <section id="nft-collection" class="mb-14">
-          <div class="flex items-center gap-3 mb-4">
-            <span class="method-get px-2 py-0.5 rounded text-xs font-bold">GET</span>
-            <h3 class="text-lg font-semibold text-white">/api/nft/collection</h3>
-            <span class="text-brand-400 text-sm font-mono ml-auto">$0.005</span>
-          </div>
-          <p class="text-gray-400 text-sm mb-4">Get collection metadata — name, symbol, total supply, floor price, description.</p>
-          <div class="overflow-x-auto mb-4">
-            <table class="w-full text-sm">
-              <thead><tr class="border-b border-white/5"><th class="text-left py-2 text-gray-500 font-medium">Param</th><th class="text-left py-2 text-gray-500 font-medium">Type</th><th class="text-left py-2 text-gray-500 font-medium">Description</th></tr></thead>
-              <tbody class="text-gray-300">
-                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">chain <span class="param-required">required</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">Chain name</td></tr>
-                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">contract <span class="param-required">required</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">Contract address</td></tr>
-              </tbody>
-            </table>
           </div>
         </section>
 

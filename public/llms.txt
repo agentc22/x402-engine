@@ -1,8 +1,8 @@
 # x402engine
-> Pay-per-call API gateway for AI agents. 59 tools, sub-cent pricing, instant crypto payments.
+> Pay-per-call API gateway for AI agents. 47 tools, sub-cent pricing, instant crypto payments.
 
 ## What is this?
-x402engine is an API gateway that provides 59 pay-per-call tools for AI agents using the HTTP 402 payment protocol. Every API call costs between $0.001 and $0.12, paid instantly with stablecoins (USDC on Base, USDC on Solana, or USDm on MegaETH).
+x402engine is an API gateway that provides 47 pay-per-call tools for AI agents using the HTTP 402 payment protocol. Every API call costs between $0.001 and $0.12, paid instantly with stablecoins (USDC on Base, USDC on Solana, or USDm on MegaETH).
 
 ## How to connect
 - MCP server (recommended): `npx -y x402engine-mcp`
@@ -50,11 +50,6 @@ x402engine is an API gateway that provides 59 pay-per-call tools for AI agents u
 - get_token_prices: $0.005 — DEX-derived token prices
 - get_token_metadata: $0.002 — Token metadata
 
-### NFT
-- get_nft_metadata: $0.005 — NFT metadata lookup
-- get_nft_ownership: $0.005 — NFT ownership history
-- get_nft_collection: $0.005 — NFT collection stats
-
 ### ENS
 - resolve_ens: $0.001 — ENS name to address
 - reverse_ens: $0.001 — Address to ENS name
@@ -66,12 +61,6 @@ x402engine is an API gateway that provides 59 pay-per-call tools for AI agents u
 ### Web
 - web_scrape: $0.005 — Scrape and extract web page content
 - web_screenshot: $0.01 — Capture web page screenshot
-
-### Travel
-- search_flights: $0.01 — Flight search
-- search_hotels: $0.01 — Hotel search
-- search_locations: $0.005 — Airport & city search
-- cheapest_travel_dates: $0.01 — Find cheapest travel dates
 
 ### Transaction
 - simulate_transaction: $0.01 — Simulate EVM transactions
