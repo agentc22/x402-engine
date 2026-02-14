@@ -254,15 +254,7 @@ app.get("/api/services/:id", freeEndpointLimiter, (req, res) => {
 // MCP endpoint (free, before payment middleware)
 mountMcp(app);
 
-// Dashboard (auth-protected, before payment middleware)
-app.use(dashboardRouter);
-
-// MegaETH facilitator routes (free, rate limited)
-app.use("/facilitator/megaeth", expensiveEndpointLimiter);
-app.use(megaethFacilitator);
-
-// --- Static site (after free API routes, before payment middleware) ---
-// Inject Umami analytics script into HTML responses if configured
+// Inject Umami analytics script into all HTML responses if configured
 if (config.umamiWebsiteId) {
   const umamiTag = `<script defer src="${config.umamiUrl}" data-website-id="${config.umamiWebsiteId}"></script>`;
   app.use((req, res, next) => {
@@ -276,6 +268,15 @@ if (config.umamiWebsiteId) {
     next();
   });
 }
+
+// Dashboard (auth-protected, before payment middleware)
+app.use(dashboardRouter);
+
+// MegaETH facilitator routes (free, rate limited)
+app.use("/facilitator/megaeth", expensiveEndpointLimiter);
+app.use(megaethFacilitator);
+
+// --- Static site (after free API routes, before payment middleware) ---
 app.use(express.static(path.join(__dirname, "../public")));
 
 // --- Rate limit on paid endpoints (secondary guard to payment requirement) ---
