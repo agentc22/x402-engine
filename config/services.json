@@ -1656,7 +1656,7 @@
             "type": "string",
             "required": true,
             "description": "Network ID (1=mainnet, 8453=Base, 10=Optimism, etc.)",
-            "example": "8453"
+            "example": "1"
           },
           "from": {
             "type": "string",
@@ -1670,24 +1670,21 @@
             "description": "Recipient/contract address",
             "example": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
           },
-          "data": {
-            "type": "string",
-            "required": false,
-            "description": "Transaction calldata (hex string)",
-            "example": "0x"
-          },
           "value": {
             "type": "string",
             "required": false,
             "description": "ETH value in wei",
             "example": "0"
           },
-          "gas": {
+          "data": {
             "type": "string",
             "required": false,
-            "description": "Chain name",
-            "example": "ethereum",
-            "default": "ethereum"
+            "description": "Transaction calldata (hex string)"
+          },
+          "gas": {
+            "type": "number",
+            "required": false,
+            "description": "Gas limit"
           }
         }
       },

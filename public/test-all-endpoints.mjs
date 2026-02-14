@@ -65,17 +65,24 @@ class MegaethScheme {
       const to = getAddress(req.payTo);
       const token = getAddress(req.asset);
       const value = BigInt(req.amount);
+      // Re-fetch nonce on first call or after error
       if (this.nonce === null)
         this.nonce = await this.pc.getTransactionCount({ address: this.wc.account.address });
-      const txHash = await this.wc.writeContract({
-        address: token, abi: erc20TransferAbi, functionName: 'transfer',
-        args: [to, value], nonce: this.nonce,
-        maxFeePerGas: parseGwei('0.001'), maxPriorityFeePerGas: 0n,
-        gas: 200000n, chain: megaethChain, account: this.wc.account,
-      });
-      await this.pc.waitForTransactionReceipt({ hash: txHash, timeout: 5000 });
-      this.nonce++;
-      return { x402Version, payload: { txHash } };
+      try {
+        const txHash = await this.wc.writeContract({
+          address: token, abi: erc20TransferAbi, functionName: 'transfer',
+          args: [to, value], nonce: this.nonce,
+          maxFeePerGas: parseGwei('0.001'), maxPriorityFeePerGas: 0n,
+          gas: 200000n, chain: megaethChain, account: this.wc.account,
+        });
+        await this.pc.waitForTransactionReceipt({ hash: txHash, timeout: 5000 });
+        this.nonce++;
+        return { x402Version, payload: { txHash } };
+      } catch (e) {
+        // Reset nonce so next call re-fetches from chain
+        this.nonce = null;
+        throw e;
+      }
     };
     const p = this.queue.then(run);
     this.queue = p.catch(() => {});
