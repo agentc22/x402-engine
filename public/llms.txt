@@ -78,9 +78,101 @@ x402engine is an API gateway that provides 59 pay-per-call tools for AI agents u
 
 ## Payment
 All payments use the x402 HTTP payment protocol. When you call an endpoint without payment, it returns HTTP 402 with payment requirements in the response header. Pay with:
-- USDC on Base (EVM, ~2s confirmation)
-- USDC on Solana (~400ms confirmation)
-- USDm on MegaETH (EVM, ~10ms confirmation)
+- USDC on Base (EVM, ~2s confirmation) — uses @x402/evm SDK, automatic Permit2 signatures
+- USDC on Solana (~400ms confirmation) — uses @x402/svm SDK, automatic
+- USDm on MegaETH (EVM, ~10ms confirmation) — requires custom scheme (see below)
+
+### Base payment (recommended, simplest)
+```js
+import { wrapFetchWithPayment, x402Client } from '@x402/fetch';
+import { registerExactEvmScheme } from '@x402/evm/exact/client';
+import { privateKeyToAccount } from 'viem/accounts';
+
+const account = privateKeyToAccount(PRIVATE_KEY);
+const client = new x402Client();
+registerExactEvmScheme(client, { signer: account, networks: ['eip155:8453'] });
+const paidFetch = wrapFetchWithPayment(fetch, client, {
+  paymentRequirementsSelector: (accepts) => accepts.find(a => a.network === 'eip155:8453'),
+});
+
+const res = await paidFetch('https://x402-gateway-production.up.railway.app/api/crypto/price?ids=bitcoin');
+```
+
+### Solana payment
+```js
+import { x402Client, wrapFetchWithPayment } from '@x402/fetch';
+import { ExactSvmScheme } from '@x402/svm'; // v2.2.0
+import { createKeyPairSignerFromBytes } from '@solana/kit';
+
+const signer = await createKeyPairSignerFromBytes(keypairBytes);
+const scheme = new ExactSvmScheme(signer);
+const client = new x402Client().register('solana:*', scheme);
+const paidFetch = wrapFetchWithPayment(fetch, client);
+```
+
+### MegaETH payment (~10ms, cheapest gas)
+The @x402/evm SDK doesn't support MegaETH natively. Use this custom scheme with `wrapFetchWithPaymentFromConfig`:
+```js
+import { wrapFetchWithPaymentFromConfig } from '@x402/fetch';
+import { privateKeyToAccount } from 'viem/accounts';
+import { createWalletClient, createPublicClient, http, getAddress, parseGwei } from 'viem';
+
+const megaethChain = {
+  id: 4326, name: 'MegaETH',
+  nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
+  rpcUrls: { default: { http: ['https://mainnet.megaeth.com/rpc'] } },
+};
+
+const erc20TransferAbi = [{
+  type: 'function', name: 'transfer', stateMutability: 'nonpayable',
+  inputs: [{ name: 'to', type: 'address' }, { name: 'value', type: 'uint256' }],
+  outputs: [{ name: '', type: 'bool' }],
+}];
+
+// Custom scheme: sends USDm transfer, returns txHash
+class MegaethScheme {
+  constructor(wc, pc) {
+    this.scheme = 'exact'; this.wc = wc; this.pc = pc;
+    this.nonce = null; this.queue = Promise.resolve();
+  }
+  createPaymentPayload(x402Version, req) {
+    const run = async () => {
+      const to = getAddress(req.payTo);
+      const token = getAddress(req.asset);
+      const value = BigInt(req.amount);
+      if (this.nonce === null)
+        this.nonce = await this.pc.getTransactionCount({ address: this.wc.account.address });
+      try {
+        const txHash = await this.wc.writeContract({
+          address: token, abi: erc20TransferAbi, functionName: 'transfer',
+          args: [to, value], nonce: this.nonce,
+          maxFeePerGas: parseGwei('0.001'), maxPriorityFeePerGas: 0n,
+          gas: 200_000n, chain: megaethChain, account: this.wc.account,
+        });
+        await this.pc.waitForTransactionReceipt({ hash: txHash, timeout: 5000 });
+        this.nonce++;
+        return { x402Version, payload: { txHash } };
+      } catch (e) { this.nonce = null; throw e; }
+    };
+    const p = this.queue.then(run);
+    this.queue = p.catch(() => {});
+    return p;
+  }
+}
+
+const account = privateKeyToAccount(PRIVATE_KEY);
+const transport = http('https://mainnet.megaeth.com/rpc');
+const scheme = new MegaethScheme(
+  createWalletClient({ account, chain: megaethChain, transport }),
+  createPublicClient({ chain: megaethChain, transport }),
+);
+const paidFetch = wrapFetchWithPaymentFromConfig(fetch, {
+  schemes: [{ network: 'eip155:4326', client: scheme }],
+});
+
+const res = await paidFetch('https://x402-gateway-production.up.railway.app/api/crypto/price?ids=bitcoin');
+```
+Key: USDm is 18 decimals (not 6). $0.001 = 1000000000000000 (10^15). Wallet needs USDm + tiny ETH for gas.
 
 ## Links
 - GitHub: https://github.com/agentc22/x402engine-mcp
