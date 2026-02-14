@@ -211,6 +211,7 @@ function buildServicesResponse() {
       price: s.price,
       endpoint: `https://x402-gateway-production.up.railway.app${s.path}`,
       method: s.method,
+      parameters: s.parameters,
     })),
   };
 }
