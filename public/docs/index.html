@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>API Documentation — x402engine</title>
-  <meta name="description" content="Complete API reference for the x402engine. 47 endpoints including 28 LLMs, web scraping, TTS, code execution, and transaction simulation. Payment integration guides and code examples.">
+  <meta name="description" content="Complete API reference for the x402engine. 51 endpoints including video generation, 28 LLMs, image generation, code execution, and transaction simulation. Payment integration guides and code examples.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -89,6 +89,10 @@
           <a href="#image-fast" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Fast Image Gen</a>
           <a href="#image-quality" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Quality Image Gen</a>
           <a href="#image-text" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Text-in-Image</a>
+          <a href="#video-fast" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Fast Video Gen</a>
+          <a href="#video-quality" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Quality Video Gen</a>
+          <a href="#video-hailuo" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Hailuo Video</a>
+          <a href="#video-animate" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Image-to-Video</a>
           <a href="#code-run" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Code Execution</a>
           <a href="#transcribe" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Transcription</a>
           <a href="#tts-openai" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">TTS (OpenAI)</a>
@@ -119,7 +123,7 @@
         <!-- Overview -->
         <section id="overview" class="mb-16">
           <h1 class="text-3xl font-bold text-white mb-4">API Documentation</h1>
-          <p class="text-gray-400 leading-relaxed mb-4">The x402engine exposes 47 production APIs behind <a href="https://www.x402.org" class="text-brand-400 hover:underline">x402 micropayments</a>. Every endpoint returns <code class="text-xs bg-white/5 px-1.5 py-0.5 rounded">402 Payment Required</code> until a valid stablecoin payment is attached to the request.</p>
+          <p class="text-gray-400 leading-relaxed mb-4">The x402engine exposes 51 production APIs behind <a href="https://www.x402.org" class="text-brand-400 hover:underline">x402 micropayments</a>. Every endpoint returns <code class="text-xs bg-white/5 px-1.5 py-0.5 rounded">402 Payment Required</code> until a valid stablecoin payment is attached to the request.</p>
           <div class="card-glow rounded-xl p-5 space-y-2 text-sm">
             <div class="flex items-start gap-3">
               <span class="text-brand-400 mt-0.5">Base URL</span>
@@ -205,7 +209,7 @@ console.log(<span class="text-emerald-400">await</span> balances.json());</code>
 
           <div class="mt-6 rounded-xl border border-brand-500/20 bg-brand-500/5 p-4 text-sm">
             <h4 class="text-brand-400 font-semibold mb-2">💡 Test All Endpoints</h4>
-            <p class="text-gray-300 mb-2">Want to test all 47 endpoints at once? Download our comprehensive test suite:</p>
+            <p class="text-gray-300 mb-2">Want to test all 51 endpoints at once? Download our comprehensive test suite:</p>
             <pre class="bg-white/5 rounded px-3 py-2 text-xs overflow-x-auto"><code>curl -O https://x402-gateway-production.up.railway.app/test-all-endpoints.mjs
 TEST_PRIVATE_KEY=0x... node test-all-endpoints.mjs</code></pre>
             <p class="text-gray-400 text-xs mt-2">Includes proper parameters and examples for every endpoint category.</p>
@@ -905,6 +909,119 @@ Content-Type: application/json
           </div>
           <p class="text-gray-400 text-sm mb-4">Image generation with accurate text rendering using Ideogram v3. Best for logos, signs, and typography.</p>
           <p class="text-gray-500 text-xs">Same parameters as <a href="#image-fast" class="text-brand-400 hover:underline">/api/image/fast</a>.</p>
+        </section>
+
+        <!-- Video Generation -->
+        <hr class="border-white/5 mb-14">
+
+        <section id="video-fast" class="mb-14">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="method-post px-2 py-0.5 rounded text-xs font-mono font-bold">POST</span>
+            <code class="text-white text-lg font-mono">/api/video/fast</code>
+            <span class="ml-auto text-brand-400 font-mono text-sm">$0.30</span>
+          </div>
+          <p class="text-gray-400 text-sm mb-4">Fast video generation using Kling 1.6 Standard. Good for drafts and quick iterations. 5 or 10 second clips.</p>
+
+          <h4 class="text-white text-sm font-semibold mb-2">Request Body</h4>
+          <div class="overflow-x-auto mb-4">
+            <table class="w-full text-sm">
+              <thead><tr class="border-b border-white/10"><th class="text-left py-2 px-3 text-gray-500 font-medium">Field</th><th class="text-left py-2 px-3 text-gray-500 font-medium">Type</th><th class="text-left py-2 px-3 text-gray-500 font-medium">Description</th></tr></thead>
+              <tbody>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">prompt <span class="param-required">required</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400">Text description of the video to generate (max 2000 chars)</td></tr>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">duration <span class="param-optional">optional</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400"><code class="text-xs bg-white/5 px-1 rounded">"5"</code> or <code class="text-xs bg-white/5 px-1 rounded">"10"</code> seconds. Default: <code class="text-xs bg-white/5 px-1 rounded">"5"</code></td></tr>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">aspect_ratio <span class="param-optional">optional</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400"><code class="text-xs bg-white/5 px-1 rounded">"16:9"</code>, <code class="text-xs bg-white/5 px-1 rounded">"9:16"</code>, or <code class="text-xs bg-white/5 px-1 rounded">"1:1"</code>. Default: <code class="text-xs bg-white/5 px-1 rounded">"16:9"</code></td></tr>
+                <tr><td class="py-2 px-3 font-mono text-xs text-white">negative_prompt <span class="param-optional">optional</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400">What to avoid (e.g. "blur, distort, low quality")</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h4 class="text-white text-sm font-semibold mb-2">Example</h4>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden mb-4">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">POST /api/video/fast
+Content-Type: application/json
+
+{
+  "prompt": "a cat walking on a beach at sunset, cinematic lighting",
+  "duration": "5",
+  "aspect_ratio": "16:9"
+}</code></pre>
+          </div>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
+            <div class="flex items-center px-4 py-2 bg-white/[0.03] border-b border-white/5"><span class="text-xs text-gray-500 font-mono">Response</span></div>
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">{
+  "video": {
+    "url": "https://v3.fal.media/files/.../output.mp4",
+    "content_type": "video/mp4",
+    "file_size": 2145678
+  },
+  "model": "fal-ai/kling-video/v1.6/standard/text-to-video",
+  "inference_time_ms": 35420
+}</code></pre>
+          </div>
+        </section>
+
+        <section id="video-quality" class="mb-14">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="method-post px-2 py-0.5 rounded text-xs font-mono font-bold">POST</span>
+            <code class="text-white text-lg font-mono">/api/video/quality</code>
+            <span class="ml-auto text-brand-400 font-mono text-sm">$0.50</span>
+          </div>
+          <p class="text-gray-400 text-sm mb-4">High-quality video generation using Kling 2.6 Pro. Cinematic quality with fluid motion. 5 or 10 second clips.</p>
+          <p class="text-gray-500 text-xs">Same parameters as <a href="#video-fast" class="text-brand-400 hover:underline">/api/video/fast</a>.</p>
+        </section>
+
+        <section id="video-hailuo" class="mb-14">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="method-post px-2 py-0.5 rounded text-xs font-mono font-bold">POST</span>
+            <code class="text-white text-lg font-mono">/api/video/hailuo</code>
+            <span class="ml-auto text-brand-400 font-mono text-sm">$0.60</span>
+          </div>
+          <p class="text-gray-400 text-sm mb-4">Premium 1080p video generation using MiniMax Hailuo-02 Pro. Fixed 6-second clips with auto-optimized prompts.</p>
+
+          <h4 class="text-white text-sm font-semibold mb-2">Request Body</h4>
+          <div class="overflow-x-auto mb-4">
+            <table class="w-full text-sm">
+              <thead><tr class="border-b border-white/10"><th class="text-left py-2 px-3 text-gray-500 font-medium">Field</th><th class="text-left py-2 px-3 text-gray-500 font-medium">Type</th><th class="text-left py-2 px-3 text-gray-500 font-medium">Description</th></tr></thead>
+              <tbody>
+                <tr><td class="py-2 px-3 font-mono text-xs text-white">prompt <span class="param-required">required</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400">Text description of the video (max 2000 chars). Prompt is auto-optimized by the model.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="text-gray-500 text-xs">Note: Hailuo always generates 6-second 1080p videos. Duration and aspect ratio are not configurable.</p>
+        </section>
+
+        <section id="video-animate" class="mb-14">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="method-post px-2 py-0.5 rounded text-xs font-mono font-bold">POST</span>
+            <code class="text-white text-lg font-mono">/api/video/animate</code>
+            <span class="ml-auto text-brand-400 font-mono text-sm">$0.50</span>
+          </div>
+          <p class="text-gray-400 text-sm mb-4">Animate a static image into video using Kling 2.6 Pro. Bring any photo or illustration to life with motion.</p>
+
+          <h4 class="text-white text-sm font-semibold mb-2">Request Body</h4>
+          <div class="overflow-x-auto mb-4">
+            <table class="w-full text-sm">
+              <thead><tr class="border-b border-white/10"><th class="text-left py-2 px-3 text-gray-500 font-medium">Field</th><th class="text-left py-2 px-3 text-gray-500 font-medium">Type</th><th class="text-left py-2 px-3 text-gray-500 font-medium">Description</th></tr></thead>
+              <tbody>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">prompt <span class="param-required">required</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400">Description of desired motion and animation</td></tr>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">image_url <span class="param-required">required</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400">URL of the image to animate (must be publicly accessible)</td></tr>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">duration <span class="param-optional">optional</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400"><code class="text-xs bg-white/5 px-1 rounded">"5"</code> or <code class="text-xs bg-white/5 px-1 rounded">"10"</code>. Default: <code class="text-xs bg-white/5 px-1 rounded">"5"</code></td></tr>
+                <tr><td class="py-2 px-3 font-mono text-xs text-white">aspect_ratio <span class="param-optional">optional</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400"><code class="text-xs bg-white/5 px-1 rounded">"16:9"</code>, <code class="text-xs bg-white/5 px-1 rounded">"9:16"</code>, or <code class="text-xs bg-white/5 px-1 rounded">"1:1"</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h4 class="text-white text-sm font-semibold mb-2">Example</h4>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">POST /api/video/animate
+Content-Type: application/json
+
+{
+  "prompt": "the person smiles and waves at the camera",
+  "image_url": "https://example.com/portrait.jpg",
+  "duration": "5"
+}</code></pre>
+          </div>
         </section>
 
         <!-- code-run -->
