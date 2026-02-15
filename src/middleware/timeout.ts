@@ -2,8 +2,9 @@ import type { Request, Response, NextFunction, RequestHandler } from "express";
 
 /**
  * Request timeout middleware with smart timeouts based on endpoint type.
- * - Compute-heavy (image, LLM, TTS, transcribe): 90s
- * - Travel APIs (slow external APIs): 60s
+ * - Video generation: 300s (models take 30-120s)
+ * - LLM endpoints: 180s (reasoning models are slow)
+ * - Compute-heavy (image, TTS, transcribe, code): 90s
  * - Standard (crypto, blockchain, web): 30s
  */
 export function requestTimeoutMiddleware(): RequestHandler {
@@ -43,6 +44,11 @@ function getTimeoutForPath(path: string): number {
   // LLM endpoints: 180 seconds (some models like o1, gemini-pro can be very slow)
   if (path.startsWith("/api/llm/")) {
     return 180_000;
+  }
+
+  // Video generation: 300 seconds (video models can take 30-120s)
+  if (path.startsWith("/api/video/")) {
+    return 300_000;
   }
 
   // Compute-heavy endpoints: 90 seconds

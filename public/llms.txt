@@ -1,8 +1,8 @@
 # x402engine
-> Pay-per-call API gateway for AI agents. 47 tools, sub-cent pricing, instant crypto payments.
+> Pay-per-call API gateway for AI agents. 51 tools, sub-cent pricing, instant crypto payments.
 
 ## What is this?
-x402engine is an API gateway that provides 47 pay-per-call tools for AI agents using the HTTP 402 payment protocol. Every API call costs between $0.001 and $0.12, paid instantly with stablecoins (USDC on Base, USDC on Solana, or USDm on MegaETH).
+x402engine is an API gateway that provides 51 pay-per-call tools for AI agents using the HTTP 402 payment protocol. Every API call costs between $0.001 and $0.60, paid instantly with stablecoins (USDC on Base, USDC on Solana, or USDm on MegaETH).
 
 ## How to connect
 - MCP server (recommended): `npx -y x402engine-mcp`
@@ -16,6 +16,12 @@ x402engine is an API gateway that provides 47 pay-per-call tools for AI agents u
 - generate_image (fast): $0.015 — AI image generation, fast mode
 - generate_image (quality): $0.05 — AI image generation, quality mode
 - generate_image (text): $0.12 — AI image with embedded text
+
+### Video Generation
+- generate_video (fast): $0.30 — Kling 1.6, quick draft quality, 5-10sec clips
+- generate_video (quality): $0.50 — Kling 2.6 Pro, cinematic quality, 5-10sec clips
+- generate_video (hailuo): $0.60 — MiniMax Hailuo-02 Pro, 1080p, 6sec clips
+- animate_image: $0.50 — Kling 2.6 Pro image-to-video, animate any image
 
 ### Code Execution
 - execute_code: $0.005 — Sandboxed code execution (Python, JS, Bash, R, Ruby, Go, Rust)

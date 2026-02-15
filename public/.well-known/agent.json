@@ -1,6 +1,6 @@
 {
   "name": "x402engine",
-  "description": "Pay-per-call API gateway for AI agents. 47 tools including image generation, LLM inference (28 models), code execution, audio transcription, crypto data, wallet analytics, ENS, IPFS, web scraping, and transaction simulation. All via HTTP 402 micropayments with USDC and USDm.",
+  "description": "Pay-per-call API gateway for AI agents. 51 tools including image generation, video generation, LLM inference (28 models), code execution, audio transcription, crypto data, wallet analytics, ENS, IPFS, web scraping, and transaction simulation. All via HTTP 402 micropayments with USDC and USDm.",
   "url": "https://x402-gateway-production.up.railway.app",
   "version": "3.0.0",
   "protocol": "a2a",
@@ -20,6 +20,13 @@
       "description": "Generate images using AI (fast, quality, and text-in-image tiers). Prices: $0.015-$0.12 per image.",
       "tags": ["image", "generation", "ai"],
       "examples": ["Generate a photo of a sunset over mountains", "Create a logo with the text 'Hello World'"]
+    },
+    {
+      "id": "video-generation",
+      "name": "Video Generation",
+      "description": "Generate videos from text (Kling, Hailuo) or animate images. Fast ($0.30), quality ($0.50), and premium ($0.60) tiers plus image-to-video ($0.50).",
+      "tags": ["video", "generation", "ai", "kling", "hailuo"],
+      "examples": ["Generate a video of a cat walking on a beach", "Animate this image into a video"]
     },
     {
       "id": "llm-inference",
@@ -57,13 +64,6 @@
       "examples": ["Show token balances for 0x123...", "Get transaction history for this wallet"]
     },
     {
-      "id": "nft",
-      "name": "NFT Data",
-      "description": "NFT metadata, ownership history, and collection statistics. Price: $0.005 per query.",
-      "tags": ["nft", "metadata", "collection"],
-      "examples": ["Get metadata for this NFT", "Show collection stats for BAYC"]
-    },
-    {
       "id": "ens",
       "name": "ENS Resolution",
       "description": "Resolve ENS names to addresses and reverse lookup. Price: $0.001.",
@@ -83,13 +83,6 @@
       "description": "Scrape web page content and capture screenshots. Prices: $0.005-$0.01.",
       "tags": ["web", "scrape", "screenshot"],
       "examples": ["Scrape the content of this URL", "Take a screenshot of this website"]
-    },
-    {
-      "id": "travel",
-      "name": "Travel Search",
-      "description": "Search flights, hotels, airports, and find cheapest travel dates. Price: $0.005-$0.01.",
-      "tags": ["travel", "flights", "hotels", "booking"],
-      "examples": ["Find flights from NYC to London", "Search hotels in Tokyo"]
     },
     {
       "id": "transaction-simulation",

@@ -17,6 +17,7 @@ import { requestTimeoutMiddleware } from "./middleware/timeout.js";
 import { debugRoutes } from "./debug-routes.js";
 import { freeEndpointLimiter, paidEndpointLimiter, expensiveEndpointLimiter } from "./middleware/rate-limit.js";
 import imageRouter from "./apis/image.js";
+import videoRouter from "./apis/video.js";
 import codeRouter from "./apis/code.js";
 import transcribeRouter from "./apis/transcribe.js";
 import cryptoRouter from "./apis/crypto.js";
@@ -350,6 +351,7 @@ app.use((req, res, next) => {
 // Transcribe gets a larger body limit for audio_base64
 app.use("/api/transcribe", express.json({ limit: "50mb" }), transcribeRouter);
 app.use(imageRouter);
+app.use(videoRouter);
 app.use(codeRouter);
 app.use(cryptoRouter);
 app.use(blockchainRouter);
