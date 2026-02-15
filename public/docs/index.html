@@ -207,6 +207,12 @@ console.log(<span class="text-emerald-400">await</span> balances.json());</code>
             </ol>
           </div>
 
+          <div class="mt-6 rounded-xl border border-red-500/20 bg-red-500/5 p-4 text-sm">
+            <h4 class="text-red-400 font-semibold mb-2">Important: Use the Exact EVM Scheme for Base</h4>
+            <p class="text-gray-300 mb-2">Base payments <strong>must</strong> use the <code class="text-xs bg-white/5 px-1 rounded">@x402/evm/exact/client</code> scheme shown above. This produces a Permit2 signature payload that the Coinbase CDP facilitator verifies and settles. Sending a raw ERC-20 transfer tx hash will <strong>not</strong> work — the facilitator expects the v2 exact scheme payload, not a transaction hash.</p>
+            <p class="text-gray-400 text-xs">The three critical lines: <code class="text-xs bg-white/5 px-1 rounded">import { registerExactEvmScheme } from "@x402/evm/exact/client"</code> → <code class="text-xs bg-white/5 px-1 rounded">registerExactEvmScheme(client, { signer, networks: ["eip155:8453"] })</code> → <code class="text-xs bg-white/5 px-1 rounded">wrapFetchWithPayment(fetch, client)</code>. MegaETH and Solana use different schemes — see <a href="#networks" class="text-brand-400 hover:underline">Networks</a> below.</p>
+          </div>
+
           <div class="mt-6 rounded-xl border border-brand-500/20 bg-brand-500/5 p-4 text-sm">
             <h4 class="text-brand-400 font-semibold mb-2">💡 Test All Endpoints</h4>
             <p class="text-gray-300 mb-2">Want to test all 51 endpoints at once? Download our comprehensive test suite:</p>
@@ -946,17 +952,20 @@ Content-Type: application/json
   "aspect_ratio": "16:9"
 }</code></pre>
           </div>
-          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
-            <div class="flex items-center px-4 py-2 bg-white/[0.03] border-b border-white/5"><span class="text-xs text-gray-500 font-mono">Response</span></div>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden mb-4">
+            <div class="flex items-center px-4 py-2 bg-white/[0.03] border-b border-white/5"><span class="text-xs text-gray-500 font-mono">Response (200 OK)</span></div>
             <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">{
-  "video": {
-    "url": "https://v3.fal.media/files/.../output.mp4",
+  <span class="text-amber-300">"video"</span>: {
+    <span class="text-amber-300">"url"</span>: <span class="text-emerald-400">"https://v3.fal.media/files/abc123/output.mp4"</span>,  <span class="text-gray-500">// ← download this URL to get the MP4</span>
     "content_type": "video/mp4",
     "file_size": 2145678
   },
   "model": "fal-ai/kling-video/v1.6/standard/text-to-video",
   "inference_time_ms": 35420
 }</code></pre>
+          </div>
+          <div class="rounded-xl border border-brand-500/20 bg-brand-500/5 p-3 text-sm text-gray-300">
+            The MP4 file is at <code class="text-xs bg-white/5 px-1 rounded">response.video.url</code> (not <code class="text-xs bg-white/5 px-1 rounded">video_url</code>). Fetch that URL directly to download the video — it's a temporary CDN link, so download promptly. All 4 video endpoints return the same response shape.
           </div>
         </section>
 

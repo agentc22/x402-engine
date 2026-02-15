@@ -22,6 +22,7 @@ x402engine is an API gateway that provides 51 pay-per-call tools for AI agents u
 - generate_video (quality): $0.50 — Kling 2.6 Pro, cinematic quality, 5-10sec clips
 - generate_video (hailuo): $0.60 — MiniMax Hailuo-02 Pro, 1080p, 6sec clips
 - animate_image: $0.50 — Kling 2.6 Pro image-to-video, animate any image
+- Response: `{ video: { url: "https://...mp4" }, model, inference_time_ms }` — download `video.url` for the MP4
 
 ### Code Execution
 - execute_code: $0.005 — Sandboxed code execution (Python, JS, Bash, R, Ruby, Go, Rust)
@@ -78,6 +79,7 @@ All payments use the x402 HTTP payment protocol. When you call an endpoint witho
 - USDm on MegaETH (EVM, ~10ms confirmation) — requires custom scheme (see below)
 
 ### Base payment (recommended, simplest)
+**Important:** You must use `registerExactEvmScheme` from `@x402/evm/exact/client` — this produces a Permit2 signature that the facilitator verifies. Sending a raw ERC-20 transfer tx hash will NOT work.
 ```js
 import { wrapFetchWithPayment, x402Client } from '@x402/fetch';
 import { registerExactEvmScheme } from '@x402/evm/exact/client';
