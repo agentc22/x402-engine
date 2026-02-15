@@ -88,8 +88,12 @@ function videoHandler(slug: string) {
     } catch (err: any) {
       upstreamStatus = err.status || 500;
       console.error(`[${cfg.serviceId}] upstream error: status=${upstreamStatus} message=${err.message}`);
-      res.setHeader("Retry-After", "10");
-      res.status(503).json({ error: "Video generation failed", retryable: true });
+      if (upstreamStatus === 403) {
+        res.status(503).json({ error: "Video generation temporarily unavailable (upstream auth)", retryable: false });
+      } else {
+        res.setHeader("Retry-After", "10");
+        res.status(503).json({ error: "Video generation failed", retryable: true });
+      }
     } finally {
       logRequest({
         service: cfg.serviceId,

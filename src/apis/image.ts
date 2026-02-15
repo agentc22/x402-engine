@@ -37,8 +37,13 @@ function imageHandler(model: "fast" | "quality" | "text", serviceId: string, end
       res.json(result);
     } catch (err: any) {
       upstreamStatus = err.status || 500;
-      res.setHeader("Retry-After", "5");
-      res.status(503).json({ error: "Image generation failed", retryable: true });
+      console.error(`[${serviceId}] upstream error: status=${upstreamStatus} message=${err.message}`);
+      if (upstreamStatus === 403) {
+        res.status(503).json({ error: "Image generation temporarily unavailable (upstream auth)", retryable: false });
+      } else {
+        res.setHeader("Retry-After", "5");
+        res.status(503).json({ error: "Image generation failed", retryable: true });
+      }
     } finally {
       logRequest({
         service: serviceId,
