@@ -773,7 +773,7 @@ Content-Type: application/json
           </div>
 
           <h4 class="text-white text-sm font-semibold mb-2">Example</h4>
-          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden mb-4">
             <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">POST /api/token/prices
 Content-Type: application/json
 
@@ -782,6 +782,18 @@ Content-Type: application/json
     { "token_address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913", "chain": "base" }
   ]
 }</code></pre>
+          </div>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
+            <div class="flex items-center px-4 py-2 bg-white/[0.03] border-b border-white/5"><span class="text-xs text-gray-500 font-mono">Response</span></div>
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">[
+  {
+    "token_address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+    "chain": "base",
+    "price_usd": 1.0001,
+    "price_change_24h": 0.01,
+    "volume_24h": 12345678.90
+  }
+]</code></pre>
           </div>
         </section>
 
@@ -805,6 +817,21 @@ Content-Type: application/json
                 <tr><td class="py-2 px-3 font-mono text-xs text-white">id</td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400">Token ID</td></tr>
               </tbody>
             </table>
+          </div>
+
+          <h4 class="text-white text-sm font-semibold mb-2">Example</h4>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden mb-4">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">GET /api/token/metadata?chain=ethereum&address=0xdac17f958d2ee523a2206206994597c13d831ec7</code></pre>
+          </div>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
+            <div class="flex items-center px-4 py-2 bg-white/[0.03] border-b border-white/5"><span class="text-xs text-gray-500 font-mono">Response</span></div>
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">{
+  "name": "Tether USD",
+  "symbol": "USDT",
+  "decimals": 6,
+  "chain": "ethereum",
+  "token_address": "0xdac17f958d2ee523a2206206994597c13d831ec7"
+}</code></pre>
           </div>
         </section>
 
@@ -887,12 +914,28 @@ Content-Type: application/json
           </div>
 
           <h4 class="text-white text-sm font-semibold mb-2">Example</h4>
-          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden mb-4">
             <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">POST /api/image/fast
 Content-Type: application/json
 
 { "prompt": "A cyberpunk cityscape at sunset, neon lights reflecting off rain-slicked streets" }</code></pre>
           </div>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
+            <div class="flex items-center px-4 py-2 bg-white/[0.03] border-b border-white/5"><span class="text-xs text-gray-500 font-mono">Response (200 OK)</span></div>
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">{
+  <span class="text-amber-300">"images"</span>: [
+    {
+      <span class="text-amber-300">"url"</span>: <span class="text-emerald-400">"https://v3.fal.media/files/abc123/output.png"</span>,  <span class="text-gray-500">// ← download this URL</span>
+      "width": 1024,
+      "height": 1024
+    }
+  ],
+  "seed": 42,
+  "model": "fal-ai/flux/schnell",
+  "inference_time_ms": 1850
+}</code></pre>
+          </div>
+          <p class="text-gray-500 text-xs mt-2">Image URL is at <code class="text-xs bg-white/5 px-1 rounded">images[0].url</code>. All 3 image endpoints return the same response shape.</p>
         </section>
 
         <!-- image-quality -->
@@ -976,7 +1019,7 @@ Content-Type: application/json
             <span class="ml-auto text-brand-400 font-mono text-sm">$0.50</span>
           </div>
           <p class="text-gray-400 text-sm mb-4">High-quality video generation using Kling 2.6 Pro. Cinematic quality with fluid motion. 5 or 10 second clips.</p>
-          <p class="text-gray-500 text-xs">Same parameters as <a href="#video-fast" class="text-brand-400 hover:underline">/api/video/fast</a>.</p>
+          <p class="text-gray-500 text-xs">Same parameters and response shape as <a href="#video-fast" class="text-brand-400 hover:underline">/api/video/fast</a>. The MP4 is at <code class="text-xs bg-white/5 px-1 rounded">response.video.url</code>.</p>
         </section>
 
         <section id="video-hailuo" class="mb-14">
@@ -996,7 +1039,7 @@ Content-Type: application/json
               </tbody>
             </table>
           </div>
-          <p class="text-gray-500 text-xs">Note: Hailuo always generates 6-second 1080p videos. Duration and aspect ratio are not configurable.</p>
+          <p class="text-gray-500 text-xs">Note: Hailuo always generates 6-second 1080p videos. Duration and aspect ratio are not configurable. Returns the same response shape as <a href="#video-fast" class="text-brand-400 hover:underline">/api/video/fast</a> — MP4 is at <code class="text-xs bg-white/5 px-1 rounded">response.video.url</code>.</p>
         </section>
 
         <section id="video-animate" class="mb-14">
@@ -1031,6 +1074,7 @@ Content-Type: application/json
   "duration": "5"
 }</code></pre>
           </div>
+          <p class="text-gray-500 text-xs">Returns the same response shape as <a href="#video-fast" class="text-brand-400 hover:underline">/api/video/fast</a> — MP4 is at <code class="text-xs bg-white/5 px-1 rounded">response.video.url</code>.</p>
         </section>
 
         <!-- code-run -->
@@ -1182,8 +1226,16 @@ Content-Type: application/json
             </table>
           </div>
 
-          <h4 class="text-white text-sm font-semibold mb-2">Response</h4>
-          <p class="text-gray-400 text-sm">For JSON content: returns the stored JSON object directly. For binary content: streams the raw file with appropriate Content-Type.</p>
+          <h4 class="text-white text-sm font-semibold mb-2">Example</h4>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden mb-4">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">GET /api/ipfs/get?cid=bafkreihdwdcefgh4dqkjv67uzcmw7ojee6xedzdetojuzjevtensgqas7y</code></pre>
+          </div>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden mb-4">
+            <div class="flex items-center px-4 py-2 bg-white/[0.03] border-b border-white/5"><span class="text-xs text-gray-500 font-mono">Response (JSON content)</span></div>
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300"><span class="text-gray-500">// Returns the stored JSON object directly</span>
+{ "name": "Test", "value": 42 }</code></pre>
+          </div>
+          <p class="text-gray-500 text-xs">For JSON content: returns the stored object as-is. For binary content (images, files): streams the raw bytes with appropriate <code class="text-xs bg-white/5 px-1 rounded">Content-Type</code> header.</p>
         </section>
 
         <!-- Divider -->
