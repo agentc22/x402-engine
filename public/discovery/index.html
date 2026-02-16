@@ -164,6 +164,10 @@
       'eip155:6343':  { name: 'MegaETH Testnet', letter: 'M', color: 'emerald', token: 'USDm', decimals: 18, confirm: '~10ms' },
       'solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp': { name: 'Solana', letter: 'S', color: 'purple', token: 'USDC', decimals: 6, confirm: '~400ms' },
       'solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1':  { name: 'Solana Devnet', letter: 'S', color: 'purple', token: 'USDC', decimals: 6, confirm: '~400ms' },
+      // Human-readable keys from x402.json
+      'base':    { name: 'Base', letter: 'B', color: 'blue',    token: 'USDC', decimals: 6,  confirm: '~2s' },
+      'solana':  { name: 'Solana', letter: 'S', color: 'purple', token: 'USDC', decimals: 6,  confirm: '~400ms' },
+      'megaeth': { name: 'MegaETH', letter: 'M', color: 'emerald', token: 'USDm', decimals: 18, confirm: '~10ms' },
     };
 
     const CATEGORY_COLORS = {
@@ -233,9 +237,9 @@
             '  </div>',
             '</div>',
             '<div class="space-y-2 text-sm">',
-            '  <div class="flex justify-between"><span class="text-gray-400">Token</span><span class="text-white">' + escapeHtml(extra.token || meta.token) + '</span></div>',
+            '  <div class="flex justify-between"><span class="text-gray-400">Token</span><span class="text-white">' + escapeHtml(extra.stablecoin || extra.token || meta.token) + '</span></div>',
             '  <div class="flex justify-between"><span class="text-gray-400">Decimals</span><span class="text-white">' + (extra.decimals || meta.decimals) + '</span></div>',
-            '  <div class="flex justify-between"><span class="text-gray-400">Confirmation</span><span class="text-white">' + escapeHtml(extra.confirmationTime || meta.confirm) + '</span></div>',
+            '  <div class="flex justify-between"><span class="text-gray-400">Confirmation</span><span class="text-white">' + escapeHtml(extra.estimatedConfirmation || extra.confirmationTime || meta.confirm) + '</span></div>',
             '</div>',
           ].join('\n');
           networksGrid.appendChild(card);
