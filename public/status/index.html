@@ -253,38 +253,41 @@
 
         document.getElementById('last-check').textContent = 'Checked: ' + new Date().toLocaleTimeString();
 
-        // Database check
+        // Database check (unauthenticated returns string "ok"/"down", authenticated returns object)
         const checks = data.checks || {};
-        const db = checks.database || {};
-        setBadge(document.getElementById('db-badge'), db.status === 'ok' || db.status === 'healthy');
+        const dbRaw = checks.database;
+        const db = typeof dbRaw === 'string' ? { status: dbRaw } : (dbRaw || {});
+        const dbOk = db.status === 'ok' || db.status === 'healthy';
+        setBadge(document.getElementById('db-badge'), dbOk);
         document.getElementById('db-status').textContent = db.status || '--';
-        document.getElementById('db-status').className = (db.status === 'ok' || db.status === 'healthy') ? 'text-emerald-400' : 'text-red-400';
+        document.getElementById('db-status').className = dbOk ? 'text-emerald-400' : 'text-red-400';
         document.getElementById('db-latency').textContent = db.latencyMs != null ? db.latencyMs + 'ms' : (db.latency != null ? db.latency + 'ms' : '--');
 
-        // MegaETH RPC check
-        const rpc = checks.megaethRpc || checks.megaeth || checks.rpc || {};
-        setBadge(document.getElementById('rpc-badge'), rpc.status === 'ok' || rpc.status === 'healthy');
+        // MegaETH RPC check (same string/object handling)
+        const rpcRaw = checks.megaethRpc || checks.megaeth || checks.rpc;
+        const rpc = typeof rpcRaw === 'string' ? { status: rpcRaw } : (rpcRaw || {});
+        const rpcOk = rpc.status === 'ok' || rpc.status === 'healthy';
+        setBadge(document.getElementById('rpc-badge'), rpcOk);
         document.getElementById('rpc-status').textContent = rpc.status || '--';
-        document.getElementById('rpc-status').className = (rpc.status === 'ok' || rpc.status === 'healthy') ? 'text-emerald-400' : 'text-red-400';
+        document.getElementById('rpc-status').className = rpcOk ? 'text-emerald-400' : 'text-red-400';
         document.getElementById('rpc-block').textContent = rpc.blockNumber != null ? Number(rpc.blockNumber).toLocaleString() : '--';
         document.getElementById('rpc-latency').textContent = rpc.latencyMs != null ? rpc.latencyMs + 'ms' : (rpc.latency != null ? rpc.latency + 'ms' : '--');
 
-        // Memory
+        // Memory (backend sends heapUsedMB/heapTotalMB/rssMB as integers, or may be absent without auth)
         const mem = data.memory || {};
-        const heapUsed = mem.heapUsed || mem.heap_used || 0;
-        const heapTotal = mem.heapTotal || mem.heap_total || 0;
-        const rss = mem.rss || 0;
-        const external = mem.external || 0;
+        const heapUsedMB = mem.heapUsedMB ?? mem.heapUsed ?? null;
+        const heapTotalMB = mem.heapTotalMB ?? mem.heapTotal ?? null;
+        const rssMB = mem.rssMB ?? mem.rss ?? null;
+        const externalMB = mem.externalMB ?? mem.external ?? null;
 
-        document.getElementById('mem-heap').textContent = formatBytes(heapUsed);
-        document.getElementById('mem-heap-total').textContent = formatBytes(heapTotal);
-        document.getElementById('mem-rss').textContent = formatBytes(rss);
-        document.getElementById('mem-external').textContent = formatBytes(external);
+        document.getElementById('mem-heap').textContent = heapUsedMB != null ? heapUsedMB + ' MB' : '--';
+        document.getElementById('mem-heap-total').textContent = heapTotalMB != null ? heapTotalMB + ' MB' : '--';
+        document.getElementById('mem-rss').textContent = rssMB != null ? rssMB + ' MB' : '--';
+        document.getElementById('mem-external').textContent = externalMB != null ? externalMB + ' MB' : '--';
 
         // Progress bars (assume 512MB max for visual)
-        const maxMem = 512 * 1024 * 1024;
-        document.getElementById('mem-heap-bar').style.width = Math.min(100, (heapUsed / maxMem) * 100) + '%';
-        document.getElementById('mem-rss-bar').style.width = Math.min(100, (rss / maxMem) * 100) + '%';
+        document.getElementById('mem-heap-bar').style.width = heapUsedMB != null ? Math.min(100, (heapUsedMB / 512) * 100) + '%' : '0%';
+        document.getElementById('mem-rss-bar').style.width = rssMB != null ? Math.min(100, (rssMB / 512) * 100) + '%' : '0%';
 
         // Key pool
         const kp = data.keyPool || data.key_pool || checks.keyPool || checks.key_pool || {};
