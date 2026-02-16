@@ -264,7 +264,7 @@
             "type": "string",
             "required": true,
             "description": "URL of the image to animate",
-            "example": "https://example.com/photo.jpg"
+            "example": "https://images.unsplash.com/photo-1529778873920-4da4926a72c2?w=512"
           },
           "duration": {
             "type": "string",
