@@ -68,6 +68,7 @@
           <a href="#payment-flow" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Payment Flow</a>
           <a href="#networks" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Networks</a>
           <a href="#discovery" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Discovery</a>
+          <a href="#mcp-server" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">MCP Server</a>
         </div>
         <div>
           <h4 class="text-gray-500 font-medium uppercase text-xs tracking-wider mb-2 px-3">Crypto &amp; Blockchain</h4>
@@ -531,6 +532,77 @@ console.log(<span class="text-emerald-400">await</span> res.json());</code></pre
           </div>
         </section>
 
+
+        <!-- MCP Server -->
+        <section id="mcp-server" class="mb-16">
+          <h2 class="text-2xl font-bold text-white mb-4">MCP Server</h2>
+          <p class="text-gray-400 mb-4"><a href="https://modelcontextprotocol.io" class="text-brand-400 hover:underline">Model Context Protocol (MCP)</a> gives AI agents a standard way to discover and call tools. For x402engine, MCP matters because agents can plug in once, then browse and use paid x402 services without custom integration code per client.</p>
+
+          <div class="rounded-xl border border-brand-500/20 bg-brand-500/5 p-4 text-sm mb-6">
+            <h4 class="text-brand-400 font-semibold mb-2">Install x402 MCP server</h4>
+            <p class="text-gray-300 mb-3">Server repo: <a href="https://github.com/agentc22/x402engine-mcp" class="text-brand-400 hover:underline">github.com/agentc22/x402engine-mcp</a></p>
+            <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
+              <pre class="p-4 overflow-x-auto"><code class="text-xs text-gray-300">claude mcp add x402 -- npx -y x402engine-mcp</code></pre>
+            </div>
+            <p class="text-gray-400 text-xs mt-2">Use this same command pattern in Claude Code, Claude Desktop, and OpenClaw.</p>
+          </div>
+
+          <h3 class="text-lg font-semibold text-white mb-3">Add x402 to popular MCP clients</h3>
+          <div class="overflow-x-auto mb-6">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="border-b border-white/10">
+                  <th class="text-left py-2 px-3 text-gray-500 font-medium">Tool</th>
+                  <th class="text-left py-2 px-3 text-gray-500 font-medium">Command / Pattern</th>
+                </tr>
+              </thead>
+              <tbody class="text-gray-300">
+                <tr class="border-b border-white/5">
+                  <td class="py-2 px-3 text-white">Claude Code</td>
+                  <td class="py-2 px-3"><code class="text-xs bg-white/5 px-1 rounded">claude mcp add x402 -- npx -y x402engine-mcp</code></td>
+                </tr>
+                <tr class="border-b border-white/5">
+                  <td class="py-2 px-3 text-white">Claude Desktop</td>
+                  <td class="py-2 px-3"><code class="text-xs bg-white/5 px-1 rounded">claude mcp add x402 -- npx -y x402engine-mcp</code></td>
+                </tr>
+                <tr class="border-b border-white/5">
+                  <td class="py-2 px-3 text-white">OpenClaw</td>
+                  <td class="py-2 px-3"><code class="text-xs bg-white/5 px-1 rounded">claude mcp add x402 -- npx -y x402engine-mcp</code></td>
+                </tr>
+                <tr class="border-b border-white/5">
+                  <td class="py-2 px-3 text-white">Cursor</td>
+                  <td class="py-2 px-3">Add an MCP server named <code class="text-xs bg-white/5 px-1 rounded">x402</code> that runs <code class="text-xs bg-white/5 px-1 rounded">npx -y x402engine-mcp</code>.</td>
+                </tr>
+                <tr class="border-b border-white/5">
+                  <td class="py-2 px-3 text-white">Cline</td>
+                  <td class="py-2 px-3">Use the same server process pattern: <code class="text-xs bg-white/5 px-1 rounded">npx -y x402engine-mcp</code> under MCP settings.</td>
+                </tr>
+                <tr class="border-b border-white/5">
+                  <td class="py-2 px-3 text-white">Continue</td>
+                  <td class="py-2 px-3">Register MCP server <code class="text-xs bg-white/5 px-1 rounded">x402</code> with command <code class="text-xs bg-white/5 px-1 rounded">npx -y x402engine-mcp</code>.</td>
+                </tr>
+                <tr class="border-b border-white/5">
+                  <td class="py-2 px-3 text-white">Windsurf</td>
+                  <td class="py-2 px-3">Add MCP server entry using <code class="text-xs bg-white/5 px-1 rounded">npx -y x402engine-mcp</code>.</td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-3 text-white">Goose</td>
+                  <td class="py-2 px-3">Use the same MCP server command pattern with server name <code class="text-xs bg-white/5 px-1 rounded">x402</code>.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3 class="text-lg font-semibold text-white mb-3">Verify connection</h3>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden mb-4">
+            <pre class="p-4 overflow-x-auto"><code class="text-xs text-gray-300">claude mcp get x402</code></pre>
+          </div>
+          <p class="text-gray-400 mb-4">If the server is connected, your agent can immediately discover all x402engine services from the discovery endpoint:</p>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
+            <pre class="p-4 overflow-x-auto"><code class="text-xs text-gray-300">https://x402engine.app/.well-known/x402.json</code></pre>
+          </div>
+        </section>
+
         <!-- Divider -->
         <hr class="border-white/5 mb-16">
         <h2 class="text-xl font-bold text-gray-500 uppercase tracking-wider mb-8">Crypto &amp; Blockchain</h2>
@@ -886,7 +958,6 @@ Content-Type: application/json
 }</code></pre>
           </div>
         </section>
-
         <!-- Divider -->
         <hr class="border-white/5 mb-16">
         <h2 class="text-xl font-bold text-gray-500 uppercase tracking-wider mb-8">Compute</h2>
@@ -1159,7 +1230,6 @@ Content-Type: application/json
 }</code></pre>
           </div>
         </section>
-
         <!-- Divider -->
         <hr class="border-white/5 mb-16">
         <h2 class="text-xl font-bold text-gray-500 uppercase tracking-wider mb-8">Storage</h2>
@@ -1237,7 +1307,6 @@ Content-Type: application/json
           </div>
           <p class="text-gray-500 text-xs">For JSON content: returns the stored object as-is. For binary content (images, files): streams the raw bytes with appropriate <code class="text-xs bg-white/5 px-1 rounded">Content-Type</code> header.</p>
         </section>
-
         <!-- Divider -->
         <hr class="border-white/5 mb-16">
         <h2 class="text-xl font-bold text-gray-500 uppercase tracking-wider mb-8">LLM & AI</h2>
