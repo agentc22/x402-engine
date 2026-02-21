@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>x402engine — Pay-per-call APIs for AI Agents</title>
-  <meta name="description" content="38 production APIs behind HTTP 402 micropayments. 15 LLMs, web search, web scraping, TTS, and transaction simulation. Pay with USDC on Base, USDm on MegaETH, or USDC on Solana. No API keys, no subscriptions — just stablecoins.">
+  <meta name="description" content="58 production APIs behind HTTP 402 micropayments. 30 LLMs, image &amp; video generation, code execution, web scraping, TTS, and transaction simulation. Pay with USDC on Base, USDm on MegaETH, or USDC on Solana. No API keys, no subscriptions — just stablecoins.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -59,7 +59,7 @@
     <div class="max-w-4xl mx-auto px-6 text-center">
       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-600/10 border border-brand-500/20 text-brand-400 text-xs font-medium mb-6">
         <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-        45 APIs live — 28 LLMs
+        58 APIs live — 30 LLMs
       </div>
       <h1 class="text-4xl sm:text-6xl font-bold text-white leading-tight mb-6">
         Pay-per-call APIs<br>
@@ -210,14 +210,14 @@ registerExactEvmScheme(client, { signer: account, networks: [<span class="text-a
   <section id="services" class="py-20 bg-surface-900/50">
     <div class="max-w-6xl mx-auto px-6">
       <div class="text-center mb-12">
-        <h2 class="text-3xl font-bold text-white mb-3">45 APIs, four categories</h2>
+        <h2 class="text-3xl font-bold text-white mb-3">58 APIs, four categories</h2>
         <p class="text-gray-400 max-w-xl mx-auto">Production-grade endpoints backed by best-in-class providers. All priced for micropayments.</p>
       </div>
 
       <!-- LLM & AI -->
       <div class="mb-10">
         <div class="flex items-center gap-3 mb-4">
-          <span class="px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-400 text-xs font-medium">LLM &amp; AI — 28 models</span>
+          <span class="px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-400 text-xs font-medium">LLM &amp; AI — 30 models</span>
         </div>
         <p class="text-gray-500 text-sm mb-4">All models via OpenRouter. Same request format, same payment flow — just pick a model.</p>
 
@@ -225,44 +225,9 @@ registerExactEvmScheme(client, { signer: account, networks: [<span class="text-a
         <div class="mb-3"><span class="text-gray-500 text-xs font-medium uppercase tracking-wider">OpenAI</span></div>
         <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
           <div class="card-glow rounded-xl p-4 transition">
-            <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">GPT-4o</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.04</span></div>
-            <p class="text-gray-500 text-xs mb-2">Flagship multimodal</p>
-            <code class="text-[10px] text-gray-600 font-mono">/api/llm/gpt-4o</code>
-          </div>
-          <div class="card-glow rounded-xl p-4 transition">
-            <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">GPT-4o Mini</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.003</span></div>
-            <p class="text-gray-500 text-xs mb-2">Fast &amp; affordable</p>
-            <code class="text-[10px] text-gray-600 font-mono">/api/llm/gpt-4o-mini</code>
-          </div>
-          <div class="card-glow rounded-xl p-4 transition">
-            <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">GPT-4.1</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.03</span></div>
-            <p class="text-gray-500 text-xs mb-2">Coding &amp; long context</p>
-            <code class="text-[10px] text-gray-600 font-mono">/api/llm/gpt-4.1</code>
-          </div>
-          <div class="card-glow rounded-xl p-4 transition">
-            <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">GPT-4.1 Mini</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.006</span></div>
-            <p class="text-gray-500 text-xs mb-2">Compact 4.1</p>
-            <code class="text-[10px] text-gray-600 font-mono">/api/llm/gpt-4.1-mini</code>
-          </div>
-          <div class="card-glow rounded-xl p-4 transition">
-            <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">GPT-5</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.035</span></div>
-            <p class="text-gray-500 text-xs mb-2">Most capable</p>
-            <code class="text-[10px] text-gray-600 font-mono">/api/llm/gpt-5</code>
-          </div>
-          <div class="card-glow rounded-xl p-4 transition">
-            <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">GPT-5 Mini</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.007</span></div>
-            <p class="text-gray-500 text-xs mb-2">Compact GPT-5</p>
-            <code class="text-[10px] text-gray-600 font-mono">/api/llm/gpt-5-mini</code>
-          </div>
-          <div class="card-glow rounded-xl p-4 transition">
-            <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">o3</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.03</span></div>
-            <p class="text-gray-500 text-xs mb-2">Reasoning model</p>
-            <code class="text-[10px] text-gray-600 font-mono">/api/llm/o3</code>
-          </div>
-          <div class="card-glow rounded-xl p-4 transition">
-            <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">o4 Mini</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.02</span></div>
-            <p class="text-gray-500 text-xs mb-2">Fast reasoning</p>
-            <code class="text-[10px] text-gray-600 font-mono">/api/llm/o4-mini</code>
+            <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">GPT-5.2 Pro</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.25</span></div>
+            <p class="text-gray-500 text-xs mb-2">Premium reasoning</p>
+            <code class="text-[10px] text-gray-600 font-mono">/api/llm/gpt-5.2-pro</code>
           </div>
           <div class="card-glow rounded-xl p-4 transition">
             <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">GPT-5.2</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.08</span></div>
@@ -274,6 +239,26 @@ registerExactEvmScheme(client, { signer: account, networks: [<span class="text-a
             <p class="text-gray-500 text-xs mb-2">Code reasoning</p>
             <code class="text-[10px] text-gray-600 font-mono">/api/llm/gpt-5.2-codex</code>
           </div>
+          <div class="card-glow rounded-xl p-4 transition">
+            <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">GPT-5.1</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.035</span></div>
+            <p class="text-gray-500 text-xs mb-2">Efficient flagship</p>
+            <code class="text-[10px] text-gray-600 font-mono">/api/llm/gpt-5.1</code>
+          </div>
+          <div class="card-glow rounded-xl p-4 transition">
+            <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">GPT-4o</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.04</span></div>
+            <p class="text-gray-500 text-xs mb-2">Flagship multimodal</p>
+            <code class="text-[10px] text-gray-600 font-mono">/api/llm/gpt-4o</code>
+          </div>
+          <div class="card-glow rounded-xl p-4 transition">
+            <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">GPT-4o Mini</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.003</span></div>
+            <p class="text-gray-500 text-xs mb-2">Fast &amp; affordable</p>
+            <code class="text-[10px] text-gray-600 font-mono">/api/llm/gpt-4o-mini</code>
+          </div>
+          <div class="card-glow rounded-xl p-4 transition">
+            <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">o1</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.03</span></div>
+            <p class="text-gray-500 text-xs mb-2">Reasoning model</p>
+            <code class="text-[10px] text-gray-600 font-mono">/api/llm/o1</code>
+          </div>
         </div>
 
         <!-- Anthropic -->
@@ -283,6 +268,11 @@ registerExactEvmScheme(client, { signer: account, networks: [<span class="text-a
             <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">Claude Opus 4.6</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.09</span></div>
             <p class="text-gray-500 text-xs mb-2">Most powerful</p>
             <code class="text-[10px] text-gray-600 font-mono">/api/llm/claude-opus</code>
+          </div>
+          <div class="card-glow rounded-xl p-4 transition">
+            <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">Claude Sonnet 4.6</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.06</span></div>
+            <p class="text-gray-500 text-xs mb-2">Latest balanced</p>
+            <code class="text-[10px] text-gray-600 font-mono">/api/llm/claude-sonnet-4.6</code>
           </div>
           <div class="card-glow rounded-xl p-4 transition">
             <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">Claude Sonnet 4.5</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.06</span></div>
@@ -300,14 +290,29 @@ registerExactEvmScheme(client, { signer: account, networks: [<span class="text-a
         <div class="mb-3"><span class="text-gray-500 text-xs font-medium uppercase tracking-wider">Google / DeepSeek / Meta</span></div>
         <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
           <div class="card-glow rounded-xl p-4 transition">
+            <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">Gemini 3 Pro</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.045</span></div>
+            <p class="text-gray-500 text-xs mb-2">Next-gen reasoning</p>
+            <code class="text-[10px] text-gray-600 font-mono">/api/llm/gemini-3-pro</code>
+          </div>
+          <div class="card-glow rounded-xl p-4 transition">
+            <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">Gemini 3 Flash</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.012</span></div>
+            <p class="text-gray-500 text-xs mb-2">Fast next-gen</p>
+            <code class="text-[10px] text-gray-600 font-mono">/api/llm/gemini-3-flash</code>
+          </div>
+          <div class="card-glow rounded-xl p-4 transition">
             <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">Gemini 2.5 Pro</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.035</span></div>
-            <p class="text-gray-500 text-xs mb-2">Google's best</p>
+            <p class="text-gray-500 text-xs mb-2">Strong reasoning</p>
             <code class="text-[10px] text-gray-600 font-mono">/api/llm/gemini-pro</code>
           </div>
           <div class="card-glow rounded-xl p-4 transition">
             <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">Gemini 2.5 Flash</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.009</span></div>
             <p class="text-gray-500 text-xs mb-2">Speed + quality</p>
             <code class="text-[10px] text-gray-600 font-mono">/api/llm/gemini-flash</code>
+          </div>
+          <div class="card-glow rounded-xl p-4 transition">
+            <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">DeepSeek V3.2</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.005</span></div>
+            <p class="text-gray-500 text-xs mb-2">Latest open-source</p>
+            <code class="text-[10px] text-gray-600 font-mono">/api/llm/deepseek-v3.2</code>
           </div>
           <div class="card-glow rounded-xl p-4 transition">
             <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">DeepSeek V3</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.005</span></div>
@@ -343,6 +348,11 @@ registerExactEvmScheme(client, { signer: account, networks: [<span class="text-a
             <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">Qwen3 235B</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.004</span></div>
             <p class="text-gray-500 text-xs mb-2">Multilingual &amp; coding</p>
             <code class="text-[10px] text-gray-600 font-mono">/api/llm/qwen</code>
+          </div>
+          <div class="card-glow rounded-xl p-4 transition">
+            <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">Qwen3 Coder</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.004</span></div>
+            <p class="text-gray-500 text-xs mb-2">Code specialist</p>
+            <code class="text-[10px] text-gray-600 font-mono">/api/llm/qwen-coder</code>
           </div>
           <div class="card-glow rounded-xl p-4 transition">
             <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">Mistral Large 3</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.006</span></div>
