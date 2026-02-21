@@ -1,6 +1,6 @@
 {
   "name": "x402engine",
-  "description": "Pay-per-call API gateway for AI agents. 51 tools including image generation, video generation, LLM inference (28 models), code execution, audio transcription, crypto data, wallet analytics, ENS, IPFS, web scraping, and transaction simulation. All via HTTP 402 micropayments with USDC and USDm.",
+  "description": "Pay-per-call API gateway for AI agents. 58 tools including image generation, video generation, LLM inference (30 models), code execution, audio transcription, crypto data, wallet analytics, ENS, IPFS, web scraping, and transaction simulation. All via HTTP 402 micropayments with USDC and USDm.",
   "url": "https://x402-gateway-production.up.railway.app",
   "version": "3.0.0",
   "protocol": "a2a",
@@ -31,7 +31,7 @@
     {
       "id": "llm-inference",
       "name": "LLM Inference",
-      "description": "Access 28 LLM models including GPT-5.2, GPT-5.2 Codex, Claude Opus 4.6, Gemini 2.5, DeepSeek, Llama, Grok, Kimi, MiniMax, GLM, Seed, Devstral, Qwen, Mistral, and Perplexity. Prices: $0.002-$0.09 per request.",
+      "description": "Access 30 LLM models including GPT-5.2 Pro, GPT-5.1, Claude Sonnet 4.6, Gemini 3 Pro/Flash, DeepSeek V3.2, Qwen3 Coder, plus GPT-5.2, Claude Opus 4.6, Gemini 2.5, DeepSeek, Llama, Grok, Kimi, MiniMax, GLM, Seed, Devstral, Mistral, and Perplexity. Prices: $0.002-$0.25 per request.",
       "tags": ["llm", "inference", "gpt", "claude", "gemini"],
       "examples": ["Ask GPT-5 to summarize this document", "Get Claude Opus to review this code"]
     },
