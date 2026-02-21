@@ -137,7 +137,7 @@ registerExactEvmScheme(client, { signer: account, networks: [<span class="text-a
 
       <div class="card-glow rounded-2xl p-8">
         <h3 class="text-white font-semibold text-lg mb-4">How does money actually move?</h3>
-        <p class="text-gray-400 leading-relaxed mb-4">The money is <strong class="text-gray-200">stablecoins</strong> &mdash; digital dollars that live on a blockchain. Think of them like casino chips, except they're always worth exactly $1 and you can send them anywhere in the world in seconds.</p>
+        <p class="text-gray-400 leading-relaxed mb-4">The money is <strong class="text-gray-200">stablecoins</strong> &mdash; tokens pegged 1:1 to the US dollar, settled on-chain. No bank wires, no payment processors, no currency conversion. A $0.001 API call costs exactly $0.001.</p>
         <p class="text-gray-400 leading-relaxed mb-4">When your software calls an endpoint, it gets back a "402 Payment Required" response &mdash; like a toll booth. The payment library reads the price, signs a stablecoin transfer from your wallet, and re-sends the request with the payment attached. The whole thing happens in one round-trip. Your code just sees the data come back.</p>
         <p class="text-gray-400 leading-relaxed">This is what the <strong class="text-gray-200">x402 protocol</strong> does &mdash; it bakes payments into regular web requests. No checkout pages, no invoices, no payment processors. Just HTTP with money built in.</p>
       </div>
