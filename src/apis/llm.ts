@@ -50,6 +50,18 @@ const MODELS: Record<string, ModelConfig> = {
   "seed": { model: "bytedance-seed/seed-1.6", serviceId: "llm-seed" },
   // Mistral (code-focused)
   "devstral": { model: "mistralai/devstral-2512", serviceId: "llm-devstral" },
+  // DeepSeek (newer)
+  "deepseek-v3.2": { model: "deepseek/deepseek-v3.2", serviceId: "llm-deepseek-v3.2" },
+  // Google (newer)
+  "gemini-3-pro": { model: "google/gemini-3-pro-preview", serviceId: "llm-gemini-3-pro" },
+  "gemini-3-flash": { model: "google/gemini-3-flash-preview", serviceId: "llm-gemini-3-flash" },
+  // Anthropic (newer)
+  "claude-sonnet-4.6": { model: "anthropic/claude-sonnet-4.6", serviceId: "llm-claude-sonnet-4.6" },
+  // OpenAI (newer)
+  "gpt-5.2-pro": { model: "openai/gpt-5.2-pro", serviceId: "llm-gpt-5.2-pro", reasoning: true },
+  "gpt-5.1": { model: "openai/gpt-5.1", serviceId: "llm-gpt-5.1" },
+  // Qwen (code-focused)
+  "qwen-coder": { model: "qwen/qwen3-coder-next", serviceId: "llm-qwen-coder" },
 };
 
 // Reasoning models burn tokens on chain-of-thought before generating content.

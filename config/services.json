@@ -1588,6 +1588,265 @@
       "cost": "$0.005"
     },
     {
+      "id": "llm-deepseek-v3.2",
+      "name": "DeepSeek V3.2",
+      "description": "DeepSeek's latest flagship model — improved reasoning and coding over V3 at same low cost",
+      "price": "$0.005",
+      "method": "POST",
+      "path": "/api/llm/deepseek-v3.2",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": {
+        "provider": "openrouter",
+        "baseUrl": "https://openrouter.ai/api/v1"
+      },
+      "parameters": {
+        "body": {
+          "messages": {
+            "type": "array",
+            "required": true,
+            "description": "Array of message objects with role and content",
+            "example": [
+              {
+                "role": "user",
+                "content": "Hello"
+              }
+            ]
+          },
+          "max_tokens": {
+            "type": "number",
+            "required": false,
+            "description": "Maximum tokens to generate",
+            "example": 1024,
+            "default": 1024
+          }
+        }
+      },
+      "cost": "$0.002"
+    },
+    {
+      "id": "llm-gemini-3-pro",
+      "name": "Gemini 3 Pro",
+      "description": "Google's next-gen pro model — advanced reasoning, coding, and multimodal understanding",
+      "price": "$0.045",
+      "method": "POST",
+      "path": "/api/llm/gemini-3-pro",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": {
+        "provider": "openrouter",
+        "baseUrl": "https://openrouter.ai/api/v1"
+      },
+      "parameters": {
+        "body": {
+          "messages": {
+            "type": "array",
+            "required": true,
+            "description": "Array of message objects with role and content",
+            "example": [
+              {
+                "role": "user",
+                "content": "Hello"
+              }
+            ]
+          },
+          "max_tokens": {
+            "type": "number",
+            "required": false,
+            "description": "Maximum tokens to generate",
+            "example": 1024,
+            "default": 1024
+          }
+        }
+      },
+      "cost": "$0.015"
+    },
+    {
+      "id": "llm-gemini-3-flash",
+      "name": "Gemini 3 Flash",
+      "description": "Google's next-gen flash model — fast and efficient for everyday tasks with improved quality",
+      "price": "$0.012",
+      "method": "POST",
+      "path": "/api/llm/gemini-3-flash",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": {
+        "provider": "openrouter",
+        "baseUrl": "https://openrouter.ai/api/v1"
+      },
+      "parameters": {
+        "body": {
+          "messages": {
+            "type": "array",
+            "required": true,
+            "description": "Array of message objects with role and content",
+            "example": [
+              {
+                "role": "user",
+                "content": "Hello"
+              }
+            ]
+          },
+          "max_tokens": {
+            "type": "number",
+            "required": false,
+            "description": "Maximum tokens to generate",
+            "example": 1024,
+            "default": 1024
+          }
+        }
+      },
+      "cost": "$0.004"
+    },
+    {
+      "id": "llm-claude-sonnet-4.6",
+      "name": "Claude Sonnet 4.6",
+      "description": "Anthropic's latest balanced model — excellent coding, reasoning, and creative writing",
+      "price": "$0.06",
+      "method": "POST",
+      "path": "/api/llm/claude-sonnet-4.6",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": {
+        "provider": "openrouter",
+        "baseUrl": "https://openrouter.ai/api/v1"
+      },
+      "parameters": {
+        "body": {
+          "messages": {
+            "type": "array",
+            "required": true,
+            "description": "Array of message objects with role and content",
+            "example": [
+              {
+                "role": "user",
+                "content": "Hello"
+              }
+            ]
+          },
+          "max_tokens": {
+            "type": "number",
+            "required": false,
+            "description": "Maximum tokens to generate",
+            "example": 1024,
+            "default": 1024
+          }
+        }
+      },
+      "cost": "$0.02"
+    },
+    {
+      "id": "llm-gpt-5.2-pro",
+      "name": "GPT-5.2 Pro",
+      "description": "OpenAI's premium reasoning model — extended thinking for complex math, science, and coding problems",
+      "price": "$0.25",
+      "method": "POST",
+      "path": "/api/llm/gpt-5.2-pro",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": {
+        "provider": "openrouter",
+        "baseUrl": "https://openrouter.ai/api/v1"
+      },
+      "parameters": {
+        "body": {
+          "messages": {
+            "type": "array",
+            "required": true,
+            "description": "Array of message objects with role and content",
+            "example": [
+              {
+                "role": "user",
+                "content": "Hello"
+              }
+            ]
+          },
+          "max_tokens": {
+            "type": "number",
+            "required": false,
+            "description": "Maximum tokens to generate (reasoning models use more)",
+            "example": 16384,
+            "default": 16384
+          }
+        }
+      },
+      "cost": "$0.10"
+    },
+    {
+      "id": "llm-qwen-coder",
+      "name": "Qwen3 Coder",
+      "description": "Alibaba's code-specialized model — optimized for code generation, review, and technical tasks",
+      "price": "$0.004",
+      "method": "POST",
+      "path": "/api/llm/qwen-coder",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": {
+        "provider": "openrouter",
+        "baseUrl": "https://openrouter.ai/api/v1"
+      },
+      "parameters": {
+        "body": {
+          "messages": {
+            "type": "array",
+            "required": true,
+            "description": "Array of message objects with role and content",
+            "example": [
+              {
+                "role": "user",
+                "content": "Hello"
+              }
+            ]
+          },
+          "max_tokens": {
+            "type": "number",
+            "required": false,
+            "description": "Maximum tokens to generate",
+            "example": 1024,
+            "default": 1024
+          }
+        }
+      },
+      "cost": "$0.002"
+    },
+    {
+      "id": "llm-gpt-5.1",
+      "name": "GPT-5.1",
+      "description": "OpenAI's efficient flagship model — strong all-around performance at lower cost than GPT-5.2",
+      "price": "$0.035",
+      "method": "POST",
+      "path": "/api/llm/gpt-5.1",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": {
+        "provider": "openrouter",
+        "baseUrl": "https://openrouter.ai/api/v1"
+      },
+      "parameters": {
+        "body": {
+          "messages": {
+            "type": "array",
+            "required": true,
+            "description": "Array of message objects with role and content",
+            "example": [
+              {
+                "role": "user",
+                "content": "Hello"
+              }
+            ]
+          },
+          "max_tokens": {
+            "type": "number",
+            "required": false,
+            "description": "Maximum tokens to generate",
+            "example": 1024,
+            "default": 1024
+          }
+        }
+      },
+      "cost": "$0.012"
+    },
+    {
       "id": "embeddings",
       "name": "Text Embeddings",
       "description": "Generate text embeddings using OpenAI text-embedding-3-small — for semantic search, clustering, RAG",
