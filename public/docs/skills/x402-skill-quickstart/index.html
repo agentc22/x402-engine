@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>x402engine Skill — Invisible Service Access</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --accent: #58a6ff;
+      --green: #3fb950;
+      --orange: #d29922;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 2rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+    h2 { font-size: 1.4rem; margin: 2rem 0 0.75rem; color: var(--accent); }
+    h3 { font-size: 1.1rem; margin: 1.5rem 0 0.5rem; }
+    p { margin-bottom: 1rem; color: var(--muted); }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    code {
+      background: var(--surface);
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+    pre {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      overflow-x: auto;
+      margin-bottom: 1rem;
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+    pre code {
+      background: none;
+      padding: 0;
+    }
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-right: 0.5rem;
+    }
+    .badge-green { background: rgba(63, 185, 80, 0.2); color: var(--green); }
+    .badge-orange { background: rgba(210, 153, 34, 0.2); color: var(--orange); }
+    .flow {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin: 1rem 0;
+      font-size: 0.9rem;
+    }
+    .flow-step {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.4rem 0.8rem;
+    }
+    .flow-arrow { color: var(--muted); }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 0.9rem;
+    }
+    th, td {
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+    th { color: var(--muted); font-weight: 600; }
+    .invisible-note {
+      background: rgba(88, 166, 255, 0.1);
+      border-left: 3px solid var(--accent);
+      padding: 1rem;
+      border-radius: 0 6px 6px 0;
+      margin: 1rem 0;
+    }
+    .back { margin-bottom: 1.5rem; display: inline-block; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <a class="back" href="/docs">&larr; Back to docs</a>
+
+  <h1>x402engine Skill</h1>
+  <p style="font-size: 1.1rem; color: var(--text);">
+    Invisible API access layer — agents answer user questions by calling 70+ paid APIs automatically via x402 micropayments.
+  </p>
+
+  <div class="invisible-note">
+    Users see answers, not payments. The only time payment is mentioned is when the wallet runs out of funds.
+  </div>
+
+  <h2>How it works</h2>
+
+  <div class="flow">
+    <span class="flow-step">User Query</span>
+    <span class="flow-arrow">&rarr;</span>
+    <span class="flow-step">Intent Match</span>
+    <span class="flow-arrow">&rarr;</span>
+    <span class="flow-step">Discovery</span>
+    <span class="flow-arrow">&rarr;</span>
+    <span class="flow-step">Autopreflight</span>
+    <span class="flow-arrow">&rarr;</span>
+    <span class="flow-step">Paid Fetch</span>
+    <span class="flow-arrow">&rarr;</span>
+    <span class="flow-step">Result</span>
+  </div>
+
+  <h3>Example</h3>
+  <pre><code>User: "what's the price of bitcoin"
+
+→ intent-router scores query against 70+ service descriptions
+→ match: crypto-price ($0.001)
+→ policy engine checks spend caps: ALLOWED
+→ @x402/fetch signs $0.001 USDC payment automatically
+→ returns: { bitcoin: { usd: 97500 } }
+
+Agent: "Bitcoin is currently $97,500."
+User never sees x402, USDC, or payment mechanics.</code></pre>
+
+  <h2>Setup</h2>
+  <pre><code>cd skills/x402engine
+npm install
+export EVM_PRIVATE_KEY=0x...   # fund with Base USDC or MegaETH USDm</code></pre>
+
+  <h2>Example queries</h2>
+  <table>
+    <thead>
+      <tr><th>User says</th><th>Service matched</th><th>Cost</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>"price of bitcoin"</td><td>crypto-price</td><td>$0.001</td></tr>
+      <tr><td>"trending crypto"</td><td>crypto-trending</td><td>$0.001</td></tr>
+      <tr><td>"generate an image of a sunset"</td><td>image-fast</td><td>$0.015</td></tr>
+      <tr><td>"wallet activity of vitalik.eth"</td><td>wallet-transactions</td><td>$0.005</td></tr>
+      <tr><td>"ask llama to summarize this"</td><td>llm-llama</td><td>$0.002</td></tr>
+      <tr><td>"run this python code"</td><td>code-run</td><td>$0.005</td></tr>
+      <tr><td>"transcribe this audio"</td><td>transcribe</td><td>$0.10</td></tr>
+      <tr><td>"scrape example.com"</td><td>web-scrape</td><td>$0.005</td></tr>
+      <tr><td>"resolve vitalik.eth"</td><td>ens-resolve</td><td>$0.001</td></tr>
+      <tr><td>"create a video of a cat"</td><td>video-fast</td><td>$0.30</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Service categories</h2>
+  <p>
+    <span class="badge badge-green">70+ services</span>
+    auto-discovered from the gateway catalog
+  </p>
+  <table>
+    <thead>
+      <tr><th>Category</th><th>Services</th><th>Price range</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Crypto</td><td>Price, markets, history, trending, search</td><td>$0.001 - $0.003</td></tr>
+      <tr><td>Wallet</td><td>Balances, transactions, token prices</td><td>$0.002 - $0.01</td></tr>
+      <tr><td>Image</td><td>Fast, quality, text-in-image</td><td>$0.015 - $0.12</td></tr>
+      <tr><td>Video</td><td>Fast, quality, animation, Hailuo</td><td>$0.30 - $0.60</td></tr>
+      <tr><td>LLM</td><td>GPT-4o, Claude, Gemini, DeepSeek, Llama, +10 more</td><td>$0.002 - $0.09</td></tr>
+      <tr><td>Code</td><td>Python, JavaScript, Bash, R</td><td>$0.005</td></tr>
+      <tr><td>Audio</td><td>Transcription, TTS (OpenAI, ElevenLabs)</td><td>$0.01 - $0.10</td></tr>
+      <tr><td>Web</td><td>Scraping, screenshots</td><td>$0.005 - $0.01</td></tr>
+      <tr><td>Storage</td><td>IPFS pin/get</td><td>$0.001 - $0.01</td></tr>
+      <tr><td>Identity</td><td>ENS resolve, reverse lookup</td><td>$0.001</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Debug CLI</h2>
+  <pre><code># List all available services from the catalog
+node ./cli.js discover
+
+# Show remaining daily budget
+node ./cli.js budget</code></pre>
+
+  <h2>Policy engine</h2>
+  <p>
+    <span class="badge badge-orange">fail-closed</span>
+    All payments pass through policy checks before signing.
+  </p>
+  <ul style="color: var(--muted); padding-left: 1.5rem; margin-bottom: 1rem;">
+    <li>Per-transaction caps</li>
+    <li>Optional daily spending limits per chain/asset</li>
+    <li>Rate limits (min interval, max per hour)</li>
+    <li>Recipient allowlist for known paygate addresses</li>
+    <li>Missing or invalid policy = deny all</li>
+  </ul>
+
+  <h2>Payment rails</h2>
+  <table>
+    <thead>
+      <tr><th>Chain</th><th>Asset</th><th>Decimals</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Base (eip155:8453)</td><td>USDC</td><td>6</td></tr>
+      <tr><td>MegaETH (eip155:4326)</td><td>USDm</td><td>18</td></tr>
+    </tbody>
+  </table>
+
+  <h2>When payment fails</h2>
+  <div class="invisible-note">
+    The only user-visible message about payments:<br>
+    <em>"I need funds to access this service. Add USDC to your wallet to continue."</em>
+  </div>
+
+</body>
+</html>
