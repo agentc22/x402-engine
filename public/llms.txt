@@ -33,13 +33,13 @@ x402engine is an API gateway that provides 58 pay-per-call tools for AI agents u
 - text_to_speech (ElevenLabs): $0.02 — Text-to-speech via ElevenLabs
 
 ### LLM Inference (30 models)
-- GPT-4o: $0.04 | GPT-4o Mini: $0.003 | GPT-4.1: $0.03 | GPT-4.1 Mini: $0.006
-- GPT-5.1: $0.035 | GPT-5.2: $0.08 | GPT-5.2 Pro: $0.25 | GPT-5.2 Codex: $0.06
-- o3: $0.03 | o4 Mini: $0.02 | o1: $0.03
+- GPT-5.2 Pro: $0.25 | GPT-5.2: $0.08 | GPT-5.2 Codex: $0.06 | GPT-5.1: $0.035
+- GPT-4o: $0.04 | GPT-4o Mini: $0.003 | o1: $0.03
 - Claude Opus 4.6: $0.09 | Claude Sonnet 4.6: $0.06 | Claude Sonnet 4.5: $0.06 | Claude Haiku 4.5: $0.02
 - Gemini 3 Pro: $0.045 | Gemini 3 Flash: $0.012 | Gemini 2.5 Pro: $0.035 | Gemini 2.5 Flash: $0.009
-- DeepSeek V3.2: $0.005 | DeepSeek V3: $0.005 | DeepSeek R1: $0.01 | Llama 3.3 70B: $0.002
-- Grok 4: $0.06 | Grok Code Fast: $0.04 | Qwen3 235B: $0.004 | Qwen3 Coder: $0.004
+- DeepSeek V3.2: $0.005 | DeepSeek V3: $0.005 | DeepSeek R1: $0.01
+- Grok 4: $0.06 | Grok Code Fast: $0.04
+- Qwen3 235B: $0.004 | Qwen3 Coder: $0.004 | Llama 3.3 70B: $0.002
 - Mistral Large 3: $0.006 | Devstral 2: $0.02 | Perplexity Sonar Pro: $0.06
 - Kimi K2.5: $0.03 | MiniMax M2.5: $0.01 | GLM-5: $0.03 | Seed 1.6: $0.02
 - Text Embeddings: $0.001
