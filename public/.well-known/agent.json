@@ -1,6 +1,6 @@
 {
   "name": "x402engine",
-  "description": "Pay-per-call API gateway for AI agents. 58 tools including image generation, video generation, LLM inference (30 models), code execution, audio transcription, crypto data, wallet analytics, ENS, IPFS, web scraping, and transaction simulation. All via HTTP 402 micropayments with USDC and USDm.",
+  "description": "Pay-per-call API gateway for AI agents. 60 tools including image generation, video generation, LLM inference (30 models), code execution, audio transcription, crypto data, wallet analytics, ENS, IPFS, web search, web scraping, and transaction simulation. All via HTTP 402 micropayments with USDC and USDm.",
   "url": "https://x402-gateway-production.up.railway.app",
   "version": "3.0.0",
   "protocol": "a2a",
@@ -79,10 +79,10 @@
     },
     {
       "id": "web",
-      "name": "Web Scraping & Screenshots",
-      "description": "Scrape web page content and capture screenshots. Prices: $0.005-$0.01.",
-      "tags": ["web", "scrape", "screenshot"],
-      "examples": ["Scrape the content of this URL", "Take a screenshot of this website"]
+      "name": "Web Search, Scraping & Screenshots",
+      "description": "Search the web, scrape page content, and capture screenshots. Prices: $0.005-$0.01.",
+      "tags": ["web", "search", "scrape", "screenshot"],
+      "examples": ["Search for latest ethereum news", "Scrape the content of this URL", "Take a screenshot of this website"]
     },
     {
       "id": "transaction-simulation",

@@ -1937,6 +1937,81 @@
       "cost": "$0.004"
     },
     {
+      "id": "search-web",
+      "name": "Web Search",
+      "description": "Neural web search with highlighted snippets — find articles, news, research, and any web content",
+      "price": "$0.010",
+      "method": "POST",
+      "path": "/api/search/web",
+      "mimeType": "application/json",
+      "category": "web",
+      "upstream": {
+        "provider": "exa",
+        "baseUrl": "https://api.exa.ai"
+      },
+      "parameters": {
+        "body": {
+          "query": {
+            "type": "string",
+            "required": true,
+            "description": "Search query",
+            "example": "latest ethereum news"
+          },
+          "numResults": {
+            "type": "number",
+            "required": false,
+            "description": "Number of results (1-30)",
+            "example": 10,
+            "default": 10
+          },
+          "includeDomains": {
+            "type": "array",
+            "required": false,
+            "description": "Only include results from these domains",
+            "example": ["arxiv.org", "github.com"]
+          },
+          "category": {
+            "type": "string",
+            "required": false,
+            "description": "Content category filter (news, research paper, company, tweet, github, pdf)",
+            "example": "news"
+          },
+          "includeText": {
+            "type": "boolean",
+            "required": false,
+            "description": "Include full page text in results",
+            "default": false
+          }
+        }
+      },
+      "cost": "$0.005"
+    },
+    {
+      "id": "search-contents",
+      "name": "Web Content Fetch",
+      "description": "Fetch full text content from URLs — extract clean text from up to 10 pages at once",
+      "price": "$0.005",
+      "method": "POST",
+      "path": "/api/search/contents",
+      "mimeType": "application/json",
+      "category": "web",
+      "upstream": {
+        "provider": "exa",
+        "baseUrl": "https://api.exa.ai"
+      },
+      "parameters": {
+        "body": {
+          "urls": {
+            "type": "array",
+            "required": true,
+            "description": "Array of URLs to fetch content from (max 10)",
+            "example": ["https://example.com/article"]
+          }
+        }
+      },
+      "cost": "$0.001"
+    },
+    {
       "id": "tts-openai",
       "name": "Text-to-Speech (OpenAI)",
       "description": "Convert text to natural speech using OpenAI TTS — 6 voices, HD quality option, multiple audio formats",

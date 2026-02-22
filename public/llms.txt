@@ -1,8 +1,8 @@
 # x402engine
-> Pay-per-call API gateway for AI agents. 58 tools, sub-cent pricing, instant crypto payments.
+> Pay-per-call API gateway for AI agents. 60 tools, sub-cent pricing, instant crypto payments.
 
 ## What is this?
-x402engine is an API gateway that provides 58 pay-per-call tools for AI agents using the HTTP 402 payment protocol. Every API call costs between $0.001 and $0.60, paid instantly with stablecoins (USDC on Base, USDC on Solana, or USDm on MegaETH).
+x402engine is an API gateway that provides 60 pay-per-call tools for AI agents using the HTTP 402 payment protocol. Every API call costs between $0.001 and $0.60, paid instantly with stablecoins (USDC on Base, USDC on Solana, or USDm on MegaETH).
 
 ## How to connect
 - MCP server (recommended): `npx -y x402engine-mcp`
@@ -68,6 +68,8 @@ x402engine is an API gateway that provides 58 pay-per-call tools for AI agents u
 ### Web
 - web_scrape: $0.005 — Scrape and extract web page content
 - web_screenshot: $0.01 — Capture web page screenshot
+- web_search: $0.01 — Neural web search with highlighted snippets (Exa)
+- web_content_fetch: $0.005 — Fetch full text content from up to 10 URLs (Exa)
 
 ### Transaction
 - simulate_transaction: $0.01 — Simulate EVM transactions

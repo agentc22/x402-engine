@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>API Documentation — x402engine</title>
-  <meta name="description" content="Complete API reference for the x402engine. 58 endpoints including video generation, 30 LLMs, image generation, code execution, and transaction simulation. Payment integration guides and code examples.">
+  <meta name="description" content="Complete API reference for the x402engine. 60 endpoints including video generation, 30 LLMs, image generation, web search, code execution, and transaction simulation. Payment integration guides and code examples.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -103,6 +103,8 @@
           <h4 class="text-gray-500 font-medium uppercase text-xs tracking-wider mb-2 px-3">Web</h4>
           <a href="#web-scrape" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Web Scrape</a>
           <a href="#web-screenshot" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Web Screenshot</a>
+          <a href="#search-web" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Web Search</a>
+          <a href="#search-contents" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Content Fetch</a>
         </div>
         <div>
           <div class="mt-6 mb-2 text-xs text-gray-600 uppercase tracking-wider font-medium px-3">LLM & AI</div>
@@ -1471,6 +1473,76 @@ POST /api/embeddings
 {
   "screenshot": "iVBORw0KGgoAAAANSUhEUgAA...",  <span class="text-gray-500">// base64 PNG</span>
   "metadata": { "title": "Example Domain", "statusCode": 200 }
+}</code></pre>
+          </div>
+        </section>
+
+        <section id="search-web" class="mb-14">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="method-post px-2 py-0.5 rounded text-xs font-bold">POST</span>
+            <h3 class="text-lg font-semibold text-white">/api/search/web</h3>
+            <span class="text-brand-400 text-sm font-mono ml-auto">$0.01</span>
+          </div>
+          <p class="text-gray-400 text-sm mb-4">Neural web search powered by Exa. Returns titles, URLs, and highlighted snippets.</p>
+          <div class="overflow-x-auto mb-4">
+            <table class="w-full text-sm">
+              <thead><tr class="border-b border-white/5"><th class="text-left py-2 text-gray-500 font-medium">Field</th><th class="text-left py-2 text-gray-500 font-medium">Type</th><th class="text-left py-2 text-gray-500 font-medium">Description</th></tr></thead>
+              <tbody class="text-gray-300">
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">query <span class="param-required">required</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">Search query</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">numResults <span class="param-optional">optional</span></td><td class="py-2 text-xs">number</td><td class="py-2 text-xs text-gray-400">Number of results, 1-30 (default: 10)</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">includeDomains <span class="param-optional">optional</span></td><td class="py-2 text-xs">string[]</td><td class="py-2 text-xs text-gray-400">Only include results from these domains</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">category <span class="param-optional">optional</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">Filter: news, research paper, company, tweet, github, pdf</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">includeText <span class="param-optional">optional</span></td><td class="py-2 text-xs">boolean</td><td class="py-2 text-xs text-gray-400">Include full page text in results (default: false)</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">POST /api/search/web
+{ "query": "latest ethereum news", "numResults": 5, "category": "news" }
+
+<span class="text-gray-500">// Response</span>
+{
+  "results": [
+    {
+      "title": "Ethereum Hits New All-Time High...",
+      "url": "https://example.com/article",
+      "publishedDate": "2026-02-20",
+      "highlights": ["Ethereum surged past $5,000..."]
+    }
+  ],
+  "autopromptString": "latest ethereum news and updates"
+}</code></pre>
+          </div>
+        </section>
+
+        <section id="search-contents" class="mb-14">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="method-post px-2 py-0.5 rounded text-xs font-bold">POST</span>
+            <h3 class="text-lg font-semibold text-white">/api/search/contents</h3>
+            <span class="text-brand-400 text-sm font-mono ml-auto">$0.005</span>
+          </div>
+          <p class="text-gray-400 text-sm mb-4">Fetch full text content from up to 10 URLs at once. Powered by Exa.</p>
+          <div class="overflow-x-auto mb-4">
+            <table class="w-full text-sm">
+              <thead><tr class="border-b border-white/5"><th class="text-left py-2 text-gray-500 font-medium">Field</th><th class="text-left py-2 text-gray-500 font-medium">Type</th><th class="text-left py-2 text-gray-500 font-medium">Description</th></tr></thead>
+              <tbody class="text-gray-300">
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">urls <span class="param-required">required</span></td><td class="py-2 text-xs">string[]</td><td class="py-2 text-xs text-gray-400">Array of URLs to fetch content from (max 10)</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">POST /api/search/contents
+{ "urls": ["https://example.com/article"] }
+
+<span class="text-gray-500">// Response</span>
+{
+  "contents": [
+    {
+      "title": "Example Article",
+      "url": "https://example.com/article",
+      "text": "Full article text content..."
+    }
+  ]
 }</code></pre>
           </div>
         </section>

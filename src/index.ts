@@ -28,6 +28,7 @@ import ipfsRouter from "./apis/ipfs.js";
 import ensRouter from "./apis/ens.js";
 import llmRouter from "./apis/llm.js";
 import webRouter from "./apis/web.js";
+import searchRouter from "./apis/search.js";
 import ttsRouter from "./apis/tts.js";
 import txRouter from "./apis/tx.js";
 import dashboardRouter from "./apis/dashboard.js";
@@ -361,6 +362,7 @@ app.use(ipfsRouter);
 app.use(ensRouter);        // ENS resolution via public Ethereum RPCs (no API key needed)
 app.use(llmRouter);
 app.use(webRouter);
+app.use(searchRouter);
 app.use(ttsRouter);
 app.use(txRouter);
 
