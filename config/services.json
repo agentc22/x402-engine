@@ -612,6 +612,37 @@
       "cost": "$0.001"
     },
     {
+      "id": "wallet-pnl",
+      "name": "Wallet PnL",
+      "description": "Realized and unrealized profit & loss per token for any wallet",
+      "price": "$0.01",
+      "method": "POST",
+      "path": "/api/wallet/pnl",
+      "mimeType": "application/json",
+      "category": "crypto",
+      "upstream": {
+        "provider": "allium",
+        "baseUrl": "https://api.allium.so/api/v1/developer/wallet/pnl"
+      },
+      "parameters": {
+        "body": {
+          "chain": {
+            "type": "string",
+            "required": true,
+            "description": "Chain name (ethereum, polygon, base, arbitrum, etc.)",
+            "example": "ethereum"
+          },
+          "address": {
+            "type": "string",
+            "required": true,
+            "description": "Wallet address",
+            "example": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+          }
+        }
+      },
+      "cost": "$0.003"
+    },
+    {
       "id": "token-prices",
       "name": "Token Prices",
       "description": "Real-time DEX-derived token prices with OHLC data — up to 200 tokens per request",

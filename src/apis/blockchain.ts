@@ -2,6 +2,7 @@ import { Router, type Request, type Response } from "express";
 import {
   getWalletBalances,
   getWalletTransactions,
+  getWalletPnl,
   getTokenPrices,
   getAssets,
 } from "../providers/allium.js";
@@ -81,6 +82,47 @@ router.post("/api/wallet/transactions", async (req: Request, res: Response) => {
     logRequest({
       service: "wallet-transactions",
       endpoint: "/api/wallet/transactions",
+      payer: (req as any).x402?.payer,
+      network: (req as any).x402?.network,
+      amount: (req as any).x402?.amount,
+      upstreamStatus,
+      latencyMs: Date.now() - start,
+    });
+  }
+});
+
+router.post("/api/wallet/pnl", async (req: Request, res: Response) => {
+  const { chain, address } = req.body || {};
+
+  if (!chain || !address) {
+    res.status(400).json({ error: "Provide 'chain' and 'address' in request body" });
+    return;
+  }
+  if (!isValidChain(chain)) {
+    res.status(400).json({ error: "Invalid chain name" });
+    return;
+  }
+  if (typeof address !== "string" || address.length > 100) {
+    res.status(400).json({ error: "Invalid address" });
+    return;
+  }
+
+  const start = Date.now();
+  let upstreamStatus = 0;
+
+  try {
+    const data = await getWalletPnl([{ chain, address }]);
+    upstreamStatus = 200;
+    res.json(data);
+  } catch (err: any) {
+    upstreamStatus = err.status || 500;
+    console.error(`[wallet-pnl] upstream error: status=${upstreamStatus} message=${err.message} upstream=${err.upstream || ""}`);
+    res.setHeader("Retry-After", "5");
+    res.status(503).json({ error: "Failed to fetch wallet PnL", retryable: true });
+  } finally {
+    logRequest({
+      service: "wallet-pnl",
+      endpoint: "/api/wallet/pnl",
       payer: (req as any).x402?.payer,
       network: (req as any).x402?.network,
       amount: (req as any).x402?.amount,

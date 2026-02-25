@@ -89,6 +89,13 @@ export async function getTokenPrices(
   return alliumPost("/prices", tokens);
 }
 
+/** Wallet PnL — realized/unrealized profit & loss per token */
+export async function getWalletPnl(
+  addresses: Array<{ chain: string; address: string }>,
+): Promise<any> {
+  return alliumPost("/wallet/pnl", addresses);
+}
+
 /** Token/asset metadata by ID, slug, or chain+address */
 export async function getAssets(
   query?: Record<string, string>,
