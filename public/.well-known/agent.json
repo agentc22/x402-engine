@@ -1,6 +1,6 @@
 {
   "name": "x402engine",
-  "description": "Pay-per-call API gateway for AI agents. 60 tools including image generation, video generation, LLM inference (30 models), code execution, audio transcription, crypto data, wallet analytics, ENS, IPFS, web search, web scraping, and transaction simulation. All via HTTP 402 micropayments with USDC and USDm.",
+  "description": "Pay-per-call API gateway for AI agents. 61 tools including image generation, video generation, LLM inference (30 models), code execution, audio transcription, crypto data, wallet analytics, ENS, IPFS, web search, web scraping, and transaction simulation. All via HTTP 402 micropayments with USDC and USDm.",
   "url": "https://x402-gateway-production.up.railway.app",
   "version": "3.0.0",
   "protocol": "a2a",
@@ -59,7 +59,7 @@
     {
       "id": "wallet-analytics",
       "name": "Wallet Analytics",
-      "description": "Token balances, transaction history, token prices, and metadata for any blockchain wallet. Prices: $0.002-$0.005.",
+      "description": "Token balances, transaction history, PnL (profit/loss), token prices, and metadata for any blockchain wallet. Prices: $0.002-$0.01.",
       "tags": ["wallet", "blockchain", "defi", "analytics"],
       "examples": ["Show token balances for 0x123...", "Get transaction history for this wallet"]
     },

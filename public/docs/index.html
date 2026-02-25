@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>API Documentation — x402engine</title>
-  <meta name="description" content="Complete API reference for the x402engine. 60 endpoints including video generation, 30 LLMs, image generation, web search, code execution, and transaction simulation. Payment integration guides and code examples.">
+  <meta name="description" content="Complete API reference for the x402engine. 61 endpoints including video generation, 30 LLMs, image generation, web search, code execution, and transaction simulation. Payment integration guides and code examples.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -79,6 +79,7 @@
           <a href="#crypto-search" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Coin Search</a>
           <a href="#wallet-balances" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Wallet Balances</a>
           <a href="#wallet-transactions" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Wallet Txns</a>
+          <a href="#wallet-pnl" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Wallet PnL</a>
           <a href="#token-prices" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Token Prices</a>
           <a href="#token-metadata" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Token Metadata</a>
           <a href="#ens-resolve" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">ENS Resolve</a>
@@ -126,7 +127,7 @@
         <!-- Overview -->
         <section id="overview" class="mb-16">
           <h1 class="text-3xl font-bold text-white mb-4">API Documentation</h1>
-          <p class="text-gray-400 leading-relaxed mb-4">The x402engine exposes 58 production APIs behind <a href="https://www.x402.org" class="text-brand-400 hover:underline">x402 micropayments</a>. Every endpoint returns <code class="text-xs bg-white/5 px-1.5 py-0.5 rounded">402 Payment Required</code> until a valid stablecoin payment is attached to the request.</p>
+          <p class="text-gray-400 leading-relaxed mb-4">The x402engine exposes 61 production APIs behind <a href="https://www.x402.org" class="text-brand-400 hover:underline">x402 micropayments</a>. Every endpoint returns <code class="text-xs bg-white/5 px-1.5 py-0.5 rounded">402 Payment Required</code> until a valid stablecoin payment is attached to the request.</p>
           <div class="card-glow rounded-xl p-5 space-y-2 text-sm">
             <div class="flex items-start gap-3">
               <span class="text-brand-400 mt-0.5">Base URL</span>
@@ -218,7 +219,7 @@ console.log(<span class="text-emerald-400">await</span> balances.json());</code>
 
           <div class="mt-6 rounded-xl border border-brand-500/20 bg-brand-500/5 p-4 text-sm">
             <h4 class="text-brand-400 font-semibold mb-2">💡 Test All Endpoints</h4>
-            <p class="text-gray-300 mb-2">Want to test all 58 endpoints at once? Download our comprehensive test suite:</p>
+            <p class="text-gray-300 mb-2">Want to test all 61 endpoints at once? Download our comprehensive test suite:</p>
             <pre class="bg-white/5 rounded px-3 py-2 text-xs overflow-x-auto"><code>curl -O https://x402-gateway-production.up.railway.app/test-all-endpoints.mjs
 TEST_PRIVATE_KEY=0x... node test-all-endpoints.mjs</code></pre>
             <p class="text-gray-400 text-xs mt-2">Includes proper parameters and examples for every endpoint category.</p>
@@ -827,6 +828,56 @@ Content-Type: application/json
       ]
     }
   ]
+}</code></pre>
+          </div>
+        </section>
+
+        <!-- wallet-pnl -->
+        <section id="wallet-pnl" class="mb-14">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="method-post px-2 py-0.5 rounded text-xs font-mono font-bold">POST</span>
+            <code class="text-white text-lg font-mono">/api/wallet/pnl</code>
+            <span class="ml-auto text-brand-400 font-mono text-sm">$0.01</span>
+          </div>
+          <p class="text-gray-400 text-sm mb-4">Realized and unrealized profit &amp; loss per token for any wallet. Powered by Allium.</p>
+
+          <h4 class="text-white text-sm font-semibold mb-2">Request Body</h4>
+          <div class="overflow-x-auto mb-4">
+            <table class="w-full text-sm">
+              <thead><tr class="border-b border-white/10"><th class="text-left py-2 px-3 text-gray-500 font-medium">Field</th><th class="text-left py-2 px-3 text-gray-500 font-medium">Type</th><th class="text-left py-2 px-3 text-gray-500 font-medium">Description</th></tr></thead>
+              <tbody>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">chain <span class="param-required">required</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400">Chain name: <code class="text-xs bg-white/5 px-1 rounded">ethereum</code>, <code class="text-xs bg-white/5 px-1 rounded">base</code>, <code class="text-xs bg-white/5 px-1 rounded">solana</code>, etc.</td></tr>
+                <tr><td class="py-2 px-3 font-mono text-xs text-white">address <span class="param-required">required</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400">Wallet address</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h4 class="text-white text-sm font-semibold mb-2">Example</h4>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden mb-4">
+            <div class="flex items-center px-4 py-2 bg-white/[0.03] border-b border-white/5"><span class="text-xs text-gray-500 font-mono">Request</span></div>
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">POST /api/wallet/pnl
+Content-Type: application/json
+
+{ "chain": "base", "address": "0xa9C424d119323495c3260ef16c7813a1133cD84e" }</code></pre>
+          </div>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
+            <div class="flex items-center px-4 py-2 bg-white/[0.03] border-b border-white/5"><span class="text-xs text-gray-500 font-mono">Response</span></div>
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">{
+  "items": [{
+    "chain": "base",
+    "address": "0xa9c4...",
+    "tokens": [{
+      "token_address": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+      "average_cost": { "currency": "USD", "amount": "1.0001" },
+      "current_price": { "currency": "USD", "amount": "1.0002" },
+      "current_balance": { "currency": "USD", "amount": "1.42" },
+      "realized_pnl": { "currency": "USD", "amount": "0.05" },
+      "unrealized_pnl": { "currency": "USD", "amount": "0.001" }
+    }],
+    "total_balance": { "currency": "USD", "amount": "1.42" },
+    "total_realized_pnl": { "currency": "USD", "amount": "0.05" },
+    "total_unrealized_pnl": { "currency": "USD", "amount": "0.001" }
+  }]
 }</code></pre>
           </div>
         </section>
