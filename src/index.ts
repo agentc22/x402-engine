@@ -232,6 +232,14 @@ app.get("/llms.txt", freeEndpointLimiter, (_req, res) => {
   res.type("text/plain").sendFile(path.join(__dirname, "../public/llms.txt"));
 });
 
+// Agent manifest — machine-readable endpoint manifest with SLOs, pricing, determinism
+app.get("/.well-known/agent-manifest.v1.json", freeEndpointLimiter, (_req, res) => {
+  res.sendFile(path.join(__dirname, "../manifest/agent-manifest.v1.json"));
+});
+app.get("/.well-known/agent-manifest-integrity.v1.json", freeEndpointLimiter, (_req, res) => {
+  res.sendFile(path.join(__dirname, "../manifest/agent-manifest.integrity.v1.json"));
+});
+
 app.get("/api/discover", freeEndpointLimiter, (_req, res) => {
   res.json(discoveryResponse);
 });
