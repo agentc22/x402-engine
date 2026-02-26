@@ -1,0 +1,194 @@
+{
+  "schema_version": "agent-manifest-catalog.v1",
+  "manifest_schema_version": "agent-manifest.v1",
+  "manifest_id": "x402engine.agent-manifest.v1",
+  "generated_at": "2026-02-25T00:00:00Z",
+  "service": {
+    "name": "x402engine",
+    "base_url": "https://x402-gateway-production.up.railway.app"
+  },
+  "defaults": {
+    "final_cost": {
+      "currency": "USD",
+      "model": "flat",
+      "includes_network_fees": false,
+      "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+    },
+    "uptime_slo": {
+      "target_pct": 99.5,
+      "window_days": 30
+    },
+    "refund_policy": {
+      "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+      "sla_hours": 24,
+      "contact": "support@x402engine.app"
+    },
+    "network_support": [
+      "eip155:4326",
+      "eip155:8453",
+      "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+    ],
+    "error_taxonomy": [
+      {
+        "code": "payment_required",
+        "http_status": 402,
+        "retryable": false,
+        "description": "Payment header missing or underpaid for this route."
+      },
+      {
+        "code": "upstream_unavailable",
+        "http_status": 503,
+        "retryable": true,
+        "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint."
+      },
+      {
+        "code": "bad_request",
+        "http_status": 400,
+        "retryable": false,
+        "description": "Input validation failed for request payload/query."
+      },
+      {
+        "code": "rate_limited",
+        "http_status": 429,
+        "retryable": true,
+        "description": "Rate limit reached; wait and retry."
+      }
+    ],
+    "last_verified_at": "2026-02-25T00:00:00Z"
+  },
+  "profiles": {
+    "read_get": {
+      "latency": {
+        "p50_ms": 250,
+        "p95_ms": 1200,
+        "timeout_ms": 10000
+      },
+      "idempotency": "idempotent",
+      "determinism": {
+        "level": "high",
+        "notes": "Read-only retrieval endpoint; response may vary with market/provider freshness."
+      }
+    },
+    "read_post": {
+      "latency": {
+        "p50_ms": 350,
+        "p95_ms": 1800,
+        "timeout_ms": 12000
+      },
+      "idempotency": "idempotent",
+      "determinism": {
+        "level": "high",
+        "notes": "Read-only query with POST body for richer filters; deterministic for same upstream snapshot."
+      }
+    },
+    "compute": {
+      "latency": {
+        "p50_ms": 1800,
+        "p95_ms": 9000,
+        "timeout_ms": 45000
+      },
+      "idempotency": "non_idempotent",
+      "determinism": {
+        "level": "low",
+        "notes": "Model/provider inference output can vary across runs, seeds, and upstream model revisions."
+      }
+    },
+    "storage_write": {
+      "latency": {
+        "p50_ms": 700,
+        "p95_ms": 4000,
+        "timeout_ms": 20000
+      },
+      "idempotency": "conditionally_idempotent",
+      "determinism": {
+        "level": "medium",
+        "notes": "Pinned content and resulting CIDs are stable for identical payloads, but provider behavior may vary."
+      }
+    }
+  },
+  "profile_rules": {
+    "compute_path_prefixes": [
+      "/api/image/",
+      "/api/video/",
+      "/api/llm/",
+      "/api/tts/",
+      "/api/transcribe",
+      "/api/code/run",
+      "/api/search/"
+    ],
+    "read_post_path_prefixes": [
+      "/api/wallet/",
+      "/api/token/prices",
+      "/api/embeddings",
+      "/api/tx/simulate"
+    ],
+    "storage_write_path_prefixes": [
+      "/api/ipfs/pin"
+    ]
+  },
+  "endpoint_overrides": {
+    "crypto-price": {
+      "fallback_equivalents": [
+        "crypto-markets",
+        "token-prices"
+      ]
+    },
+    "wallet-balances": {
+      "fallback_equivalents": [
+        "wallet-pnl",
+        "wallet-transactions"
+      ]
+    },
+    "tx-simulate": {
+      "determinism": {
+        "level": "medium",
+        "notes": "Simulation depends on latest mempool/state and node implementation details."
+      }
+    }
+  },
+  "examples": {
+    "crypto-price": {
+      "endpoint_id": "crypto-price",
+      "request": {
+        "method": "GET",
+        "path": "/api/crypto/price?ids=bitcoin,ethereum&currencies=usd"
+      },
+      "response": {
+        "bitcoin": {
+          "usd": 91234.12
+        },
+        "ethereum": {
+          "usd": 4865.44
+        }
+      }
+    },
+    "wallet-balances": {
+      "endpoint_id": "wallet-balances",
+      "request": {
+        "method": "POST",
+        "path": "/api/wallet/balances",
+        "body": {
+          "chain": "base",
+          "address": "0x7dd5Be069f2d2eAd75eC7C3423B116fF043c2629"
+        }
+      },
+      "response": {
+        "items": [
+          {
+            "chain": "base",
+            "address": "0x7dd5be069f2d2ead75ec7c3423b116ff043c2629",
+            "token": {
+              "chain": "base",
+              "address": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+              "type": "evm_erc20",
+              "price": 1.0002,
+              "decimals": 6,
+              "info": { "name": "USD Coin", "symbol": "USDC" }
+            },
+            "raw_balance": 125420000
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,175 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://x402engine.app/schemas/agent-manifest.v1.json",
+  "title": "x402engine Agent Manifest v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "manifest_id",
+    "service",
+    "generated_at",
+    "endpoints",
+    "examples"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "agent-manifest.v1"
+    },
+    "manifest_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "service": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "base_url"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "base_url": { "type": "string", "format": "uri" }
+      }
+    },
+    "endpoints": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/endpoint"
+      }
+    },
+    "examples": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["crypto-price", "wallet-balances"],
+      "properties": {
+        "crypto-price": { "$ref": "#/$defs/example" },
+        "wallet-balances": { "$ref": "#/$defs/example" }
+      }
+    }
+  },
+  "$defs": {
+    "endpoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "path",
+        "method",
+        "price",
+        "final_cost",
+        "latency",
+        "uptime_slo",
+        "idempotency",
+        "determinism",
+        "refund_policy",
+        "fallback_equivalents",
+        "network_support",
+        "error_taxonomy",
+        "last_verified_at"
+      ],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "path": { "type": "string", "pattern": "^/" },
+        "method": { "type": "string", "enum": ["GET", "POST", "PUT", "PATCH", "DELETE"] },
+        "price": { "type": "string", "pattern": "^\\$[0-9]+(\\.[0-9]+)?$" },
+        "final_cost": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["currency", "amount", "model", "includes_network_fees", "notes"],
+          "properties": {
+            "currency": { "type": "string", "const": "USD" },
+            "amount": { "type": "number", "minimum": 0 },
+            "model": { "type": "string", "enum": ["flat"] },
+            "includes_network_fees": { "type": "boolean" },
+            "notes": { "type": "string", "minLength": 1 }
+          }
+        },
+        "latency": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["p50_ms", "p95_ms", "timeout_ms"],
+          "properties": {
+            "p50_ms": { "type": "integer", "minimum": 1 },
+            "p95_ms": { "type": "integer", "minimum": 1 },
+            "timeout_ms": { "type": "integer", "minimum": 1 }
+          }
+        },
+        "uptime_slo": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["target_pct", "window_days"],
+          "properties": {
+            "target_pct": { "type": "number", "minimum": 0, "maximum": 100 },
+            "window_days": { "type": "integer", "minimum": 1 }
+          }
+        },
+        "idempotency": {
+          "type": "string",
+          "enum": ["idempotent", "non_idempotent", "conditionally_idempotent"]
+        },
+        "determinism": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["level", "notes"],
+          "properties": {
+            "level": { "type": "string", "enum": ["high", "medium", "low"] },
+            "notes": { "type": "string", "minLength": 1 }
+          }
+        },
+        "refund_policy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["policy", "sla_hours", "contact"],
+          "properties": {
+            "policy": { "type": "string", "minLength": 1 },
+            "sla_hours": { "type": "integer", "minimum": 1 },
+            "contact": { "type": "string", "minLength": 1 }
+          }
+        },
+        "fallback_equivalents": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "network_support": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "pattern": "^(eip155:[0-9]+|solana:[A-Za-z0-9]+)$"
+          },
+          "uniqueItems": true
+        },
+        "error_taxonomy": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["code", "http_status", "retryable", "description"],
+            "properties": {
+              "code": { "type": "string", "minLength": 1 },
+              "http_status": { "type": "integer", "minimum": 100, "maximum": 599 },
+              "retryable": { "type": "boolean" },
+              "description": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        "last_verified_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "example": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["endpoint_id", "request", "response"],
+      "properties": {
+        "endpoint_id": { "type": "string", "minLength": 1 },
+        "request": { "type": "object" },
+        "response": { "type": "object" }
+      }
+    }
+  }
+}

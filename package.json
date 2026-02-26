@@ -10,7 +10,11 @@
     "test": "vitest run",
     "test:unit": "vitest run test/megaeth.test.ts",
     "test:rpc": "tsx test/megaeth-rpc.ts",
-    "test:integration": "tsx test/manual-flow.ts && tsx test/verify-megaeth.ts"
+    "test:integration": "tsx test/manual-flow.ts && tsx test/verify-megaeth.ts",
+    "manifest:generate": "node scripts/generate-agent-manifest.mjs",
+    "manifest:validate": "node scripts/validate-agent-manifest.mjs",
+    "manifest:hash-sign": "node scripts/hash-sign-agent-manifest.mjs",
+    "manifest:all": "npm run manifest:generate && npm run manifest:validate && npm run manifest:hash-sign"
   },
   "dependencies": {
     "@coinbase/x402": "^2.1.0",

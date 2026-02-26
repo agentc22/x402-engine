@@ -1,0 +1,4205 @@
+{
+  "endpoints": [
+    {
+      "determinism": {
+        "level": "low",
+        "notes": "Model/provider inference output can vary across runs, seeds, and upstream model revisions."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "embeddings",
+        "image-fast"
+      ],
+      "final_cost": {
+        "amount": 0.005,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "code-run",
+      "idempotency": "non_idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 1800,
+        "p95_ms": 9000,
+        "timeout_ms": 45000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/code/run",
+      "price": "$0.005",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "high",
+        "notes": "Read-only retrieval endpoint; response may vary with market/provider freshness."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "crypto-markets",
+        "crypto-price"
+      ],
+      "final_cost": {
+        "amount": 0.003,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "crypto-history",
+      "idempotency": "idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 250,
+        "p95_ms": 1200,
+        "timeout_ms": 10000
+      },
+      "method": "GET",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/crypto/history",
+      "price": "$0.003",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "high",
+        "notes": "Read-only retrieval endpoint; response may vary with market/provider freshness."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "crypto-history",
+        "crypto-price"
+      ],
+      "final_cost": {
+        "amount": 0.002,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "crypto-markets",
+      "idempotency": "idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 250,
+        "p95_ms": 1200,
+        "timeout_ms": 10000
+      },
+      "method": "GET",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/crypto/markets",
+      "price": "$0.002",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "high",
+        "notes": "Read-only retrieval endpoint; response may vary with market/provider freshness."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "crypto-markets",
+        "token-prices"
+      ],
+      "final_cost": {
+        "amount": 0.001,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "crypto-price",
+      "idempotency": "idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 250,
+        "p95_ms": 1200,
+        "timeout_ms": 10000
+      },
+      "method": "GET",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/crypto/price",
+      "price": "$0.001",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "high",
+        "notes": "Read-only retrieval endpoint; response may vary with market/provider freshness."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "crypto-history",
+        "crypto-markets"
+      ],
+      "final_cost": {
+        "amount": 0.001,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "crypto-search",
+      "idempotency": "idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 250,
+        "p95_ms": 1200,
+        "timeout_ms": 10000
+      },
+      "method": "GET",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/crypto/search",
+      "price": "$0.001",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "high",
+        "notes": "Read-only retrieval endpoint; response may vary with market/provider freshness."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "crypto-history",
+        "crypto-markets"
+      ],
+      "final_cost": {
+        "amount": 0.001,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "crypto-trending",
+      "idempotency": "idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 250,
+        "p95_ms": 1200,
+        "timeout_ms": 10000
+      },
+      "method": "GET",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/crypto/trending",
+      "price": "$0.001",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "high",
+        "notes": "Read-only query with POST body for richer filters; deterministic for same upstream snapshot."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "code-run",
+        "image-fast"
+      ],
+      "final_cost": {
+        "amount": 0.001,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "embeddings",
+      "idempotency": "idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 350,
+        "p95_ms": 1800,
+        "timeout_ms": 12000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/embeddings",
+      "price": "$0.001",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "high",
+        "notes": "Read-only retrieval endpoint; response may vary with market/provider freshness."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "crypto-history",
+        "crypto-markets"
+      ],
+      "final_cost": {
+        "amount": 0.001,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "ens-resolve",
+      "idempotency": "idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 250,
+        "p95_ms": 1200,
+        "timeout_ms": 10000
+      },
+      "method": "GET",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/ens/resolve",
+      "price": "$0.001",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "high",
+        "notes": "Read-only retrieval endpoint; response may vary with market/provider freshness."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "crypto-history",
+        "crypto-markets"
+      ],
+      "final_cost": {
+        "amount": 0.001,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "ens-reverse",
+      "idempotency": "idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 250,
+        "p95_ms": 1200,
+        "timeout_ms": 10000
+      },
+      "method": "GET",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/ens/reverse",
+      "price": "$0.001",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "low",
+        "notes": "Model/provider inference output can vary across runs, seeds, and upstream model revisions."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "code-run",
+        "embeddings"
+      ],
+      "final_cost": {
+        "amount": 0.015,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "image-fast",
+      "idempotency": "non_idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 1800,
+        "p95_ms": 9000,
+        "timeout_ms": 45000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/image/fast",
+      "price": "$0.015",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "low",
+        "notes": "Model/provider inference output can vary across runs, seeds, and upstream model revisions."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "code-run",
+        "embeddings"
+      ],
+      "final_cost": {
+        "amount": 0.05,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "image-quality",
+      "idempotency": "non_idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 1800,
+        "p95_ms": 9000,
+        "timeout_ms": 45000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/image/quality",
+      "price": "$0.05",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "low",
+        "notes": "Model/provider inference output can vary across runs, seeds, and upstream model revisions."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "code-run",
+        "embeddings"
+      ],
+      "final_cost": {
+        "amount": 0.12,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "image-text",
+      "idempotency": "non_idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 1800,
+        "p95_ms": 9000,
+        "timeout_ms": 45000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/image/text",
+      "price": "$0.12",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "high",
+        "notes": "Read-only retrieval endpoint; response may vary with market/provider freshness."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "ipfs-pin"
+      ],
+      "final_cost": {
+        "amount": 0.001,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "ipfs-get",
+      "idempotency": "idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 250,
+        "p95_ms": 1200,
+        "timeout_ms": 10000
+      },
+      "method": "GET",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/ipfs/get",
+      "price": "$0.001",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "medium",
+        "notes": "Pinned content and resulting CIDs are stable for identical payloads, but provider behavior may vary."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "ipfs-get"
+      ],
+      "final_cost": {
+        "amount": 0.01,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "ipfs-pin",
+      "idempotency": "conditionally_idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 700,
+        "p95_ms": 4000,
+        "timeout_ms": 20000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/ipfs/pin",
+      "price": "$0.01",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "low",
+        "notes": "Model/provider inference output can vary across runs, seeds, and upstream model revisions."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "code-run",
+        "embeddings"
+      ],
+      "final_cost": {
+        "amount": 0.02,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "llm-claude-haiku",
+      "idempotency": "non_idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 1800,
+        "p95_ms": 9000,
+        "timeout_ms": 45000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/llm/claude-haiku",
+      "price": "$0.02",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "low",
+        "notes": "Model/provider inference output can vary across runs, seeds, and upstream model revisions."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "code-run",
+        "embeddings"
+      ],
+      "final_cost": {
+        "amount": 0.09,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "llm-claude-opus",
+      "idempotency": "non_idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 1800,
+        "p95_ms": 9000,
+        "timeout_ms": 45000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/llm/claude-opus",
+      "price": "$0.09",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "low",
+        "notes": "Model/provider inference output can vary across runs, seeds, and upstream model revisions."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "code-run",
+        "embeddings"
+      ],
+      "final_cost": {
+        "amount": 0.06,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "llm-claude-sonnet",
+      "idempotency": "non_idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 1800,
+        "p95_ms": 9000,
+        "timeout_ms": 45000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/llm/claude-sonnet",
+      "price": "$0.06",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "low",
+        "notes": "Model/provider inference output can vary across runs, seeds, and upstream model revisions."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "code-run",
+        "embeddings"
+      ],
+      "final_cost": {
+        "amount": 0.06,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "llm-claude-sonnet-4.6",
+      "idempotency": "non_idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 1800,
+        "p95_ms": 9000,
+        "timeout_ms": 45000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/llm/claude-sonnet-4.6",
+      "price": "$0.06",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "low",
+        "notes": "Model/provider inference output can vary across runs, seeds, and upstream model revisions."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "code-run",
+        "embeddings"
+      ],
+      "final_cost": {
+        "amount": 0.005,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "llm-deepseek",
+      "idempotency": "non_idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 1800,
+        "p95_ms": 9000,
+        "timeout_ms": 45000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/llm/deepseek",
+      "price": "$0.005",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "low",
+        "notes": "Model/provider inference output can vary across runs, seeds, and upstream model revisions."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "code-run",
+        "embeddings"
+      ],
+      "final_cost": {
+        "amount": 0.01,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "llm-deepseek-r1",
+      "idempotency": "non_idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 1800,
+        "p95_ms": 9000,
+        "timeout_ms": 45000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/llm/deepseek-r1",
+      "price": "$0.01",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "low",
+        "notes": "Model/provider inference output can vary across runs, seeds, and upstream model revisions."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "code-run",
+        "embeddings"
+      ],
+      "final_cost": {
+        "amount": 0.005,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "llm-deepseek-v3.2",
+      "idempotency": "non_idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 1800,
+        "p95_ms": 9000,
+        "timeout_ms": 45000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/llm/deepseek-v3.2",
+      "price": "$0.005",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "low",
+        "notes": "Model/provider inference output can vary across runs, seeds, and upstream model revisions."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "code-run",
+        "embeddings"
+      ],
+      "final_cost": {
+        "amount": 0.02,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "llm-devstral",
+      "idempotency": "non_idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 1800,
+        "p95_ms": 9000,
+        "timeout_ms": 45000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/llm/devstral",
+      "price": "$0.02",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "low",
+        "notes": "Model/provider inference output can vary across runs, seeds, and upstream model revisions."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "code-run",
+        "embeddings"
+      ],
+      "final_cost": {
+        "amount": 0.012,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "llm-gemini-3-flash",
+      "idempotency": "non_idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 1800,
+        "p95_ms": 9000,
+        "timeout_ms": 45000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/llm/gemini-3-flash",
+      "price": "$0.012",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "low",
+        "notes": "Model/provider inference output can vary across runs, seeds, and upstream model revisions."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "code-run",
+        "embeddings"
+      ],
+      "final_cost": {
+        "amount": 0.045,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "llm-gemini-3-pro",
+      "idempotency": "non_idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 1800,
+        "p95_ms": 9000,
+        "timeout_ms": 45000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/llm/gemini-3-pro",
+      "price": "$0.045",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "low",
+        "notes": "Model/provider inference output can vary across runs, seeds, and upstream model revisions."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "code-run",
+        "embeddings"
+      ],
+      "final_cost": {
+        "amount": 0.009,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "llm-gemini-flash",
+      "idempotency": "non_idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 1800,
+        "p95_ms": 9000,
+        "timeout_ms": 45000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/llm/gemini-flash",
+      "price": "$0.009",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "low",
+        "notes": "Model/provider inference output can vary across runs, seeds, and upstream model revisions."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "code-run",
+        "embeddings"
+      ],
+      "final_cost": {
+        "amount": 0.035,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "llm-gemini-pro",
+      "idempotency": "non_idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 1800,
+        "p95_ms": 9000,
+        "timeout_ms": 45000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/llm/gemini-pro",
+      "price": "$0.035",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "low",
+        "notes": "Model/provider inference output can vary across runs, seeds, and upstream model revisions."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "code-run",
+        "embeddings"
+      ],
+      "final_cost": {
+        "amount": 0.03,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "llm-glm",
+      "idempotency": "non_idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 1800,
+        "p95_ms": 9000,
+        "timeout_ms": 45000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/llm/glm",
+      "price": "$0.03",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "low",
+        "notes": "Model/provider inference output can vary across runs, seeds, and upstream model revisions."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "code-run",
+        "embeddings"
+      ],
+      "final_cost": {
+        "amount": 0.04,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "llm-gpt-4o",
+      "idempotency": "non_idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 1800,
+        "p95_ms": 9000,
+        "timeout_ms": 45000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/llm/gpt-4o",
+      "price": "$0.04",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "low",
+        "notes": "Model/provider inference output can vary across runs, seeds, and upstream model revisions."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "code-run",
+        "embeddings"
+      ],
+      "final_cost": {
+        "amount": 0.003,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "llm-gpt-4o-mini",
+      "idempotency": "non_idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 1800,
+        "p95_ms": 9000,
+        "timeout_ms": 45000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/llm/gpt-4o-mini",
+      "price": "$0.003",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "low",
+        "notes": "Model/provider inference output can vary across runs, seeds, and upstream model revisions."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "code-run",
+        "embeddings"
+      ],
+      "final_cost": {
+        "amount": 0.035,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "llm-gpt-5.1",
+      "idempotency": "non_idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 1800,
+        "p95_ms": 9000,
+        "timeout_ms": 45000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/llm/gpt-5.1",
+      "price": "$0.035",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "low",
+        "notes": "Model/provider inference output can vary across runs, seeds, and upstream model revisions."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "code-run",
+        "embeddings"
+      ],
+      "final_cost": {
+        "amount": 0.08,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "llm-gpt-5.2",
+      "idempotency": "non_idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 1800,
+        "p95_ms": 9000,
+        "timeout_ms": 45000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/llm/gpt-5.2",
+      "price": "$0.08",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "low",
+        "notes": "Model/provider inference output can vary across runs, seeds, and upstream model revisions."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "code-run",
+        "embeddings"
+      ],
+      "final_cost": {
+        "amount": 0.06,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "llm-gpt-5.2-codex",
+      "idempotency": "non_idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 1800,
+        "p95_ms": 9000,
+        "timeout_ms": 45000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/llm/gpt-5.2-codex",
+      "price": "$0.06",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "low",
+        "notes": "Model/provider inference output can vary across runs, seeds, and upstream model revisions."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "code-run",
+        "embeddings"
+      ],
+      "final_cost": {
+        "amount": 0.25,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "llm-gpt-5.2-pro",
+      "idempotency": "non_idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 1800,
+        "p95_ms": 9000,
+        "timeout_ms": 45000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/llm/gpt-5.2-pro",
+      "price": "$0.25",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "low",
+        "notes": "Model/provider inference output can vary across runs, seeds, and upstream model revisions."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "code-run",
+        "embeddings"
+      ],
+      "final_cost": {
+        "amount": 0.06,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "llm-grok",
+      "idempotency": "non_idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 1800,
+        "p95_ms": 9000,
+        "timeout_ms": 45000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/llm/grok",
+      "price": "$0.06",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "low",
+        "notes": "Model/provider inference output can vary across runs, seeds, and upstream model revisions."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "code-run",
+        "embeddings"
+      ],
+      "final_cost": {
+        "amount": 0.04,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "llm-grok-code",
+      "idempotency": "non_idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 1800,
+        "p95_ms": 9000,
+        "timeout_ms": 45000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/llm/grok-code",
+      "price": "$0.04",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "low",
+        "notes": "Model/provider inference output can vary across runs, seeds, and upstream model revisions."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "code-run",
+        "embeddings"
+      ],
+      "final_cost": {
+        "amount": 0.03,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "llm-kimi",
+      "idempotency": "non_idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 1800,
+        "p95_ms": 9000,
+        "timeout_ms": 45000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/llm/kimi",
+      "price": "$0.03",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "low",
+        "notes": "Model/provider inference output can vary across runs, seeds, and upstream model revisions."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "code-run",
+        "embeddings"
+      ],
+      "final_cost": {
+        "amount": 0.002,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "llm-llama",
+      "idempotency": "non_idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 1800,
+        "p95_ms": 9000,
+        "timeout_ms": 45000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/llm/llama",
+      "price": "$0.002",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "low",
+        "notes": "Model/provider inference output can vary across runs, seeds, and upstream model revisions."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "code-run",
+        "embeddings"
+      ],
+      "final_cost": {
+        "amount": 0.01,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "llm-minimax",
+      "idempotency": "non_idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 1800,
+        "p95_ms": 9000,
+        "timeout_ms": 45000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/llm/minimax",
+      "price": "$0.01",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "low",
+        "notes": "Model/provider inference output can vary across runs, seeds, and upstream model revisions."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "code-run",
+        "embeddings"
+      ],
+      "final_cost": {
+        "amount": 0.006,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "llm-mistral",
+      "idempotency": "non_idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 1800,
+        "p95_ms": 9000,
+        "timeout_ms": 45000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/llm/mistral",
+      "price": "$0.006",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "low",
+        "notes": "Model/provider inference output can vary across runs, seeds, and upstream model revisions."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "code-run",
+        "embeddings"
+      ],
+      "final_cost": {
+        "amount": 0.03,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "llm-o1",
+      "idempotency": "non_idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 1800,
+        "p95_ms": 9000,
+        "timeout_ms": 45000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/llm/o1",
+      "price": "$0.03",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "low",
+        "notes": "Model/provider inference output can vary across runs, seeds, and upstream model revisions."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "code-run",
+        "embeddings"
+      ],
+      "final_cost": {
+        "amount": 0.06,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "llm-perplexity",
+      "idempotency": "non_idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 1800,
+        "p95_ms": 9000,
+        "timeout_ms": 45000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/llm/perplexity",
+      "price": "$0.06",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "low",
+        "notes": "Model/provider inference output can vary across runs, seeds, and upstream model revisions."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "code-run",
+        "embeddings"
+      ],
+      "final_cost": {
+        "amount": 0.004,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "llm-qwen",
+      "idempotency": "non_idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 1800,
+        "p95_ms": 9000,
+        "timeout_ms": 45000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/llm/qwen",
+      "price": "$0.004",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "low",
+        "notes": "Model/provider inference output can vary across runs, seeds, and upstream model revisions."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "code-run",
+        "embeddings"
+      ],
+      "final_cost": {
+        "amount": 0.004,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "llm-qwen-coder",
+      "idempotency": "non_idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 1800,
+        "p95_ms": 9000,
+        "timeout_ms": 45000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/llm/qwen-coder",
+      "price": "$0.004",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "low",
+        "notes": "Model/provider inference output can vary across runs, seeds, and upstream model revisions."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "code-run",
+        "embeddings"
+      ],
+      "final_cost": {
+        "amount": 0.02,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "llm-seed",
+      "idempotency": "non_idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 1800,
+        "p95_ms": 9000,
+        "timeout_ms": 45000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/llm/seed",
+      "price": "$0.02",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "low",
+        "notes": "Model/provider inference output can vary across runs, seeds, and upstream model revisions."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "search-web",
+        "web-scrape"
+      ],
+      "final_cost": {
+        "amount": 0.005,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "search-contents",
+      "idempotency": "non_idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 1800,
+        "p95_ms": 9000,
+        "timeout_ms": 45000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/search/contents",
+      "price": "$0.005",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "low",
+        "notes": "Model/provider inference output can vary across runs, seeds, and upstream model revisions."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "search-contents",
+        "web-scrape"
+      ],
+      "final_cost": {
+        "amount": 0.01,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "search-web",
+      "idempotency": "non_idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 1800,
+        "p95_ms": 9000,
+        "timeout_ms": 45000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/search/web",
+      "price": "$0.010",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "high",
+        "notes": "Read-only retrieval endpoint; response may vary with market/provider freshness."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "crypto-history",
+        "crypto-markets"
+      ],
+      "final_cost": {
+        "amount": 0.002,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "token-metadata",
+      "idempotency": "idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 250,
+        "p95_ms": 1200,
+        "timeout_ms": 10000
+      },
+      "method": "GET",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/token/metadata",
+      "price": "$0.002",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "high",
+        "notes": "Read-only query with POST body for richer filters; deterministic for same upstream snapshot."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "crypto-history",
+        "crypto-markets"
+      ],
+      "final_cost": {
+        "amount": 0.005,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "token-prices",
+      "idempotency": "idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 350,
+        "p95_ms": 1800,
+        "timeout_ms": 12000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/token/prices",
+      "price": "$0.005",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "low",
+        "notes": "Model/provider inference output can vary across runs, seeds, and upstream model revisions."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "code-run",
+        "embeddings"
+      ],
+      "final_cost": {
+        "amount": 0.1,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "transcribe",
+      "idempotency": "non_idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 1800,
+        "p95_ms": 9000,
+        "timeout_ms": 45000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/transcribe",
+      "price": "$0.10",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "low",
+        "notes": "Model/provider inference output can vary across runs, seeds, and upstream model revisions."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "code-run",
+        "embeddings"
+      ],
+      "final_cost": {
+        "amount": 0.02,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "tts-elevenlabs",
+      "idempotency": "non_idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 1800,
+        "p95_ms": 9000,
+        "timeout_ms": 45000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/tts/elevenlabs",
+      "price": "$0.02",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "low",
+        "notes": "Model/provider inference output can vary across runs, seeds, and upstream model revisions."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "code-run",
+        "embeddings"
+      ],
+      "final_cost": {
+        "amount": 0.01,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "tts-openai",
+      "idempotency": "non_idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 1800,
+        "p95_ms": 9000,
+        "timeout_ms": 45000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/tts/openai",
+      "price": "$0.01",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "medium",
+        "notes": "Simulation depends on latest mempool/state and node implementation details."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "crypto-history",
+        "crypto-markets"
+      ],
+      "final_cost": {
+        "amount": 0.01,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "tx-simulate",
+      "idempotency": "idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 350,
+        "p95_ms": 1800,
+        "timeout_ms": 12000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/tx/simulate",
+      "price": "$0.01",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "low",
+        "notes": "Model/provider inference output can vary across runs, seeds, and upstream model revisions."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "code-run",
+        "embeddings"
+      ],
+      "final_cost": {
+        "amount": 0.5,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "video-animate",
+      "idempotency": "non_idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 1800,
+        "p95_ms": 9000,
+        "timeout_ms": 45000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/video/animate",
+      "price": "$0.50",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "low",
+        "notes": "Model/provider inference output can vary across runs, seeds, and upstream model revisions."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "code-run",
+        "embeddings"
+      ],
+      "final_cost": {
+        "amount": 0.3,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "video-fast",
+      "idempotency": "non_idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 1800,
+        "p95_ms": 9000,
+        "timeout_ms": 45000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/video/fast",
+      "price": "$0.30",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "low",
+        "notes": "Model/provider inference output can vary across runs, seeds, and upstream model revisions."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "code-run",
+        "embeddings"
+      ],
+      "final_cost": {
+        "amount": 0.6,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "video-hailuo",
+      "idempotency": "non_idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 1800,
+        "p95_ms": 9000,
+        "timeout_ms": 45000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/video/hailuo",
+      "price": "$0.60",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "low",
+        "notes": "Model/provider inference output can vary across runs, seeds, and upstream model revisions."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "code-run",
+        "embeddings"
+      ],
+      "final_cost": {
+        "amount": 0.5,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "video-quality",
+      "idempotency": "non_idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 1800,
+        "p95_ms": 9000,
+        "timeout_ms": 45000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/video/quality",
+      "price": "$0.50",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "high",
+        "notes": "Read-only query with POST body for richer filters; deterministic for same upstream snapshot."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "wallet-pnl",
+        "wallet-transactions"
+      ],
+      "final_cost": {
+        "amount": 0.005,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "wallet-balances",
+      "idempotency": "idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 350,
+        "p95_ms": 1800,
+        "timeout_ms": 12000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/wallet/balances",
+      "price": "$0.005",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "high",
+        "notes": "Read-only query with POST body for richer filters; deterministic for same upstream snapshot."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "crypto-history",
+        "crypto-markets"
+      ],
+      "final_cost": {
+        "amount": 0.01,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "wallet-pnl",
+      "idempotency": "idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 350,
+        "p95_ms": 1800,
+        "timeout_ms": 12000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/wallet/pnl",
+      "price": "$0.01",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "high",
+        "notes": "Read-only query with POST body for richer filters; deterministic for same upstream snapshot."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "crypto-history",
+        "crypto-markets"
+      ],
+      "final_cost": {
+        "amount": 0.005,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "wallet-transactions",
+      "idempotency": "idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 350,
+        "p95_ms": 1800,
+        "timeout_ms": 12000
+      },
+      "method": "POST",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/wallet/transactions",
+      "price": "$0.005",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "high",
+        "notes": "Read-only retrieval endpoint; response may vary with market/provider freshness."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "search-contents",
+        "search-web"
+      ],
+      "final_cost": {
+        "amount": 0.005,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "web-scrape",
+      "idempotency": "idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 250,
+        "p95_ms": 1200,
+        "timeout_ms": 10000
+      },
+      "method": "GET",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/web/scrape",
+      "price": "$0.005",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    },
+    {
+      "determinism": {
+        "level": "high",
+        "notes": "Read-only retrieval endpoint; response may vary with market/provider freshness."
+      },
+      "error_taxonomy": [
+        {
+          "code": "bad_request",
+          "description": "Input validation failed for request payload/query.",
+          "http_status": 400,
+          "retryable": false
+        },
+        {
+          "code": "payment_required",
+          "description": "Payment header missing or underpaid for this route.",
+          "http_status": 402,
+          "retryable": false
+        },
+        {
+          "code": "rate_limited",
+          "description": "Rate limit reached; wait and retry.",
+          "http_status": 429,
+          "retryable": true
+        },
+        {
+          "code": "upstream_unavailable",
+          "description": "Provider unavailable or timed out; retry with backoff or fallback endpoint.",
+          "http_status": 503,
+          "retryable": true
+        }
+      ],
+      "fallback_equivalents": [
+        "search-contents",
+        "search-web"
+      ],
+      "final_cost": {
+        "amount": 0.01,
+        "currency": "USD",
+        "includes_network_fees": false,
+        "model": "flat",
+        "notes": "Flat per-request endpoint fee; excludes L1/L2 settlement gas paid separately by payer."
+      },
+      "id": "web-screenshot",
+      "idempotency": "idempotent",
+      "last_verified_at": "2026-02-25T00:00:00Z",
+      "latency": {
+        "p50_ms": 250,
+        "p95_ms": 1200,
+        "timeout_ms": 10000
+      },
+      "method": "GET",
+      "network_support": [
+        "eip155:4326",
+        "eip155:8453",
+        "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+      ],
+      "path": "/api/web/screenshot",
+      "price": "$0.01",
+      "refund_policy": {
+        "contact": "support@x402engine.app",
+        "policy": "Case-by-case refunds for provider outages, duplicate charges, or gateway faults.",
+        "sla_hours": 24
+      },
+      "uptime_slo": {
+        "target_pct": 99.5,
+        "window_days": 30
+      }
+    }
+  ],
+  "examples": {
+    "crypto-price": {
+      "endpoint_id": "crypto-price",
+      "request": {
+        "method": "GET",
+        "path": "/api/crypto/price?ids=bitcoin,ethereum&currencies=usd"
+      },
+      "response": {
+        "bitcoin": {
+          "usd": 91234.12
+        },
+        "ethereum": {
+          "usd": 4865.44
+        }
+      }
+    },
+    "wallet-balances": {
+      "endpoint_id": "wallet-balances",
+      "request": {
+        "body": {
+          "address": "0x7dd5Be069f2d2eAd75eC7C3423B116fF043c2629",
+          "chain": "base"
+        },
+        "method": "POST",
+        "path": "/api/wallet/balances"
+      },
+      "response": {
+        "items": [
+          {
+            "address": "0x7dd5be069f2d2ead75ec7c3423b116ff043c2629",
+            "chain": "base",
+            "raw_balance": 125420000,
+            "token": {
+              "address": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+              "chain": "base",
+              "decimals": 6,
+              "info": {
+                "name": "USD Coin",
+                "symbol": "USDC"
+              },
+              "price": 1.0002,
+              "type": "evm_erc20"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "generated_at": "2026-02-25T00:00:00Z",
+  "manifest_id": "x402engine.agent-manifest.v1",
+  "schema_version": "agent-manifest.v1",
+  "service": {
+    "base_url": "https://x402-gateway-production.up.railway.app",
+    "name": "x402engine"
+  }
+}

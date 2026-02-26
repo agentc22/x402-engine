@@ -1,0 +1,15 @@
+{
+  "schema_version": "agent-manifest-integrity.v1",
+  "manifest_path": "manifest/agent-manifest.v1.json",
+  "hash": {
+    "algorithm": "sha256",
+    "value": "62ab39a7e0f29714fe75e7e5dd59d479cea116af69ada2a7924620a5bb95caab"
+  },
+  "signature": {
+    "algorithm": "ed25519",
+    "public_key_base64": "REPLACE_WITH_ED25519_PUBLIC_KEY_BASE64",
+    "signature_base64": "REPLACE_WITH_ED25519_SIGNATURE_BASE64"
+  },
+  "signed_at": "REPLACE_WITH_SIGNING_TIMESTAMP",
+  "notes": "Scaffold placeholders only. Set AGENT_MANIFEST_ED25519_PRIVATE_KEY_PEM to produce real signature."
+}

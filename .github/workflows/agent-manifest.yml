@@ -1,0 +1,35 @@
+name: agent-manifest
+
+on:
+  pull_request:
+    paths:
+      - "config/services.json"
+      - "manifest/**"
+      - "scripts/generate-agent-manifest.mjs"
+      - "scripts/validate-agent-manifest.mjs"
+      - "scripts/hash-sign-agent-manifest.mjs"
+      - ".github/workflows/agent-manifest.yml"
+  push:
+    branches: ["main"]
+    paths:
+      - "config/services.json"
+      - "manifest/**"
+      - "scripts/generate-agent-manifest.mjs"
+      - "scripts/validate-agent-manifest.mjs"
+      - "scripts/hash-sign-agent-manifest.mjs"
+      - ".github/workflows/agent-manifest.yml"
+
+jobs:
+  verify-manifest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+      - run: npm ci
+      - run: npm run manifest:generate
+      - run: npm run manifest:validate
+      - run: npm run manifest:hash-sign
+      - run: git diff --exit-code manifest/agent-manifest.v1.json manifest/agent-manifest.integrity.v1.json
