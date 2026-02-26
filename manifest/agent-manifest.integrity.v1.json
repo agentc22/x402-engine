@@ -7,9 +7,9 @@
   },
   "signature": {
     "algorithm": "ed25519",
-    "public_key_base64": "REPLACE_WITH_ED25519_PUBLIC_KEY_BASE64",
-    "signature_base64": "REPLACE_WITH_ED25519_SIGNATURE_BASE64"
+    "public_key_base64": "MCowBQYDK2VwAyEA7UzlKDfVdz+5YRxTgAZzWtN7STzPlvWPQoVahNVhZBc=",
+    "signature_base64": "EoIr1P5L+3LRuG4+T+X+hWOUhe4QGAbxtuP0j9kuJASVgMxF+GT6TY0mGnsou7njM5fGtIM5RUdHnTnroLPSDg=="
   },
-  "signed_at": "REPLACE_WITH_SIGNING_TIMESTAMP",
-  "notes": "Scaffold placeholders only. Set AGENT_MANIFEST_ED25519_PRIVATE_KEY_PEM to produce real signature."
+  "signed_at": "2026-02-26T01:24:10.267Z",
+  "notes": "Signed with AGENT_MANIFEST_ED25519_PRIVATE_KEY_PEM"
 }
