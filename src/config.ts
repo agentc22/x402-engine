@@ -62,6 +62,7 @@ export const config = {
     elevenlabs: csvKeys("ELEVENLABS_API_KEYS", "ELEVENLABS_API_KEY"),
     tenderly: csvKeys("TENDERLY_API_KEYS", "TENDERLY_API_KEY"),
     exa: csvKeys("EXA_API_KEYS", "EXA_API_KEY"),
+    serpapi: csvKeys("SERPAPI_API_KEYS", "SERPAPI_API_KEY"),
   },
 
   tenderlyAccount: optional("TENDERLY_ACCOUNT", ""),

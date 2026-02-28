@@ -23,7 +23,7 @@ import transcribeRouter from "./apis/transcribe.js";
 import cryptoRouter from "./apis/crypto.js";
 import blockchainRouter from "./apis/blockchain.js";
 import ipfsRouter from "./apis/ipfs.js";
-// import travelRouter from "./apis/travel.js";  // Disabled: Missing Amadeus API keys
+import travelRouter from "./apis/travel.js";
 // import nftRouter from "./apis/nft.js";        // Disabled: Temporarily removed
 import ensRouter from "./apis/ens.js";
 import llmRouter from "./apis/llm.js";
@@ -37,6 +37,7 @@ import { initFal } from "./providers/fal.js";
 import { initDeepgram } from "./providers/deepgram.js";
 import { initIpfs } from "./providers/ipfs.js";
 import { initAmadeus } from "./providers/amadeus.js";
+import { initSerpApi } from "./providers/serpapi.js";
 import { checkMegaETHConnection } from "./verification/megaeth.js";
 import { keyPool } from "./lib/key-pool.js";
 import { mountMcp } from "./mcp.js";
@@ -365,7 +366,7 @@ app.use(codeRouter);
 app.use(cryptoRouter);
 app.use(blockchainRouter);
 app.use(ipfsRouter);
-// app.use(travelRouter);  // Disabled: Missing Amadeus API keys
+app.use(travelRouter);
 // app.use(nftRouter);     // Disabled: Temporarily removed
 app.use(ensRouter);        // ENS resolution via public Ethereum RPCs (no API key needed)
 app.use(llmRouter);
@@ -410,6 +411,7 @@ async function main() {
   initDeepgram();
   initIpfs();
   initAmadeus();
+  initSerpApi();
 
   server = app.listen(config.port, () => {
     console.log(`\nx402engine running on http://localhost:${config.port}`);
