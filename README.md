@@ -42,6 +42,13 @@ MegaETH offers the fastest payment verification at <10ms using `eth_sendRawTrans
 | `/api/ens/resolve` | GET | $0.001 | Ethereum RPC | ENS name to address |
 | `/api/ens/reverse` | GET | $0.001 | Ethereum RPC | Address to ENS name |
 
+### Travel
+
+| Endpoint | Method | Price | Upstream | Description |
+|----------|--------|-------|----------|-------------|
+| `/api/travel/flights` | GET | $0.02 | SerpApi | Google Flights search (best flights, prices, insights) |
+| `/api/travel/hotels` | GET | $0.02 | SerpApi | Google Hotels search (properties, ratings, amenities) |
+
 ### Storage
 
 | Endpoint | Method | Price | Upstream | Description |
@@ -133,6 +140,7 @@ Required:
 Provider keys (add as needed per category, supports comma-separated key pools):
 - **Compute:** `FAL_API_KEYS`, `E2B_API_KEYS`, `DEEPGRAM_API_KEYS`
 - **Crypto:** `COINGECKO_API_KEYS` (optional), `ALLIUM_API_KEYS`
+- **Travel:** `SERPAPI_API_KEYS`
 - **Storage:** `PINATA_JWTS`
 
 ## Scripts

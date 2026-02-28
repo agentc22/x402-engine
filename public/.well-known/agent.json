@@ -1,6 +1,6 @@
 {
   "name": "x402engine",
-  "description": "Pay-per-call API gateway for AI agents. 61 tools including image generation, video generation, LLM inference (30 models), code execution, audio transcription, crypto data, wallet analytics, ENS, IPFS, web search, web scraping, and transaction simulation. All via HTTP 402 micropayments with USDC and USDm.",
+  "description": "Pay-per-call API gateway for AI agents. 63 tools including image generation, video generation, LLM inference (30 models), code execution, audio transcription, crypto data, wallet analytics, travel (flights & hotels), ENS, IPFS, web search, web scraping, and transaction simulation. All via HTTP 402 micropayments with USDC and USDm.",
   "url": "https://x402-gateway-production.up.railway.app",
   "version": "3.0.0",
   "protocol": "a2a",
@@ -90,6 +90,13 @@
       "description": "Simulate EVM transactions to preview outcomes before execution. Price: $0.01.",
       "tags": ["transaction", "simulation", "evm"],
       "examples": ["Simulate this swap transaction", "Preview what happens if I send this tx"]
+    },
+    {
+      "id": "travel",
+      "name": "Travel Search",
+      "description": "Search flights and hotels via Google Flights and Google Hotels. Find best flights with price insights, and hotels with ratings and amenities. Prices: $0.02 per search.",
+      "tags": ["travel", "flights", "hotels", "google-flights", "google-hotels"],
+      "examples": ["Search flights from JFK to LAX on April 15", "Find hotels in Paris for 3 nights"]
     },
     {
       "id": "embeddings",

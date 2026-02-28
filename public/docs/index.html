@@ -85,6 +85,8 @@
           <a href="#ens-resolve" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">ENS Resolve</a>
           <a href="#ens-reverse" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">ENS Reverse</a>
 <a href="#tx-simulate" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">TX Simulation</a>
+          <a href="#travel-flights" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Flight Search</a>
+          <a href="#travel-hotels" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Hotel Search</a>
         </div>
         <div>
           <h4 class="text-gray-500 font-medium uppercase text-xs tracking-wider mb-2 px-3">Compute</h4>
@@ -1701,6 +1703,107 @@ POST /api/embeddings
   "gasUsed": 51234,
   "logs": [...],
   "trace": { "type": "CALL", "from": "0x...", "to": "0x...", ... }
+}</code></pre>
+          </div>
+        </section>
+
+        <!-- Travel: Flight Search -->
+        <hr class="border-white/5 mb-16">
+
+        <section id="travel-flights" class="mb-14">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="method-get px-2 py-0.5 rounded text-xs font-bold">GET</span>
+            <h3 class="text-lg font-semibold text-white">/api/travel/flights</h3>
+            <span class="text-brand-400 text-sm font-mono ml-auto">$0.02</span>
+          </div>
+          <p class="text-gray-400 text-sm mb-4">Search flights via Google Flights (SerpApi). Returns best flights, alternative options, and price insights.</p>
+          <div class="overflow-x-auto mb-4">
+            <table class="w-full text-sm">
+              <thead><tr class="border-b border-white/5"><th class="text-left py-2 text-gray-500 font-medium">Param</th><th class="text-left py-2 text-gray-500 font-medium">Type</th><th class="text-left py-2 text-gray-500 font-medium">Description</th></tr></thead>
+              <tbody class="text-gray-300">
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">origin <span class="param-required">required</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">Departure airport IATA code (e.g. JFK)</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">destination <span class="param-required">required</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">Arrival airport IATA code (e.g. LAX)</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">departureDate <span class="param-required">required</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">Departure date (YYYY-MM-DD)</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">returnDate <span class="param-optional">optional</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">Return date for round trips (YYYY-MM-DD)</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">adults <span class="param-optional">optional</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">Number of adult passengers (default: 1)</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">travelClass <span class="param-optional">optional</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">1=Economy, 2=Premium, 3=Business, 4=First</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">stops <span class="param-optional">optional</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">0=Nonstop, 1=Up to 1 stop, 2=Up to 2 stops</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">maxPrice <span class="param-optional">optional</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">Maximum price filter</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">currency <span class="param-optional">optional</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">Currency code (default: USD)</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">GET /api/travel/flights?origin=JFK&destination=LAX&departureDate=2026-04-15
+
+<span class="text-gray-500">// Response</span>
+{
+  "best_flights": [
+    {
+      "flights": [{
+        "airline": "JetBlue",
+        "flight_number": "B6 223",
+        "departure_airport": { "name": "JFK", "time": "2026-04-15 12:29" },
+        "arrival_airport": { "name": "LAX", "time": "2026-04-15 15:37" },
+        "duration": 368,
+        "travel_class": "Economy"
+      }],
+      "total_duration": 368,
+      "price": 124
+    }
+  ],
+  "other_flights": [...],
+  "price_insights": {
+    "lowest_price": 100,
+    "price_level": "low",
+    "typical_price_range": [115, 235]
+  }
+}</code></pre>
+          </div>
+        </section>
+
+        <!-- Travel: Hotel Search -->
+        <hr class="border-white/5 mb-16">
+
+        <section id="travel-hotels" class="mb-14">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="method-get px-2 py-0.5 rounded text-xs font-bold">GET</span>
+            <h3 class="text-lg font-semibold text-white">/api/travel/hotels</h3>
+            <span class="text-brand-400 text-sm font-mono ml-auto">$0.02</span>
+          </div>
+          <p class="text-gray-400 text-sm mb-4">Search hotels via Google Hotels (SerpApi). Returns properties with prices, ratings, and amenities.</p>
+          <div class="overflow-x-auto mb-4">
+            <table class="w-full text-sm">
+              <thead><tr class="border-b border-white/5"><th class="text-left py-2 text-gray-500 font-medium">Param</th><th class="text-left py-2 text-gray-500 font-medium">Type</th><th class="text-left py-2 text-gray-500 font-medium">Description</th></tr></thead>
+              <tbody class="text-gray-300">
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">q <span class="param-required">required</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">Search query — city or hotel name (e.g. "hotels in Paris")</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">checkInDate <span class="param-required">required</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">Check-in date (YYYY-MM-DD)</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">checkOutDate <span class="param-required">required</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">Check-out date (YYYY-MM-DD)</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">adults <span class="param-optional">optional</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">Number of adults (default: 2)</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">sortBy <span class="param-optional">optional</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">3=Lowest price, 8=Highest rating, 13=Most reviewed</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">minPrice <span class="param-optional">optional</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">Minimum price per night</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">maxPrice <span class="param-optional">optional</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">Maximum price per night</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">hotelClass <span class="param-optional">optional</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">Star rating (2-5)</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">currency <span class="param-optional">optional</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">Currency code (default: USD)</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">GET /api/travel/hotels?q=hotels+in+Paris&checkInDate=2026-04-15&checkOutDate=2026-04-18
+
+<span class="text-gray-500">// Response</span>
+{
+  "properties": [
+    {
+      "name": "Villa Panthéon",
+      "overall_rating": 4.3,
+      "rate_per_night": { "lowest": "$224" },
+      "hotel_class": "4-star hotel",
+      "amenities": ["Free Wi-Fi", "Restaurant", "Bar"],
+      "images": [{ "thumbnail": "https://..." }]
+    }
+  ],
+  "brands": [...]
 }</code></pre>
           </div>
         </section>
