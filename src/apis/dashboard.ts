@@ -33,6 +33,9 @@ router.get("/api/dashboard/stats", authCheck, async (_req, res) => {
       revenueRows,
       uniquePayersRow,
       dailyRevenueRows,
+      revenue24hRows,
+      revenue7dRows,
+      dailyRevenueAmountRows,
     ] = await Promise.all([
       pool.query(`SELECT COUNT(*)::int AS count FROM requests WHERE service != 'megaeth-payment'`),
       pool.query(`SELECT COUNT(*)::int AS count FROM requests WHERE created_at > NOW() - INTERVAL '1 day' AND service != 'megaeth-payment'`),
@@ -73,6 +76,33 @@ router.get("/api/dashboard/stats", authCheck, async (_req, res) => {
         FROM requests WHERE created_at > NOW() - INTERVAL '30 days'
         GROUP BY day, network ORDER BY day
       `),
+      // Revenue last 24h
+      pool.query(`
+        SELECT COALESCE(network, 'unknown') AS network,
+               SUM(CASE WHEN amount IS NOT NULL THEN amount::numeric ELSE 0 END) AS total_raw
+        FROM requests WHERE amount IS NOT NULL AND service != 'megaeth-payment'
+          AND created_at > NOW() - INTERVAL '1 day'
+        GROUP BY network
+      `),
+      // Revenue last 7d
+      pool.query(`
+        SELECT COALESCE(network, 'unknown') AS network,
+               SUM(CASE WHEN amount IS NOT NULL THEN amount::numeric ELSE 0 END) AS total_raw
+        FROM requests WHERE amount IS NOT NULL AND service != 'megaeth-payment'
+          AND created_at > NOW() - INTERVAL '7 days'
+        GROUP BY network
+      `),
+      // Daily revenue amounts (30d) for chart
+      pool.query(`
+        SELECT date_trunc('day', created_at)::date AS day,
+               SUM(CASE
+                 WHEN network LIKE '%4326%' THEN amount::numeric / 1e18
+                 ELSE amount::numeric / 1e6
+               END) AS usd
+        FROM requests WHERE amount IS NOT NULL AND service != 'megaeth-payment'
+          AND created_at > NOW() - INTERVAL '30 days'
+        GROUP BY day ORDER BY day
+      `),
     ]);
 
     // Build cost/price maps from services config
@@ -94,6 +124,13 @@ router.get("/api/dashboard/stats", authCheck, async (_req, res) => {
       return n / 1e6; // Base/Solana USDC = 6 decimals
     }
     const actualRevenue = (revenueRows.rows as any[]).reduce(
+      (sum: number, r: any) => sum + rawToUsd(r.total_raw, r.network), 0
+    );
+
+    const revenue24h = (revenue24hRows.rows as any[]).reduce(
+      (sum: number, r: any) => sum + rawToUsd(r.total_raw, r.network), 0
+    );
+    const revenue7d = (revenue7dRows.rows as any[]).reduce(
       (sum: number, r: any) => sum + rawToUsd(r.total_raw, r.network), 0
     );
 
@@ -141,6 +178,9 @@ router.get("/api/dashboard/stats", authCheck, async (_req, res) => {
       topPayers: topPayersRows.rows,
       recent: recentRows.rows,
       revenue: revenueRows.rows,
+      revenue24h,
+      revenue7d,
+      dailyRevenueChart: dailyRevenueAmountRows.rows,
       github,
       profit: {
         totalRevenue: actualRevenue,
@@ -151,7 +191,8 @@ router.get("/api/dashboard/stats", authCheck, async (_req, res) => {
       },
     });
   } catch (err: any) {
-    res.status(500).json({ error: err.message });
+    // Avoid leaking internal error details/config values to API consumers
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
@@ -217,6 +258,11 @@ router.get("/dashboard", authCheck, (_req, res) => {
     <h2>Requests (30d)</h2>
     <div class="chart" id="dailyChart"></div>
   </div>
+</div>
+
+<div class="panel" style="margin-bottom:16px">
+  <h2>Daily Revenue (30d)</h2>
+  <div class="chart" id="revenueChart"></div>
 </div>
 
 <div class="grid2">
@@ -293,6 +339,8 @@ async function load() {
       {l:'Last 24h', v:d.last24h.toLocaleString()},
       {l:'Last 7 Days', v:d.last7d.toLocaleString()},
       {l:'Unique Payers', v:d.uniquePayers.toLocaleString()},
+      {l:'Revenue 24h', v:'$'+(d.revenue24h||0).toFixed(2), s:'Last 24 hours', green: (d.revenue24h||0) > 0},
+      {l:'Revenue 7d', v:'$'+(d.revenue7d||0).toFixed(2), s:'Last 7 days', green: (d.revenue7d||0) > 0},
       {l:'Total Revenue', v:'$'+totalRevenue.toFixed(2), s:(d.revenue||[]).map(r=>netLabel(r.network)+': $'+rawToUsd(r.total_raw,r.network).toFixed(2)).join(' | ')},
       {l:'Est. Cost', v:'$'+(p.totalCost||0).toFixed(2), s:'Avg upstream cost per call'},
       {l:'Est. Profit', v:'$'+(p.totalProfit||0).toFixed(2), s:'Margin: '+(p.margin||0).toFixed(1)+'%', green: (p.totalProfit||0) > 0},
@@ -312,6 +360,17 @@ async function load() {
     document.getElementById('dailyChart').innerHTML = d.daily.map(h=>
       '<div class="chart-bar" style="height:'+Math.max(4, h.count/dMax*120)+'px" title="'+h.day+': '+h.count+'"></div>'
     ).join('');
+
+    // Daily revenue chart
+    const revChart = d.dailyRevenueChart || [];
+    if (revChart.length > 0) {
+      const rMax = Math.max(...revChart.map(r=>Number(r.usd)), 0.01);
+      document.getElementById('revenueChart').innerHTML = revChart.map(r=>
+        '<div class="chart-bar" style="height:'+Math.max(4, Number(r.usd)/rMax*120)+'px;background:#4ade80" title="'+r.day+': $'+Number(r.usd).toFixed(2)+'"></div>'
+      ).join('');
+    } else {
+      document.getElementById('revenueChart').innerHTML = '<p style="color:#888;padding:20px">No revenue data yet</p>';
+    }
 
     // Service table with profit breakdown
     const profitMap = {};
