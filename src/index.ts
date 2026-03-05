@@ -32,6 +32,7 @@ import searchRouter from "./apis/search.js";
 import ttsRouter from "./apis/tts.js";
 import txRouter from "./apis/tx.js";
 import dashboardRouter from "./apis/dashboard.js";
+import healthRouter from "./apis/health.js";
 import megaethFacilitator from "./facilitator/index.js";
 import { initFal } from "./providers/fal.js";
 import { initDeepgram } from "./providers/deepgram.js";
@@ -54,7 +55,7 @@ app.use(cors({
   origin: "*",
   methods: ["GET", "POST", "OPTIONS"],
   allowedHeaders: ["Content-Type", "X-PAYMENT", "payment-signature", "X-DEV-BYPASS"],
-  exposedHeaders: ["PAYMENT-REQUIRED", "PAYMENT-RESPONSE", "X-Request-ID"],
+  exposedHeaders: ["PAYMENT-REQUIRED", "PAYMENT-RESPONSE", "X-Request-ID", "X-Response-Time"],
 }));
 
 // --- Security headers ---
@@ -64,6 +65,19 @@ app.use((_req, res, next) => {
   res.setHeader("X-Frame-Options", "DENY");
   res.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
   res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+  next();
+});
+
+// --- Response timing header ---
+app.use((_req, res, next) => {
+  const start = Date.now();
+  const origWriteHead = res.writeHead.bind(res);
+  (res as any).writeHead = function (statusCode: number, ...args: any[]) {
+    if (!res.headersSent) {
+      res.setHeader("X-Response-Time", `${Date.now() - start}ms`);
+    }
+    return origWriteHead(statusCode, ...args);
+  };
   next();
 });
 
@@ -248,6 +262,9 @@ app.get("/api/discover", freeEndpointLimiter, (_req, res) => {
 app.get("/api/services", freeEndpointLimiter, (_req, res) => {
   res.json(servicesResponse);
 });
+
+// Service health (live aggregation from requests table)
+app.use(freeEndpointLimiter, healthRouter);
 
 app.get("/api/services/:id", freeEndpointLimiter, (req, res) => {
   const svc = getService(req.params.id as string);
