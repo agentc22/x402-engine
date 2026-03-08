@@ -62,6 +62,19 @@ const MODELS: Record<string, ModelConfig> = {
   "gpt-5.1": { model: "openai/gpt-5.1", serviceId: "llm-gpt-5.1" },
   // Qwen (code-focused)
   "qwen-coder": { model: "qwen/qwen3-coder-next", serviceId: "llm-qwen-coder" },
+  // OpenAI (latest)
+  "gpt-5.4": { model: "openai/gpt-5.4", serviceId: "llm-gpt-5.4" },
+  "gpt-5.4-pro": { model: "openai/gpt-5.4-pro", serviceId: "llm-gpt-5.4-pro", reasoning: true },
+  "gpt-5.3-codex": { model: "openai/gpt-5.3-codex", serviceId: "llm-gpt-5.3-codex", reasoning: true },
+  // Anthropic (previous-gen)
+  "claude-opus-4.5": { model: "anthropic/claude-opus-4.5", serviceId: "llm-claude-opus-4.5" },
+  // Google (latest)
+  "gemini-3.1-pro": { model: "google/gemini-3.1-pro-preview", serviceId: "llm-gemini-3.1-pro", reasoning: true },
+  "gemini-3.1-flash-lite": { model: "google/gemini-3.1-flash-lite-preview", serviceId: "llm-gemini-3.1-flash-lite" },
+  // Qwen (latest)
+  "qwen3.5": { model: "qwen/qwen3.5-plus-02-15", serviceId: "llm-qwen3.5" },
+  // DeepSeek (enhanced reasoning)
+  "deepseek-v3.2-speciale": { model: "deepseek/deepseek-v3.2-speciale", serviceId: "llm-deepseek-v3.2-speciale", reasoning: true },
 };
 
 // Reasoning models burn tokens on chain-of-thought before generating content.
