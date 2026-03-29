@@ -124,161 +124,172 @@
       "cost": "$0.08"
     },
     {
-      "id": "video-fast",
-      "name": "Fast Video Generation",
-      "description": "Quick video generation using Kling 1.6 (~30s, 5-10sec clips, good for drafts)",
-      "price": "$0.30",
-      "cost": "$0.225",
+      "id": "face-swap",
+      "name": "Face Swap",
+      "description": "Identity-preserving face swap using FLUX PuLID for portraits, product shots, and stylized edits",
+      "price": "$0.08",
+      "cost": "$0.0333",
       "method": "POST",
-      "path": "/api/video/fast",
+      "path": "/api/image/face-swap",
       "mimeType": "application/json",
       "category": "compute",
       "upstream": {
         "provider": "fal",
-        "baseUrl": "https://fal.run/fal-ai/kling-video/v1.6/standard/text-to-video"
+        "baseUrl": "https://fal.run/fal-ai/flux-pulid"
       },
       "parameters": {
         "body": {
           "prompt": {
             "type": "string",
             "required": true,
-            "description": "Text description of video to generate",
-            "example": "a cat walking on a beach at sunset"
+            "description": "Describe the final image after the face swap",
+            "example": "a studio portrait with natural skin tones and soft cinematic lighting"
           },
-          "duration": {
+          "reference_image_url": {
             "type": "string",
-            "required": false,
-            "description": "Video duration in seconds (5 or 10)",
-            "example": "5",
-            "default": "5"
+            "required": true,
+            "description": "Public image URL containing the source face to preserve",
+            "example": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=1024"
           },
-          "aspect_ratio": {
-            "type": "string",
+          "width": {
+            "type": "number",
             "required": false,
-            "description": "Aspect ratio (16:9, 9:16, 1:1)",
-            "example": "16:9",
-            "default": "16:9"
+            "description": "Image width in pixels (256-2048)",
+            "example": 1024,
+            "default": 1024
+          },
+          "height": {
+            "type": "number",
+            "required": false,
+            "description": "Image height in pixels (256-2048)",
+            "example": 1024,
+            "default": 1024
+          },
+          "seed": {
+            "type": "number",
+            "required": false,
+            "description": "Random seed for reproducibility",
+            "example": 7
           },
           "negative_prompt": {
             "type": "string",
             "required": false,
-            "description": "What to avoid in the video",
-            "example": "blur, distort, low quality"
+            "description": "What to avoid in the final image",
+            "example": "blur, warped eyes, extra fingers"
+          },
+          "guidance_scale": {
+            "type": "number",
+            "required": false,
+            "description": "Prompt guidance strength",
+            "example": 4
+          },
+          "id_weight": {
+            "type": "number",
+            "required": false,
+            "description": "How strongly to preserve identity from the reference face",
+            "example": 1.2
           }
         }
       }
     },
     {
-      "id": "video-quality",
-      "name": "Quality Video Generation",
-      "description": "High-quality video generation using Kling 2.6 Pro (~60s, cinematic quality, 5-10sec clips)",
-      "price": "$0.50",
-      "cost": "$0.35",
+      "id": "image-nano-banana",
+      "name": "Nano Banana 2 Image Generation",
+      "description": "Google's fast, high-quality image generation with aspect ratio control and optional web search",
+      "price": "$0.10",
+      "cost": "$0.08",
       "method": "POST",
-      "path": "/api/video/quality",
+      "path": "/api/image/nano-banana",
       "mimeType": "application/json",
       "category": "compute",
       "upstream": {
         "provider": "fal",
-        "baseUrl": "https://fal.run/fal-ai/kling-video/v2.6/pro/text-to-video"
+        "baseUrl": "https://fal.run/fal-ai/nano-banana-2"
       },
       "parameters": {
         "body": {
           "prompt": {
             "type": "string",
             "required": true,
-            "description": "Text description of video to generate",
-            "example": "a drone shot flying over a mountain range at golden hour"
-          },
-          "duration": {
-            "type": "string",
-            "required": false,
-            "description": "Video duration in seconds (5 or 10)",
-            "example": "5",
-            "default": "5"
+            "description": "Text description of image to generate (up to 50,000 chars)",
+            "example": "a cyberpunk cityscape at sunset with neon signs"
           },
           "aspect_ratio": {
             "type": "string",
             "required": false,
-            "description": "Aspect ratio (16:9, 9:16, 1:1)",
+            "description": "Output aspect ratio (auto, 21:9, 16:9, 3:2, 4:3, 5:4, 1:1, 4:5, 3:4, 2:3, 9:16)",
             "example": "16:9",
-            "default": "16:9"
+            "default": "1:1"
           },
-          "negative_prompt": {
+          "output_format": {
             "type": "string",
             "required": false,
-            "description": "What to avoid in the video",
-            "example": "blur, distort, low quality"
+            "description": "Image format: png, jpeg, or webp",
+            "example": "png",
+            "default": "png"
+          },
+          "seed": {
+            "type": "number",
+            "required": false,
+            "description": "Random seed for reproducibility",
+            "example": 42
           }
         }
       }
     },
     {
-      "id": "video-hailuo",
-      "name": "Hailuo Video Generation",
-      "description": "Premium 1080p video generation using MiniMax Hailuo-02 Pro (~45s, 6sec clips, auto-optimized prompts)",
-      "price": "$0.60",
-      "cost": "$0.48",
+      "id": "tts-lux",
+      "name": "Lux Voice Cloning TTS",
+      "description": "Voice-cloning text-to-speech — provide a reference audio clip and generate speech in that voice at 48kHz",
+      "price": "$0.02",
+      "cost": "$0.007",
       "method": "POST",
-      "path": "/api/video/hailuo",
+      "path": "/api/tts/lux",
       "mimeType": "application/json",
       "category": "compute",
       "upstream": {
         "provider": "fal",
-        "baseUrl": "https://fal.run/fal-ai/minimax/hailuo-02/pro/text-to-video"
+        "baseUrl": "https://fal.run/fal-ai/lux-tts"
       },
       "parameters": {
         "body": {
-          "prompt": {
+          "text": {
             "type": "string",
             "required": true,
-            "description": "Text description of video to generate",
-            "example": "a timelapse of a flower blooming in a garden"
-          }
-        }
-      }
-    },
-    {
-      "id": "video-animate",
-      "name": "Image-to-Video Animation",
-      "description": "Animate a static image into video using Kling 2.6 Pro (~60s, bring any image to life)",
-      "price": "$0.50",
-      "cost": "$0.35",
-      "method": "POST",
-      "path": "/api/video/animate",
-      "mimeType": "application/json",
-      "category": "compute",
-      "upstream": {
-        "provider": "fal",
-        "baseUrl": "https://fal.run/fal-ai/kling-video/v2.6/pro/image-to-video"
-      },
-      "parameters": {
-        "body": {
-          "prompt": {
-            "type": "string",
-            "required": true,
-            "description": "Description of desired motion and animation",
-            "example": "the person smiles and waves at the camera"
+            "description": "Text to convert to speech",
+            "example": "Hey, what's up? I'm feeling really great today!"
           },
-          "image_url": {
+          "audio_url": {
             "type": "string",
             "required": true,
-            "description": "URL of the image to animate",
-            "example": "https://images.unsplash.com/photo-1529778873920-4da4926a72c2?w=512"
+            "description": "URL of reference audio file for voice cloning",
+            "example": "https://storage.googleapis.com/falserverless/example_inputs/reference_audio.wav"
           },
-          "duration": {
-            "type": "string",
+          "num_inference_steps": {
+            "type": "number",
             "required": false,
-            "description": "Video duration in seconds (5 or 10)",
-            "example": "5",
-            "default": "5"
+            "description": "Flow-matching inference steps (1-16)",
+            "example": 4,
+            "default": 4
           },
-          "aspect_ratio": {
-            "type": "string",
+          "guidance_scale": {
+            "type": "number",
             "required": false,
-            "description": "Aspect ratio (16:9, 9:16, 1:1)",
-            "example": "16:9",
-            "default": "16:9"
+            "description": "Classifier-free guidance scale (0-10)",
+            "example": 3,
+            "default": 3
+          },
+          "max_ref_length": {
+            "type": "number",
+            "required": false,
+            "description": "Max reference audio duration in seconds (1-15)",
+            "example": 5,
+            "default": 5
+          },
+          "seed": {
+            "type": "number",
+            "required": false,
+            "description": "Random seed for reproducibility"
           }
         }
       }
@@ -2659,6 +2670,198 @@
           }
         }
       }
+    },
+    {
+      "id": "llm-minimax-m2.7",
+      "name": "MiniMax M2.7",
+      "description": "MiniMax's latest model — improved reasoning and generation with 204k context",
+      "price": "$0.01",
+      "method": "POST",
+      "path": "/api/llm/minimax-m2.7",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": {
+        "provider": "openrouter",
+        "baseUrl": "https://openrouter.ai/api/v1"
+      },
+      "parameters": {
+        "body": {
+          "messages": {
+            "type": "array",
+            "required": true,
+            "description": "Array of message objects with role and content",
+            "example": [{ "role": "user", "content": "Hello" }]
+          },
+          "max_tokens": {
+            "type": "number",
+            "required": false,
+            "description": "Maximum tokens to generate",
+            "example": 1024,
+            "default": 1024
+          }
+        }
+      },
+      "cost": "$0.0004"
+    },
+    {
+      "id": "llm-llama-4-maverick",
+      "name": "Llama 4 Maverick",
+      "description": "Meta's latest open model — 1M context, strong multilingual and reasoning at very low cost",
+      "price": "$0.003",
+      "method": "POST",
+      "path": "/api/llm/llama-4-maverick",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": {
+        "provider": "openrouter",
+        "baseUrl": "https://openrouter.ai/api/v1"
+      },
+      "parameters": {
+        "body": {
+          "messages": {
+            "type": "array",
+            "required": true,
+            "description": "Array of message objects with role and content",
+            "example": [{ "role": "user", "content": "Hello" }]
+          },
+          "max_tokens": {
+            "type": "number",
+            "required": false,
+            "description": "Maximum tokens to generate",
+            "example": 1024,
+            "default": 1024
+          }
+        }
+      },
+      "cost": "$0.0002"
+    },
+    {
+      "id": "llm-gpt-5-nano",
+      "name": "GPT-5 Nano",
+      "description": "OpenAI's cheapest GPT-5 tier — ultra-affordable for high-volume agent tasks",
+      "price": "$0.002",
+      "method": "POST",
+      "path": "/api/llm/gpt-5-nano",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": {
+        "provider": "openrouter",
+        "baseUrl": "https://openrouter.ai/api/v1"
+      },
+      "parameters": {
+        "body": {
+          "messages": {
+            "type": "array",
+            "required": true,
+            "description": "Array of message objects with role and content",
+            "example": [{ "role": "user", "content": "Hello" }]
+          },
+          "max_tokens": {
+            "type": "number",
+            "required": false,
+            "description": "Maximum tokens to generate",
+            "example": 1024,
+            "default": 1024
+          }
+        }
+      },
+      "cost": "$0.0002"
+    },
+    {
+      "id": "llm-o4-mini",
+      "name": "OpenAI o4-mini",
+      "description": "OpenAI's latest small reasoning model — fast chain-of-thought for math, coding, and analysis",
+      "price": "$0.03",
+      "method": "POST",
+      "path": "/api/llm/o4-mini",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": {
+        "provider": "openrouter",
+        "baseUrl": "https://openrouter.ai/api/v1"
+      },
+      "parameters": {
+        "body": {
+          "messages": {
+            "type": "array",
+            "required": true,
+            "description": "Array of message objects with role and content",
+            "example": [{ "role": "user", "content": "Hello" }]
+          },
+          "max_tokens": {
+            "type": "number",
+            "required": false,
+            "description": "Maximum tokens to generate",
+            "example": 16384,
+            "default": 16384
+          }
+        }
+      },
+      "cost": "$0.002"
+    },
+    {
+      "id": "llm-grok-4-fast",
+      "name": "Grok 4 Fast",
+      "description": "xAI's fast model — 2M context window at very low cost, great for large document processing",
+      "price": "$0.004",
+      "method": "POST",
+      "path": "/api/llm/grok-4-fast",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": {
+        "provider": "openrouter",
+        "baseUrl": "https://openrouter.ai/api/v1"
+      },
+      "parameters": {
+        "body": {
+          "messages": {
+            "type": "array",
+            "required": true,
+            "description": "Array of message objects with role and content",
+            "example": [{ "role": "user", "content": "Hello" }]
+          },
+          "max_tokens": {
+            "type": "number",
+            "required": false,
+            "description": "Maximum tokens to generate",
+            "example": 1024,
+            "default": 1024
+          }
+        }
+      },
+      "cost": "$0.0002"
+    },
+    {
+      "id": "llm-command-a",
+      "name": "Cohere Command A",
+      "description": "Cohere's flagship model — 256k context, strong for enterprise RAG and structured generation",
+      "price": "$0.04",
+      "method": "POST",
+      "path": "/api/llm/command-a",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": {
+        "provider": "openrouter",
+        "baseUrl": "https://openrouter.ai/api/v1"
+      },
+      "parameters": {
+        "body": {
+          "messages": {
+            "type": "array",
+            "required": true,
+            "description": "Array of message objects with role and content",
+            "example": [{ "role": "user", "content": "Hello" }]
+          },
+          "max_tokens": {
+            "type": "number",
+            "required": false,
+            "description": "Maximum tokens to generate",
+            "example": 1024,
+            "default": 1024
+          }
+        }
+      },
+      "cost": "$0.004"
     }
   ]
 }

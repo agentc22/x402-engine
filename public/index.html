@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>x402engine — Pay-per-call APIs for AI Agents</title>
-  <meta name="description" content="71 production APIs behind HTTP 402 micropayments. 38 LLMs, image &amp; video generation, code execution, travel search, web scraping, TTS, and transaction simulation. Pay with USDC on Base, USDm on MegaETH, or USDC on Solana. No API keys, no subscriptions — just stablecoins.">
+  <meta name="description" content="74 production APIs behind HTTP 402 micropayments. 44 LLMs, image generation, face swap, code execution, travel search, web scraping, TTS, and transaction simulation. Pay with USDC on Base, USDm on MegaETH, or USDC on Solana. No API keys, no subscriptions — just stablecoins.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -60,7 +60,7 @@
     <div class="max-w-4xl mx-auto px-6 text-center">
       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-600/10 border border-brand-500/20 text-brand-400 text-xs font-medium mb-6">
         <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-        71 APIs live — 38 LLMs
+        76 APIs live — 44 LLMs
       </div>
       <h1 class="text-4xl sm:text-6xl font-bold text-white leading-tight mb-6">
         Pay-per-call APIs<br>
@@ -214,7 +214,7 @@ registerExactEvmScheme(client, { signer: account, networks: [<span class="text-a
   <section id="services" class="py-20 bg-surface-900/50">
     <div class="max-w-6xl mx-auto px-6">
       <div class="text-center mb-12">
-        <h2 class="text-3xl font-bold text-white mb-3">71 APIs, six categories</h2>
+        <h2 class="text-3xl font-bold text-white mb-3">76 APIs, 5 categories</h2>
         <p class="text-gray-400 max-w-xl mx-auto">Production-grade endpoints backed by best-in-class providers. All priced for micropayments.</p>
       </div>
 
@@ -277,6 +277,16 @@ registerExactEvmScheme(client, { signer: account, networks: [<span class="text-a
             <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">o1</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.03</span></div>
             <p class="text-gray-500 text-xs mb-2">Reasoning model</p>
             <code class="text-[10px] text-gray-600 font-mono">/api/llm/o1</code>
+          </div>
+          <div class="card-glow rounded-xl p-4 transition">
+            <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">o4-mini</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.03</span></div>
+            <p class="text-gray-500 text-xs mb-2">Latest small reasoning</p>
+            <code class="text-[10px] text-gray-600 font-mono">/api/llm/o4-mini</code>
+          </div>
+          <div class="card-glow rounded-xl p-4 transition">
+            <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">GPT-5 Nano</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.002</span></div>
+            <p class="text-gray-500 text-xs mb-2">Ultra-cheap GPT-5</p>
+            <code class="text-[10px] text-gray-600 font-mono">/api/llm/gpt-5-nano</code>
           </div>
         </div>
 
@@ -368,6 +378,11 @@ registerExactEvmScheme(client, { signer: account, networks: [<span class="text-a
             <p class="text-gray-500 text-xs mb-2">Open-source, low cost</p>
             <code class="text-[10px] text-gray-600 font-mono">/api/llm/llama</code>
           </div>
+          <div class="card-glow rounded-xl p-4 transition">
+            <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">Llama 4 Maverick</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.003</span></div>
+            <p class="text-gray-500 text-xs mb-2">1M context, latest Meta</p>
+            <code class="text-[10px] text-gray-600 font-mono">/api/llm/llama-4-maverick</code>
+          </div>
         </div>
 
         <!-- xAI, Qwen, Mistral, Perplexity -->
@@ -377,6 +392,11 @@ registerExactEvmScheme(client, { signer: account, networks: [<span class="text-a
             <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">Grok 4</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.06</span></div>
             <p class="text-gray-500 text-xs mb-2">xAI reasoning</p>
             <code class="text-[10px] text-gray-600 font-mono">/api/llm/grok</code>
+          </div>
+          <div class="card-glow rounded-xl p-4 transition">
+            <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">Grok 4 Fast</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.004</span></div>
+            <p class="text-gray-500 text-xs mb-2">2M context, very cheap</p>
+            <code class="text-[10px] text-gray-600 font-mono">/api/llm/grok-4-fast</code>
           </div>
           <div class="card-glow rounded-xl p-4 transition">
             <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">Grok Code Fast</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.04</span></div>
@@ -415,8 +435,8 @@ registerExactEvmScheme(client, { signer: account, networks: [<span class="text-a
           </div>
         </div>
 
-        <!-- New models: Moonshot, MiniMax, Zhipu, ByteDance -->
-        <div class="mb-3"><span class="text-gray-500 text-xs font-medium uppercase tracking-wider">Moonshot / MiniMax / Zhipu / ByteDance</span></div>
+        <!-- New models: Moonshot, MiniMax, Zhipu, ByteDance, Cohere -->
+        <div class="mb-3"><span class="text-gray-500 text-xs font-medium uppercase tracking-wider">Moonshot / MiniMax / Zhipu / ByteDance / Cohere</span></div>
         <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
           <div class="card-glow rounded-xl p-4 transition">
             <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">Kimi K2.5</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.03</span></div>
@@ -429,6 +449,11 @@ registerExactEvmScheme(client, { signer: account, networks: [<span class="text-a
             <code class="text-[10px] text-gray-600 font-mono">/api/llm/minimax</code>
           </div>
           <div class="card-glow rounded-xl p-4 transition">
+            <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">MiniMax M2.7</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.01</span></div>
+            <p class="text-gray-500 text-xs mb-2">Latest, 204k context</p>
+            <code class="text-[10px] text-gray-600 font-mono">/api/llm/minimax-m2.7</code>
+          </div>
+          <div class="card-glow rounded-xl p-4 transition">
             <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">GLM-5</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.03</span></div>
             <p class="text-gray-500 text-xs mb-2">Zhipu multilingual</p>
             <code class="text-[10px] text-gray-600 font-mono">/api/llm/glm</code>
@@ -437,6 +462,11 @@ registerExactEvmScheme(client, { signer: account, networks: [<span class="text-a
             <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">Seed 1.6</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.02</span></div>
             <p class="text-gray-500 text-xs mb-2">ByteDance flagship</p>
             <code class="text-[10px] text-gray-600 font-mono">/api/llm/seed</code>
+          </div>
+          <div class="card-glow rounded-xl p-4 transition">
+            <div class="flex items-start justify-between mb-1"><h3 class="text-white font-medium text-sm">Command A</h3><span class="price-tag text-brand-400 text-xs font-mono">$0.04</span></div>
+            <p class="text-gray-500 text-xs mb-2">Cohere enterprise RAG</p>
+            <code class="text-[10px] text-gray-600 font-mono">/api/llm/command-a</code>
           </div>
         </div>
 
@@ -483,6 +513,14 @@ registerExactEvmScheme(client, { signer: account, networks: [<span class="text-a
           </div>
           <div class="card-glow rounded-xl p-5 transition">
             <div class="flex items-start justify-between mb-2">
+              <h3 class="text-white font-medium">Nano Banana 2</h3>
+              <span class="price-tag text-brand-400 text-sm font-mono">$0.10</span>
+            </div>
+            <p class="text-gray-500 text-sm mb-3">Google's fast image gen with aspect ratio control</p>
+            <code class="text-xs text-gray-600 font-mono">POST /api/image/nano-banana</code>
+          </div>
+          <div class="card-glow rounded-xl p-5 transition">
+            <div class="flex items-start justify-between mb-2">
               <h3 class="text-white font-medium">Code Execution</h3>
               <span class="price-tag text-brand-400 text-sm font-mono">$0.005</span>
             </div>
@@ -512,6 +550,14 @@ registerExactEvmScheme(client, { signer: account, networks: [<span class="text-a
             </div>
             <p class="text-gray-500 text-sm mb-3">Ultra-realistic, multilingual voices</p>
             <code class="text-xs text-gray-600 font-mono">POST /api/tts/elevenlabs</code>
+          </div>
+          <div class="card-glow rounded-xl p-5 transition">
+            <div class="flex items-start justify-between mb-2">
+              <h3 class="text-white font-medium">Voice Cloning TTS</h3>
+              <span class="price-tag text-brand-400 text-sm font-mono">$0.02</span>
+            </div>
+            <p class="text-gray-500 text-sm mb-3">Lux TTS — clone any voice at 48kHz</p>
+            <code class="text-xs text-gray-600 font-mono">POST /api/tts/lux</code>
           </div>
         </div>
       </div>
@@ -933,6 +979,12 @@ registerExactEvmScheme(client, { signer: account, networks: [<span class="text-a
             <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/llm/gemini-3.1-flash-lite</td><td class="py-2.5 px-5 text-right text-brand-400">$0.003</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">3000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">3×10<sup>15</sup></td></tr>
             <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/llm/qwen3.5</td><td class="py-2.5 px-5 text-right text-brand-400">$0.006</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">6000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">6×10<sup>15</sup></td></tr>
             <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/llm/deepseek-v3.2-speciale</td><td class="py-2.5 px-5 text-right text-brand-400">$0.008</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">8000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">8×10<sup>15</sup></td></tr>
+            <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/llm/minimax-m2.7</td><td class="py-2.5 px-5 text-right text-brand-400">$0.01</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">10000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">10<sup>16</sup></td></tr>
+            <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/llm/llama-4-maverick</td><td class="py-2.5 px-5 text-right text-brand-400">$0.003</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">3000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">3×10<sup>15</sup></td></tr>
+            <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/llm/gpt-5-nano</td><td class="py-2.5 px-5 text-right text-brand-400">$0.002</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">2000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">2×10<sup>15</sup></td></tr>
+            <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/llm/o4-mini</td><td class="py-2.5 px-5 text-right text-brand-400">$0.03</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">30000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">3×10<sup>16</sup></td></tr>
+            <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/llm/grok-4-fast</td><td class="py-2.5 px-5 text-right text-brand-400">$0.004</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">4000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">4×10<sup>15</sup></td></tr>
+            <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/llm/command-a</td><td class="py-2.5 px-5 text-right text-brand-400">$0.04</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">40000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">4×10<sup>16</sup></td></tr>
             <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/travel/flights</td><td class="py-2.5 px-5 text-right text-brand-400">$0.02</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">20000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">2×10<sup>16</sup></td></tr>
             <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/travel/hotels</td><td class="py-2.5 px-5 text-right text-brand-400">$0.02</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">20000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">2×10<sup>16</sup></td></tr>
             <tr class="border-b border-white/[0.03] hover:bg-white/[0.02]"><td class="py-2.5 px-5 font-mono text-xs">/api/embeddings</td><td class="py-2.5 px-5 text-right text-brand-400">$0.001</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">1000</td><td class="py-2.5 px-5 text-right text-gray-500 hidden sm:table-cell font-mono text-xs">10<sup>15</sup></td></tr>

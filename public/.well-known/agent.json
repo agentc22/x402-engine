@@ -1,6 +1,6 @@
 {
   "name": "x402engine",
-  "description": "Pay-per-call API gateway for AI agents. 71 tools including image generation, video generation, LLM inference (38 models), code execution, audio transcription, crypto data, wallet analytics, travel (flights & hotels), ENS, IPFS, web search, web scraping, and transaction simulation. All via HTTP 402 micropayments with USDC and USDm.",
+  "description": "Pay-per-call API gateway for AI agents. 76 tools including image generation, video generation, LLM inference (44 models), code execution, audio transcription, voice cloning, crypto data, wallet analytics, travel (flights & hotels), ENS, IPFS, web search, web scraping, and transaction simulation. All via HTTP 402 micropayments with USDC and USDm.",
   "url": "https://x402-gateway-production.up.railway.app",
   "version": "3.0.0",
   "protocol": "a2a",
@@ -17,7 +17,7 @@
     {
       "id": "image-generation",
       "name": "Image Generation",
-      "description": "Generate images using AI (fast, quality, and text-in-image tiers). Prices: $0.015-$0.12 per image.",
+      "description": "Generate images using AI (fast, quality, text-in-image, and Nano Banana 2 tiers). Prices: $0.015-$0.12 per image.",
       "tags": ["image", "generation", "ai"],
       "examples": ["Generate a photo of a sunset over mountains", "Create a logo with the text 'Hello World'"]
     },
@@ -31,7 +31,7 @@
     {
       "id": "llm-inference",
       "name": "LLM Inference",
-      "description": "Access 38 LLM models including GPT-5.4/5.4 Pro/5.3 Codex, GPT-5.2 Pro, Claude Opus 4.6/4.5, Claude Sonnet 4.6, Gemini 3.1 Pro/Flash Lite, Gemini 3 Pro/Flash, DeepSeek V3.2 Speciale, Qwen 3.5, plus DeepSeek, Llama, Grok, Kimi, MiniMax, GLM, Seed, Devstral, Mistral, and Perplexity. Prices: $0.002-$0.30 per request.",
+      "description": "Access 44 LLM models including GPT-5.4/5.4 Pro/5.3 Codex, GPT-5 Nano, o4-mini, Claude Opus 4.6/4.5, Claude Sonnet 4.6, Gemini 3.1 Pro/Flash Lite, Llama 4 Maverick, Grok 4 Fast, Cohere Command A, MiniMax M2.7, DeepSeek V3.2 Speciale, Qwen 3.5, plus Llama, Grok, Kimi, MiniMax, GLM, Seed, Devstral, Mistral, and Perplexity. Prices: $0.002-$0.30 per request.",
       "tags": ["llm", "inference", "gpt", "claude", "gemini"],
       "examples": ["Ask GPT-5 to summarize this document", "Get Claude Opus to review this code"]
     },
@@ -45,7 +45,7 @@
     {
       "id": "audio",
       "name": "Audio Processing",
-      "description": "Transcribe audio to text (Deepgram Nova-3) and generate speech from text (OpenAI, ElevenLabs). Prices: $0.01-$0.10.",
+      "description": "Transcribe audio to text (Deepgram Nova-3), generate speech from text (OpenAI, ElevenLabs), and clone voices with Lux TTS. Prices: $0.01-$0.10.",
       "tags": ["audio", "transcription", "tts", "speech"],
       "examples": ["Transcribe this audio file", "Convert this text to speech"]
     },

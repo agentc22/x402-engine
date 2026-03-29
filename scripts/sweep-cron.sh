@@ -18,6 +18,8 @@ export PATH="$HOME/.local/bin:$HOME/.nvm/versions/node/$(ls $HOME/.nvm/versions/
 
 cd "$HOME/.openclaw/workspace/scripts"
 
+export SAMPLE_SIZE=4
+
 if node "$SWEEP_SCRIPT" >> "$LOG_DIR/sweep.log" 2>&1; then
   echo "[$TS] Sweep completed successfully" >> "$LOG_DIR/sweep.log"
 else

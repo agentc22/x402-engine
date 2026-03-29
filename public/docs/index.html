@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>API Documentation — x402engine</title>
-  <meta name="description" content="Complete API reference for the x402engine. 71 endpoints including video generation, 38 LLMs, image generation, web search, code execution, and transaction simulation. Payment integration guides and code examples.">
+  <meta name="description" content="Complete API reference for the x402engine. 74 endpoints including face swap, 44 LLMs, image generation, web search, code execution, and transaction simulation. Payment integration guides and code examples.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -93,14 +93,13 @@
           <a href="#image-fast" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Fast Image Gen</a>
           <a href="#image-quality" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Quality Image Gen</a>
           <a href="#image-text" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Text-in-Image</a>
-          <a href="#video-fast" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Fast Video Gen</a>
-          <a href="#video-quality" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Quality Video Gen</a>
-          <a href="#video-hailuo" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Hailuo Video</a>
-          <a href="#video-animate" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Image-to-Video</a>
+          <a href="#face-swap" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Face Swap</a>
+          <a href="#image-nano-banana" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Nano Banana 2</a>
           <a href="#code-run" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Code Execution</a>
           <a href="#transcribe" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Transcription</a>
           <a href="#tts-openai" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">TTS (OpenAI)</a>
           <a href="#tts-elevenlabs" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">TTS (ElevenLabs)</a>
+          <a href="#tts-lux" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Voice Cloning (Lux)</a>
         </div>
         <div>
           <h4 class="text-gray-500 font-medium uppercase text-xs tracking-wider mb-2 px-3">Web</h4>
@@ -111,7 +110,7 @@
         </div>
         <div>
           <div class="mt-6 mb-2 text-xs text-gray-600 uppercase tracking-wider font-medium px-3">LLM & AI</div>
-          <a href="#llm-models" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">All Models (28)</a>
+          <a href="#llm-models" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">All Models (38)</a>
           <a href="#embeddings" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Embeddings</a>
         </div>
         <div>
@@ -1090,121 +1089,109 @@ Content-Type: application/json
           <p class="text-gray-500 text-xs">Same parameters as <a href="#image-fast" class="text-brand-400 hover:underline">/api/image/fast</a>.</p>
         </section>
 
-        <!-- Video Generation -->
-        <hr class="border-white/5 mb-14">
-
-        <section id="video-fast" class="mb-14">
+        <!-- face-swap -->
+        <section id="face-swap" class="mb-14">
           <div class="flex items-center gap-3 mb-4">
             <span class="method-post px-2 py-0.5 rounded text-xs font-mono font-bold">POST</span>
-            <code class="text-white text-lg font-mono">/api/video/fast</code>
-            <span class="ml-auto text-brand-400 font-mono text-sm">$0.30</span>
+            <code class="text-white text-lg font-mono">/api/image/face-swap</code>
+            <span class="ml-auto text-brand-400 font-mono text-sm">$0.08</span>
           </div>
-          <p class="text-gray-400 text-sm mb-4">Fast video generation using Kling 1.6 Standard. Good for drafts and quick iterations. 5 or 10 second clips.</p>
+          <p class="text-gray-400 text-sm mb-4">Identity-preserving face swap using FLUX PuLID. Best for portraits, stylized edits, and marketing mockups where the reference face needs to stay recognizable.</p>
 
           <h4 class="text-white text-sm font-semibold mb-2">Request Body</h4>
           <div class="overflow-x-auto mb-4">
             <table class="w-full text-sm">
               <thead><tr class="border-b border-white/10"><th class="text-left py-2 px-3 text-gray-500 font-medium">Field</th><th class="text-left py-2 px-3 text-gray-500 font-medium">Type</th><th class="text-left py-2 px-3 text-gray-500 font-medium">Description</th></tr></thead>
               <tbody>
-                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">prompt <span class="param-required">required</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400">Text description of the video to generate (max 2000 chars)</td></tr>
-                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">duration <span class="param-optional">optional</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400"><code class="text-xs bg-white/5 px-1 rounded">"5"</code> or <code class="text-xs bg-white/5 px-1 rounded">"10"</code> seconds. Default: <code class="text-xs bg-white/5 px-1 rounded">"5"</code></td></tr>
-                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">aspect_ratio <span class="param-optional">optional</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400"><code class="text-xs bg-white/5 px-1 rounded">"16:9"</code>, <code class="text-xs bg-white/5 px-1 rounded">"9:16"</code>, or <code class="text-xs bg-white/5 px-1 rounded">"1:1"</code>. Default: <code class="text-xs bg-white/5 px-1 rounded">"16:9"</code></td></tr>
-                <tr><td class="py-2 px-3 font-mono text-xs text-white">negative_prompt <span class="param-optional">optional</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400">What to avoid (e.g. "blur, distort, low quality")</td></tr>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">prompt <span class="param-required">required</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400">Describe the final image after the face swap</td></tr>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">reference_image_url <span class="param-required">required</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400">Public image URL containing the face to preserve</td></tr>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">width <span class="param-optional">optional</span></td><td class="py-2 px-3 text-gray-400">number</td><td class="py-2 px-3 text-gray-400">256–2048 pixels. Default: <code class="text-xs bg-white/5 px-1 rounded">1024</code></td></tr>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">height <span class="param-optional">optional</span></td><td class="py-2 px-3 text-gray-400">number</td><td class="py-2 px-3 text-gray-400">256–2048 pixels. Default: <code class="text-xs bg-white/5 px-1 rounded">1024</code></td></tr>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">negative_prompt <span class="param-optional">optional</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400">Artifacts to avoid, such as blur or warped features</td></tr>
+                <tr><td class="py-2 px-3 font-mono text-xs text-white">id_weight <span class="param-optional">optional</span></td><td class="py-2 px-3 text-gray-400">number</td><td class="py-2 px-3 text-gray-400">How strongly to preserve the reference identity. Example: <code class="text-xs bg-white/5 px-1 rounded">1.2</code></td></tr>
               </tbody>
             </table>
           </div>
 
           <h4 class="text-white text-sm font-semibold mb-2">Example</h4>
           <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden mb-4">
-            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">POST /api/video/fast
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">POST /api/image/face-swap
 Content-Type: application/json
 
 {
-  "prompt": "a cat walking on a beach at sunset, cinematic lighting",
-  "duration": "5",
-  "aspect_ratio": "16:9"
+  "prompt": "a fashion editorial portrait with soft cinematic lighting",
+  "reference_image_url": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=1024",
+  "width": 768,
+  "height": 1024,
+  "id_weight": 1.2
 }</code></pre>
           </div>
-          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden mb-4">
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
             <div class="flex items-center px-4 py-2 bg-white/[0.03] border-b border-white/5"><span class="text-xs text-gray-500 font-mono">Response (200 OK)</span></div>
             <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">{
-  <span class="text-amber-300">"video"</span>: {
-    <span class="text-amber-300">"url"</span>: <span class="text-emerald-400">"https://v3.fal.media/files/abc123/output.mp4"</span>,  <span class="text-gray-500">// ← download this URL to get the MP4</span>
-    "content_type": "video/mp4",
-    "file_size": 2145678
-  },
-  "model": "fal-ai/kling-video/v1.6/standard/text-to-video",
-  "inference_time_ms": 35420
+  <span class="text-amber-300">"images"</span>: [
+    {
+      <span class="text-amber-300">"url"</span>: <span class="text-emerald-400">"https://v3.fal.media/files/abc123/faceswap.png"</span>,
+      "width": 768,
+      "height": 1024
+    }
+  ],
+  "seed": 7,
+  "model": "fal-ai/flux-pulid",
+  "inference_time_ms": 4210
 }</code></pre>
           </div>
-          <div class="rounded-xl border border-brand-500/20 bg-brand-500/5 p-3 text-sm text-gray-300">
-            The MP4 file is at <code class="text-xs bg-white/5 px-1 rounded">response.video.url</code> (not <code class="text-xs bg-white/5 px-1 rounded">video_url</code>). Fetch that URL directly to download the video — it's a temporary CDN link, so download promptly. All 4 video endpoints return the same response shape.
-          </div>
+          <p class="text-gray-500 text-xs mt-2">Same response shape as the other image endpoints. The generated image is at <code class="text-xs bg-white/5 px-1 rounded">images[0].url</code>.</p>
         </section>
 
-        <section id="video-quality" class="mb-14">
+        <!-- image-nano-banana -->
+        <section id="image-nano-banana" class="mb-14">
           <div class="flex items-center gap-3 mb-4">
             <span class="method-post px-2 py-0.5 rounded text-xs font-mono font-bold">POST</span>
-            <code class="text-white text-lg font-mono">/api/video/quality</code>
-            <span class="ml-auto text-brand-400 font-mono text-sm">$0.50</span>
+            <code class="text-white text-lg font-mono">/api/image/nano-banana</code>
+            <span class="ml-auto text-brand-400 font-mono text-sm">$0.10</span>
           </div>
-          <p class="text-gray-400 text-sm mb-4">High-quality video generation using Kling 2.6 Pro. Cinematic quality with fluid motion. 5 or 10 second clips.</p>
-          <p class="text-gray-500 text-xs">Same parameters and response shape as <a href="#video-fast" class="text-brand-400 hover:underline">/api/video/fast</a>. The MP4 is at <code class="text-xs bg-white/5 px-1 rounded">response.video.url</code>.</p>
-        </section>
-
-        <section id="video-hailuo" class="mb-14">
-          <div class="flex items-center gap-3 mb-4">
-            <span class="method-post px-2 py-0.5 rounded text-xs font-mono font-bold">POST</span>
-            <code class="text-white text-lg font-mono">/api/video/hailuo</code>
-            <span class="ml-auto text-brand-400 font-mono text-sm">$0.60</span>
-          </div>
-          <p class="text-gray-400 text-sm mb-4">Premium 1080p video generation using MiniMax Hailuo-02 Pro. Fixed 6-second clips with auto-optimized prompts.</p>
+          <p class="text-gray-400 text-sm mb-4">Google's Nano Banana 2 — fast, high-quality image generation with flexible aspect ratios. Great for photorealistic content.</p>
 
           <h4 class="text-white text-sm font-semibold mb-2">Request Body</h4>
           <div class="overflow-x-auto mb-4">
             <table class="w-full text-sm">
               <thead><tr class="border-b border-white/10"><th class="text-left py-2 px-3 text-gray-500 font-medium">Field</th><th class="text-left py-2 px-3 text-gray-500 font-medium">Type</th><th class="text-left py-2 px-3 text-gray-500 font-medium">Description</th></tr></thead>
               <tbody>
-                <tr><td class="py-2 px-3 font-mono text-xs text-white">prompt <span class="param-required">required</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400">Text description of the video (max 2000 chars). Prompt is auto-optimized by the model.</td></tr>
-              </tbody>
-            </table>
-          </div>
-          <p class="text-gray-500 text-xs">Note: Hailuo always generates 6-second 1080p videos. Duration and aspect ratio are not configurable. Returns the same response shape as <a href="#video-fast" class="text-brand-400 hover:underline">/api/video/fast</a> — MP4 is at <code class="text-xs bg-white/5 px-1 rounded">response.video.url</code>.</p>
-        </section>
-
-        <section id="video-animate" class="mb-14">
-          <div class="flex items-center gap-3 mb-4">
-            <span class="method-post px-2 py-0.5 rounded text-xs font-mono font-bold">POST</span>
-            <code class="text-white text-lg font-mono">/api/video/animate</code>
-            <span class="ml-auto text-brand-400 font-mono text-sm">$0.50</span>
-          </div>
-          <p class="text-gray-400 text-sm mb-4">Animate a static image into video using Kling 2.6 Pro. Bring any photo or illustration to life with motion.</p>
-
-          <h4 class="text-white text-sm font-semibold mb-2">Request Body</h4>
-          <div class="overflow-x-auto mb-4">
-            <table class="w-full text-sm">
-              <thead><tr class="border-b border-white/10"><th class="text-left py-2 px-3 text-gray-500 font-medium">Field</th><th class="text-left py-2 px-3 text-gray-500 font-medium">Type</th><th class="text-left py-2 px-3 text-gray-500 font-medium">Description</th></tr></thead>
-              <tbody>
-                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">prompt <span class="param-required">required</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400">Description of desired motion and animation</td></tr>
-                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">image_url <span class="param-required">required</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400">URL of the image to animate (must be publicly accessible)</td></tr>
-                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">duration <span class="param-optional">optional</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400"><code class="text-xs bg-white/5 px-1 rounded">"5"</code> or <code class="text-xs bg-white/5 px-1 rounded">"10"</code>. Default: <code class="text-xs bg-white/5 px-1 rounded">"5"</code></td></tr>
-                <tr><td class="py-2 px-3 font-mono text-xs text-white">aspect_ratio <span class="param-optional">optional</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400"><code class="text-xs bg-white/5 px-1 rounded">"16:9"</code>, <code class="text-xs bg-white/5 px-1 rounded">"9:16"</code>, or <code class="text-xs bg-white/5 px-1 rounded">"1:1"</code></td></tr>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">prompt <span class="param-required">required</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400">Text description of image to generate (up to 50,000 chars)</td></tr>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">aspect_ratio <span class="param-optional">optional</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400"><code class="text-xs bg-white/5 px-1 rounded">1:1</code>, <code class="text-xs bg-white/5 px-1 rounded">16:9</code>, <code class="text-xs bg-white/5 px-1 rounded">9:16</code>, <code class="text-xs bg-white/5 px-1 rounded">4:3</code>, <code class="text-xs bg-white/5 px-1 rounded">3:2</code>, etc. Default: <code class="text-xs bg-white/5 px-1 rounded">1:1</code></td></tr>
+                <tr class="border-b border-white/5"><td class="py-2 px-3 font-mono text-xs text-white">output_format <span class="param-optional">optional</span></td><td class="py-2 px-3 text-gray-400">string</td><td class="py-2 px-3 text-gray-400"><code class="text-xs bg-white/5 px-1 rounded">png</code>, <code class="text-xs bg-white/5 px-1 rounded">jpeg</code>, <code class="text-xs bg-white/5 px-1 rounded">webp</code>. Default: <code class="text-xs bg-white/5 px-1 rounded">png</code></td></tr>
+                <tr><td class="py-2 px-3 font-mono text-xs text-white">seed <span class="param-optional">optional</span></td><td class="py-2 px-3 text-gray-400">number</td><td class="py-2 px-3 text-gray-400">Random seed for reproducibility</td></tr>
               </tbody>
             </table>
           </div>
 
           <h4 class="text-white text-sm font-semibold mb-2">Example</h4>
-          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
-            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">POST /api/video/animate
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden mb-4">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">POST /api/image/nano-banana
 Content-Type: application/json
 
 {
-  "prompt": "the person smiles and waves at the camera",
-  "image_url": "https://example.com/portrait.jpg",
-  "duration": "5"
+  "prompt": "a cyberpunk cityscape at sunset with neon signs",
+  "aspect_ratio": "16:9",
+  "output_format": "png"
 }</code></pre>
           </div>
-          <p class="text-gray-500 text-xs">Returns the same response shape as <a href="#video-fast" class="text-brand-400 hover:underline">/api/video/fast</a> — MP4 is at <code class="text-xs bg-white/5 px-1 rounded">response.video.url</code>.</p>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
+            <div class="flex items-center px-4 py-2 bg-white/[0.03] border-b border-white/5"><span class="text-xs text-gray-500 font-mono">Response (200 OK)</span></div>
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">{
+  <span class="text-amber-300">"images"</span>: [
+    {
+      <span class="text-amber-300">"url"</span>: <span class="text-emerald-400">"https://v3.fal.media/files/abc123/output.png"</span>,
+      "width": 1024,
+      "height": 576
+    }
+  ],
+  "seed": 42,
+  "model": "fal-ai/nano-banana-2",
+  "inference_time_ms": 3200
+}</code></pre>
+          </div>
         </section>
 
         <!-- code-run -->
@@ -1669,6 +1656,48 @@ POST /api/embeddings
 {
   "audio": "//uQxAAAAAANIAAAAAExB...",  <span class="text-gray-500">// base64 audio</span>
   "format": "mp3_44100_128"
+}</code></pre>
+          </div>
+        </section>
+
+        <section id="tts-lux" class="mb-14">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="method-post px-2 py-0.5 rounded text-xs font-bold">POST</span>
+            <h3 class="text-lg font-semibold text-white">/api/tts/lux</h3>
+            <span class="text-brand-400 text-sm font-mono ml-auto">$0.02</span>
+          </div>
+          <p class="text-gray-400 text-sm mb-4">Voice-cloning TTS via Lux. Provide a reference audio clip and generate speech in that voice at 48kHz.</p>
+          <div class="overflow-x-auto mb-4">
+            <table class="w-full text-sm">
+              <thead><tr class="border-b border-white/5"><th class="text-left py-2 text-gray-500 font-medium">Field</th><th class="text-left py-2 text-gray-500 font-medium">Type</th><th class="text-left py-2 text-gray-500 font-medium">Description</th></tr></thead>
+              <tbody class="text-gray-300">
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">text <span class="param-required">required</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">Text to speak (max 10,000 chars)</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">audio_url <span class="param-required">required</span></td><td class="py-2 text-xs">string</td><td class="py-2 text-xs text-gray-400">URL of reference audio file for voice cloning</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">num_inference_steps <span class="param-optional">optional</span></td><td class="py-2 text-xs">number</td><td class="py-2 text-xs text-gray-400">Flow-matching steps, 1-16 (default: 4)</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">guidance_scale <span class="param-optional">optional</span></td><td class="py-2 text-xs">number</td><td class="py-2 text-xs text-gray-400">Classifier-free guidance, 0-10 (default: 3)</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">max_ref_length <span class="param-optional">optional</span></td><td class="py-2 text-xs">number</td><td class="py-2 text-xs text-gray-400">Max reference audio duration in seconds, 1-15 (default: 5)</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-2 font-mono text-xs">seed <span class="param-optional">optional</span></td><td class="py-2 text-xs">number</td><td class="py-2 text-xs text-gray-400">Random seed for reproducibility</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="rounded-xl bg-surface-900 border border-white/5 overflow-hidden">
+            <pre class="p-4 overflow-x-auto"><code class="text-sm text-gray-300">POST /api/tts/lux
+{
+  "text": "Hey, what's up? I'm feeling really great today!",
+  "audio_url": "https://example.com/reference-voice.wav",
+  "num_inference_steps": 4,
+  "guidance_scale": 3
+}
+
+<span class="text-gray-500">// Response</span>
+{
+  "audio": {
+    "url": "https://v3.fal.media/files/abc123/output.wav",
+    "content_type": "audio/wav",
+    "file_size": 384000
+  },
+  "seed": 12345,
+  "inference_time_ms": 2800
 }</code></pre>
           </div>
         </section>
