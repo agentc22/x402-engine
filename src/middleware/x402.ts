@@ -112,6 +112,12 @@ export function devBypassMiddleware(): RequestHandler {
       crypto.timingSafeEqual(Buffer.from(bypassHeader), Buffer.from(config.devBypassSecret))
     ) {
       (req as any).devBypassed = true;
+      (req as any).x402 = {
+        payer: null,
+        network: "dev-bypass",
+        amount: null,
+        method: "dev-bypass",
+      };
     }
     next();
   };

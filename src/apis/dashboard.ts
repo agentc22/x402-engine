@@ -58,7 +58,13 @@ router.get("/api/dashboard/stats", authCheck, async (_req, res) => {
         GROUP BY payer ORDER BY requests DESC LIMIT 20
       `),
       pool.query(`
-        SELECT service, endpoint, payer, network, amount, upstream_status, latency_ms, created_at
+        SELECT service, endpoint, payer, network, amount, upstream_status, latency_ms, created_at,
+               CASE
+                 WHEN network = 'dev-bypass' THEN 'dev-bypass'
+                 WHEN payer IS NOT NULL OR network IS NOT NULL OR amount IS NOT NULL THEN 'paid'
+                 WHEN upstream_status < 400 THEN 'legacy-unattributed'
+                 ELSE 'unknown'
+               END AS payment_state
         FROM requests WHERE service != 'megaeth-payment' ORDER BY created_at DESC LIMIT 50
       `),
       pool.query(`
@@ -285,6 +291,7 @@ router.get("/dashboard", authCheck, (_req, res) => {
 const KEY = ${JSON.stringify(key)};
 function netClass(n) {
   if (!n) return 'net-unknown';
+  if (n === 'dev-bypass') return 'net-unknown';
   if (n.includes('8453') || n.includes('84532')) return 'net-base';
   if (n.includes('solana')) return 'net-solana';
   if (n.includes('4326')) return 'net-megaeth';
@@ -292,6 +299,7 @@ function netClass(n) {
 }
 function netLabel(n) {
   if (!n || n === 'unknown') return 'N/A';
+  if (n === 'dev-bypass') return 'Dev bypass';
   if (n.includes('8453')) return 'Base';
   if (n.includes('84532')) return 'Base Sep';
   if (n.includes('solana')) return 'Solana';
@@ -302,6 +310,13 @@ function shortAddr(a) {
   if (!a) return '-';
   if (a.length > 16) return a.slice(0, 6) + '...' + a.slice(-4);
   return a;
+}
+function payerLabel(r) {
+  if (r.payer) return shortAddr(r.payer);
+  if (r.network === 'dev-bypass') return 'Dev bypass';
+  if (r.payment_state === 'legacy-unattributed') return 'Legacy unattributed';
+  if (r.network && r.network.includes('solana') && r.amount) return 'Verified';
+  return '-';
 }
 function timeAgo(d) {
   const s = Math.floor((Date.now() - new Date(d).getTime()) / 1000);
@@ -392,7 +407,7 @@ async function load() {
 
     // Recent requests
     document.getElementById('recentTable').innerHTML = '<table><tr><th>Time</th><th>Service</th><th>Network</th><th>Payer</th><th>Status</th><th>Latency</th></tr>'
-      + d.recent.map(r=>'<tr><td>'+timeAgo(r.created_at)+'</td><td>'+r.service+'</td><td><span class="network-tag '+netClass(r.network)+'">'+netLabel(r.network)+'</span></td><td class="mono payer-addr" title="'+(r.payer||'')+'">'+shortAddr(r.payer)+'</td><td class="'+(r.upstream_status < 400 ? 'status-ok' : 'status-err')+'">'+r.upstream_status+'</td><td>'+r.latency_ms+'ms</td></tr>').join('')
+      + d.recent.map(r=>'<tr><td>'+timeAgo(r.created_at)+'</td><td>'+r.service+'</td><td><span class="network-tag '+netClass(r.network)+'">'+netLabel(r.network)+'</span></td><td class="mono payer-addr" title="'+(r.payer||payerLabel(r))+'">'+payerLabel(r)+'</td><td class="'+(r.upstream_status < 400 ? 'status-ok' : 'status-err')+'">'+r.upstream_status+'</td><td>'+r.latency_ms+'ms</td></tr>').join('')
       + '</table>';
 
   } catch(e) {

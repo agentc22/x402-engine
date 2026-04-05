@@ -149,6 +149,36 @@ app.get("/health/deep", expensiveEndpointLimiter, async (req, res) => {
 const discoveryResponse = buildDiscoveryResponse();
 const servicesResponse = buildServicesResponse();
 
+function decodePaymentHeader(header: string): any | null {
+  try {
+    return JSON.parse(Buffer.from(header, "base64").toString("utf-8"));
+  } catch {
+    return null;
+  }
+}
+
+function buildSdkPaymentContext(decoded: any): { payer: string | null; network: string | null; amount: string | null; method: "sdk" } | null {
+  if (!decoded || typeof decoded !== "object") return null;
+
+  const network = decoded.accepted?.network ?? null;
+  const amount = decoded.accepted?.amount ?? null;
+  const payer =
+    decoded.payload?.authorization?.from ??
+    decoded.payload?.permit2Authorization?.from ??
+    null;
+
+  if (!network && !amount && !payer) {
+    return null;
+  }
+
+  return {
+    payer,
+    network,
+    amount,
+    method: "sdk",
+  };
+}
+
 function buildDiscoveryResponse() {
   const services = getAllServices();
   const routes = buildRoutesConfig();
@@ -330,27 +360,17 @@ app.use((req, _res, next) => {
     (req.headers["payment-signature"] as string) ||
     (req.headers["x-payment"] as string);
   if (!header) return next();
-  try {
-    const decoded = JSON.parse(Buffer.from(header, "base64").toString("utf-8"));
-    const network = decoded.accepted?.network;
-    const amount = decoded.accepted?.amount;
-    // EVM: authorization.from  or  permit2Authorization.from
-    // SVM: payload may differ — fall back gracefully
-    const payer =
-      decoded.payload?.authorization?.from ??
-      decoded.payload?.permit2Authorization?.from ??
-      null;
-    if (network) {
-      (req as any).x402 = {
-        payer,
-        network,
-        amount,
-        method: "sdk",
-      };
-    }
-  } catch {
+  const decoded = decodePaymentHeader(header);
+  if (!decoded) {
     // Malformed header — let the SDK middleware handle the error
+    return next();
   }
+
+  const paymentContext = buildSdkPaymentContext(decoded);
+  if (paymentContext) {
+    (req as any).x402 = paymentContext;
+  }
+
   next();
 });
 
@@ -369,6 +389,19 @@ app.use((req, res, next) => {
     const verifiedNext = (err?: unknown) => {
       if (!err && !res.headersSent) {
         (req as any).x402Verified = true;
+
+        if (!(req as any).x402) {
+          const header =
+            (req.headers["payment-signature"] as string) ||
+            (req.headers["x-payment"] as string);
+          if (header) {
+            const decoded = decodePaymentHeader(header);
+            const paymentContext = buildSdkPaymentContext(decoded);
+            if (paymentContext) {
+              (req as any).x402 = paymentContext;
+            }
+          }
+        }
       }
       next(err);
     };
