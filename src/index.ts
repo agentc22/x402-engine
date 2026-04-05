@@ -386,20 +386,16 @@ app.use((req, res, next) => {
   if ((req as any).devBypassed || (req as any).x402?.method === "direct") {
     next();
   } else {
-    const verifiedNext = (err?: unknown) => {
-      if (!err && !res.headersSent) {
-        (req as any).x402Verified = true;
-
-        if (!(req as any).x402) {
-          const header =
-            (req.headers["payment-signature"] as string) ||
-            (req.headers["x-payment"] as string);
-          if (header) {
-            const decoded = decodePaymentHeader(header);
-            const paymentContext = buildSdkPaymentContext(decoded);
-            if (paymentContext) {
-              (req as any).x402 = paymentContext;
-            }
+    const afterPaymentMiddleware = (err?: unknown) => {
+      if (!err && !res.headersSent && (req as any).x402Verified && !(req as any).x402) {
+        const header =
+          (req.headers["payment-signature"] as string) ||
+          (req.headers["x-payment"] as string);
+        if (header) {
+          const decoded = decodePaymentHeader(header);
+          const paymentContext = buildSdkPaymentContext(decoded);
+          if (paymentContext) {
+            (req as any).x402 = paymentContext;
           }
         }
       }
@@ -407,7 +403,7 @@ app.use((req, res, next) => {
     };
 
     // Express 4 doesn't catch async rejections — wrap SDK middleware
-    Promise.resolve(paymentMw(req, res, verifiedNext)).catch((err) => {
+    Promise.resolve(paymentMw(req, res, afterPaymentMiddleware)).catch((err) => {
       console.error("[x402-sdk] Unhandled error in payment middleware:", err);
       next(err);
     });

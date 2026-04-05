@@ -62,7 +62,7 @@ router.get("/api/dashboard/stats", authCheck, async (_req, res) => {
                CASE
                  WHEN network = 'dev-bypass' THEN 'dev-bypass'
                  WHEN payer IS NOT NULL OR network IS NOT NULL OR amount IS NOT NULL THEN 'paid'
-                 WHEN upstream_status < 400 THEN 'legacy-unattributed'
+                 WHEN upstream_status > 0 AND upstream_status < 400 THEN 'legacy-unattributed'
                  ELSE 'unknown'
                END AS payment_state
         FROM requests WHERE service != 'megaeth-payment' ORDER BY created_at DESC LIMIT 50
@@ -407,7 +407,7 @@ async function load() {
 
     // Recent requests
     document.getElementById('recentTable').innerHTML = '<table><tr><th>Time</th><th>Service</th><th>Network</th><th>Payer</th><th>Status</th><th>Latency</th></tr>'
-      + d.recent.map(r=>'<tr><td>'+timeAgo(r.created_at)+'</td><td>'+r.service+'</td><td><span class="network-tag '+netClass(r.network)+'">'+netLabel(r.network)+'</span></td><td class="mono payer-addr" title="'+(r.payer||payerLabel(r))+'">'+payerLabel(r)+'</td><td class="'+(r.upstream_status < 400 ? 'status-ok' : 'status-err')+'">'+r.upstream_status+'</td><td>'+r.latency_ms+'ms</td></tr>').join('')
+      + d.recent.map(r=>'<tr><td>'+timeAgo(r.created_at)+'</td><td>'+r.service+'</td><td><span class="network-tag '+netClass(r.network)+'">'+netLabel(r.network)+'</span></td><td class="mono payer-addr" title="'+(r.payer||payerLabel(r))+'">'+payerLabel(r)+'</td><td class="'+(r.upstream_status > 0 && r.upstream_status < 400 ? 'status-ok' : 'status-err')+'">'+r.upstream_status+'</td><td>'+r.latency_ms+'ms</td></tr>').join('')
       + '</table>';
 
   } catch(e) {

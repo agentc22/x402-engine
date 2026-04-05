@@ -1,9 +1,9 @@
 import type { Request, Response, NextFunction, RequestHandler } from "express";
 import crypto from "crypto";
-import { paymentMiddleware, x402ResourceServer } from "@x402/express";
+import { paymentMiddlewareFromHTTPServer, x402ResourceServer } from "@x402/express";
 import { ExactEvmScheme } from "@x402/evm/exact/server";
 import { ExactSvmScheme } from "@x402/svm/exact/server";
-import { HTTPFacilitatorClient } from "@x402/core/server";
+import { HTTPFacilitatorClient, x402HTTPResourceServer } from "@x402/core/server";
 import { createFacilitatorConfig } from "@coinbase/x402";
 import { config } from "../config.js";
 import { buildRoutesConfig, NETWORKS } from "../services/registry.js";
@@ -92,8 +92,21 @@ export function createPaymentMiddleware(): RequestHandler {
   const routes = buildRoutesConfig();
   console.log("  Payment routes configured:", Object.keys(routes as Record<string, unknown>).join(", "));
 
-  // Pass routes to SDK for payment verification
-  return paymentMiddleware(routes, server);
+  const httpServer = new x402HTTPResourceServer(server, routes);
+  const originalProcessHTTPRequest = httpServer.processHTTPRequest.bind(httpServer);
+  httpServer.processHTTPRequest = async (...args) => {
+    const [context] = args;
+    const result = await originalProcessHTTPRequest(...args);
+    if (result.type === "payment-verified") {
+      const req = (context.adapter as any).req;
+      if (req) {
+        req.x402Verified = true;
+      }
+    }
+    return result;
+  };
+
+  return paymentMiddlewareFromHTTPServer(httpServer);
 }
 
 /**
