@@ -366,12 +366,54 @@ app.use((req, res, next) => {
   if ((req as any).devBypassed || (req as any).x402?.method === "direct") {
     next();
   } else {
+    const verifiedNext = (err?: unknown) => {
+      if (!err && !res.headersSent) {
+        (req as any).x402Verified = true;
+      }
+      next(err);
+    };
+
     // Express 4 doesn't catch async rejections — wrap SDK middleware
-    Promise.resolve(paymentMw(req, res, next)).catch((err) => {
+    Promise.resolve(paymentMw(req, res, verifiedNext)).catch((err) => {
       console.error("[x402-sdk] Unhandled error in payment middleware:", err);
       next(err);
     });
   }
+});
+
+// Defense in depth: every paid API mounted below must have passed one of the
+// accepted payment paths before the request reaches a handler.
+const paidApiPrefixes = [
+  "/api/transcribe",
+  "/api/image",
+  "/api/video",
+  "/api/code",
+  "/api/crypto",
+  "/api/wallet",
+  "/api/token",
+  "/api/ipfs",
+  "/api/travel",
+  "/api/ens",
+  "/api/llm",
+  "/api/embeddings",
+  "/api/web",
+  "/api/search",
+  "/api/tts",
+  "/api/tx",
+];
+
+app.use((req, res, next) => {
+  const isPaidApi = paidApiPrefixes.some((prefix) => req.path === prefix || req.path.startsWith(`${prefix}/`));
+  if (!isPaidApi || req.method === "OPTIONS") {
+    return next();
+  }
+
+  if ((req as any).devBypassed || (req as any).x402?.method === "direct" || (req as any).x402Verified) {
+    return next();
+  }
+
+  console.error("[paid-guard] Blocked paid route without verified payment", req.method, req.path);
+  res.status(403).json({ error: "Verified payment required" });
 });
 
 // --- Paid API routes (after payment middleware) ---
