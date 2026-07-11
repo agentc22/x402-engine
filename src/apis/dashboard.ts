@@ -2,6 +2,7 @@ import { Router } from "express";
 import { getPool } from "../db/ledger.js";
 import { config } from "../config.js";
 import { getAllServices } from "../services/registry.js";
+import { calculateLifetimeMetrics, LIFETIME_AUDIT, rawToUsd } from "../dashboard/lifetime.js";
 
 const router = Router();
 
@@ -40,6 +41,9 @@ router.get("/api/dashboard/stats", authCheck, async (_req, res) => {
       revenue24hRows,
       revenue7dRows,
       dailyRevenueAmountRows,
+      lifetimeSettlementRows,
+      preAuditServiceRows,
+      postAuditServiceRows,
     ] = await Promise.all([
       pool.query(`SELECT COUNT(*)::int AS count FROM requests`),
       pool.query(`SELECT COUNT(*)::int AS count FROM requests WHERE service != 'megaeth-payment'`),
@@ -118,6 +122,57 @@ router.get("/api/dashboard/stats", authCheck, async (_req, res) => {
           AND created_at > NOW() - INTERVAL '30 days'
         GROUP BY day ORDER BY day
       `),
+      pool.query(`
+        SELECT network, COUNT(*)::int AS count, SUM(amount::numeric) AS total_raw
+        FROM requests
+        WHERE amount IS NOT NULL AND (
+          (network = $1 AND service != 'megaeth-payment' AND created_at > $2) OR
+          (network = $3 AND service = 'megaeth-payment' AND created_at > $4) OR
+          (network = $5 AND service != 'megaeth-payment' AND created_at > $6)
+        )
+        GROUP BY network
+      `, [
+        LIFETIME_AUDIT.chains[0].network,
+        LIFETIME_AUDIT.chains[0].auditedThrough,
+        LIFETIME_AUDIT.chains[1].network,
+        LIFETIME_AUDIT.chains[1].auditedThrough,
+        LIFETIME_AUDIT.chains[2].network,
+        LIFETIME_AUDIT.chains[2].auditedThrough,
+      ]),
+      pool.query(`
+        SELECT service, COUNT(*)::int AS count
+        FROM requests
+        WHERE amount IS NOT NULL AND service != 'megaeth-payment' AND (
+          (network = $1 AND created_at <= $2) OR
+          (network = $3 AND created_at <= $4) OR
+          (network = $5 AND created_at <= $6)
+        )
+        GROUP BY service
+      `, [
+        LIFETIME_AUDIT.chains[0].network,
+        LIFETIME_AUDIT.chains[0].auditedThrough,
+        LIFETIME_AUDIT.chains[1].network,
+        LIFETIME_AUDIT.chains[1].auditedThrough,
+        LIFETIME_AUDIT.chains[2].network,
+        LIFETIME_AUDIT.chains[2].auditedThrough,
+      ]),
+      pool.query(`
+        SELECT service, COUNT(*)::int AS count
+        FROM requests
+        WHERE amount IS NOT NULL AND service != 'megaeth-payment' AND (
+          (network = $1 AND created_at > $2) OR
+          (network = $3 AND created_at > $4) OR
+          (network = $5 AND created_at > $6)
+        )
+        GROUP BY service
+      `, [
+        LIFETIME_AUDIT.chains[0].network,
+        LIFETIME_AUDIT.chains[0].auditedThrough,
+        LIFETIME_AUDIT.chains[1].network,
+        LIFETIME_AUDIT.chains[1].auditedThrough,
+        LIFETIME_AUDIT.chains[2].network,
+        LIFETIME_AUDIT.chains[2].auditedThrough,
+      ]),
     ]);
 
     // Build cost/price maps from services config
@@ -132,12 +187,6 @@ router.get("/api/dashboard/stats", authCheck, async (_req, res) => {
     }
 
     // Compute actual on-chain revenue (from DB amounts, not config prices)
-    function rawToUsd(raw: string | number, network: string): number {
-      const n = Number(raw);
-      if (!n) return 0;
-      if (network && network.includes("4326")) return n / 1e18; // MegaETH USDm = 18 decimals
-      return n / 1e6; // Base/Solana USDC = 6 decimals
-    }
     const actualRevenue = (revenueRows.rows as any[]).reduce(
       (sum: number, r: any) => sum + rawToUsd(r.total_raw, r.network), 0
     );
@@ -147,6 +196,12 @@ router.get("/api/dashboard/stats", authCheck, async (_req, res) => {
     );
     const revenue7d = (revenue7dRows.rows as any[]).reduce(
       (sum: number, r: any) => sum + rawToUsd(r.total_raw, r.network), 0
+    );
+    const lifetime = calculateLifetimeMetrics(
+      lifetimeSettlementRows.rows,
+      preAuditServiceRows.rows,
+      postAuditServiceRows.rows,
+      costMap,
     );
 
     // Compute costs from service call counts
@@ -200,12 +255,12 @@ router.get("/api/dashboard/stats", authCheck, async (_req, res) => {
       revenue24h,
       revenue7d,
       dailyRevenueChart: dailyRevenueAmountRows.rows,
+      lifetime,
       github,
       profit: {
-        totalRevenue: actualRevenue,
-        totalCost,
-        totalProfit: actualRevenue - totalCost,
-        margin: actualRevenue > 0 ? ((actualRevenue - totalCost) / actualRevenue) * 100 : 0,
+        ...lifetime.profit,
+        trackedRevenue: actualRevenue,
+        trackedCost: totalCost,
         byService: serviceProfits,
       },
     });
@@ -360,12 +415,12 @@ router.get("/dashboard", authCheck, (_req, res) => {
   h1 { font-size: 24px; margin-bottom: 4px; color: #fff; }
   .subtitle { color: #888; font-size: 14px; margin-bottom: 24px; }
   .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
-  .card { background: #16161f; border: 1px solid #2a2a3a; border-radius: 12px; padding: 20px; }
+  .card { background: #16161f; border: 1px solid #2a2a3a; border-radius: 8px; padding: 20px; }
   .card .label { font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 1px; }
   .card .value { font-size: 32px; font-weight: 700; color: #fff; margin-top: 4px; }
   .card .sub { font-size: 12px; color: #6a6; margin-top: 4px; }
   .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
-  .panel { background: #16161f; border: 1px solid #2a2a3a; border-radius: 12px; padding: 20px; }
+  .panel { background: #16161f; border: 1px solid #2a2a3a; border-radius: 8px; padding: 20px; }
   .panel h2 { font-size: 16px; margin-bottom: 12px; color: #ccc; }
   table { width: 100%; border-collapse: collapse; font-size: 13px; }
   th { text-align: left; padding: 8px 12px; color: #888; font-weight: 500; border-bottom: 1px solid #2a2a3a; }
@@ -393,7 +448,7 @@ router.get("/dashboard", authCheck, (_req, res) => {
 </head>
 <body>
 <h1>x402 Engine <span style="color:#3b82f6">Dashboard</span></h1>
-<p class="subtitle">Real-time API usage and payments &mdash; <span class="refresh" onclick="load()">Refresh</span></p>
+<p class="subtitle">Audited lifetime settlements and real-time API usage &mdash; <span class="refresh" onclick="load()">Refresh</span></p>
 
 <div class="cards" id="cards"><div class="loading">Loading...</div></div>
 
@@ -478,31 +533,23 @@ async function load() {
     const d = await r.json();
     if (d.error) { document.getElementById('cards').innerHTML = '<div class="card"><div class="value" style="color:#f66">Error</div><div class="label">'+d.error+'</div></div>'; return; }
 
-    // Revenue: convert raw amounts to USD
-    // MegaETH (eip155:4326) USDm = 18 decimals, Base/Solana USDC = 6 decimals
-    function rawToUsd(raw, network) {
-      const n = Number(raw);
-      if (!n) return 0;
-      if (network && network.includes('4326')) return n / 1e18;
-      return n / 1e6;
-    }
-    const totalRevenue = (d.revenue || []).reduce((sum, r) => sum + rawToUsd(r.total_raw, r.network), 0);
-
     // Profit data
     const p = d.profit || {};
+    const lifetime = d.lifetime || {};
+    const lifetimeChains = lifetime.byChain || [];
 
     // Cards
     document.getElementById('cards').innerHTML = [
-      {l:'Total Logged Requests', v:d.total.toLocaleString(), s:'Paid API: '+(d.apiTotal||0).toLocaleString()+' | Payment events: '+(d.paymentEvents||0).toLocaleString()},
-      {l:'Paid API Calls', v:(d.apiTotal||0).toLocaleString(), s:'Excludes internal payment verification rows'},
+      {l:'Lifetime Sold Requests', v:(lifetime.totalRequests||0).toLocaleString(), s:lifetimeChains.map(c=>netLabel(c.network)+': '+c.totalRequests.toLocaleString()).join(' | ')+' | +'+(lifetime.incrementalRequests||0).toLocaleString()+' since audit'},
+      {l:'Tracked API Rows', v:(d.apiTotal||0).toLocaleString(), s:'Database rows retained for service-level analytics'},
       {l:'Last 24h', v:d.last24h.toLocaleString(), s:'Paid API: '+(d.apiLast24h||0).toLocaleString()},
       {l:'Last 7 Days', v:d.last7d.toLocaleString(), s:'Paid API: '+(d.apiLast7d||0).toLocaleString()},
       {l:'Unique Payers', v:d.uniquePayers.toLocaleString()},
       {l:'Revenue 24h', v:'$'+(d.revenue24h||0).toFixed(2), s:'Last 24 hours', green: (d.revenue24h||0) > 0},
       {l:'Revenue 7d', v:'$'+(d.revenue7d||0).toFixed(2), s:'Last 7 days', green: (d.revenue7d||0) > 0},
-      {l:'Total Revenue', v:'$'+totalRevenue.toFixed(2), s:(d.revenue||[]).map(r=>netLabel(r.network)+': $'+rawToUsd(r.total_raw,r.network).toFixed(2)).join(' | ')},
-      {l:'Est. Cost', v:'$'+(p.totalCost||0).toFixed(2), s:'Avg upstream cost per call'},
-      {l:'Est. Profit', v:'$'+(p.totalProfit||0).toFixed(2), s:'Margin: '+(p.margin||0).toFixed(1)+'%', green: (p.totalProfit||0) > 0},
+      {l:'Lifetime Revenue', v:'$'+(lifetime.totalRevenue||0).toFixed(2), s:lifetimeChains.map(c=>netLabel(c.network)+': $'+c.totalRevenueUsd.toFixed(3)).join(' | ')+' | +$'+(lifetime.incrementalRevenue||0).toFixed(3)+' since audit'},
+      {l:'Est. Lifetime Cost', v:'$'+(p.totalCost||0).toFixed(2), s:'Based on retained service mix and configured upstream costs'},
+      {l:'Est. Lifetime Profit', v:'$'+(p.totalProfit||0).toFixed(2), s:'Estimated margin: '+(p.margin||0).toFixed(1)+'%', green: (p.totalProfit||0) > 0},
       {l:'NPM Downloads', v:npmAll.downloads.toLocaleString(), s:'This week: '+npmWeek.downloads.toLocaleString()},
       {l:'GitHub (14d)', v:d.github.clones+' clones', s:d.github.uniqueCloners+' unique cloners, '+d.github.views+' views'},
       {l:'Networks', v:d.byNetwork.map(n=>netLabel(n.network)).join(', ') || 'None yet'},

@@ -25,4 +25,11 @@ describe("dashboard stats", () => {
     expect(dashboardSource).toContain("estimated_rows");
     expect(dashboardSource).toContain("current_database()");
   });
+
+  it("shows audited lifetime settlements separately from retained rows", () => {
+    expect(dashboardSource).toContain("calculateLifetimeMetrics");
+    expect(dashboardSource).toContain("Lifetime Sold Requests");
+    expect(dashboardSource).toContain("Tracked API Rows");
+    expect(dashboardSource).toContain("Est. Lifetime Profit");
+  });
 });
