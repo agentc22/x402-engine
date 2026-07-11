@@ -148,6 +148,7 @@ app.get("/health/deep", expensiveEndpointLimiter, async (req, res) => {
 
 const discoveryResponse = buildDiscoveryResponse();
 const servicesResponse = buildServicesResponse();
+const openApiResponse = buildOpenApiResponse();
 
 function decodePaymentHeader(header: string): any | null {
   try {
@@ -263,7 +264,147 @@ function buildServicesResponse() {
   };
 }
 
+function buildOpenApiResponse() {
+  const services = getAllServices();
+  const routes = buildRoutesConfig() as Record<string, any>;
+
+  const toSchema = (param: any) => ({
+    type: ["string", "number", "integer", "boolean", "array", "object"].includes(param?.type)
+      ? param.type
+      : "string",
+    description: param?.description,
+    example: param?.example,
+    default: param?.default,
+  });
+
+  const paths: Record<string, any> = {
+    "/health": {
+      get: {
+        summary: "Health check",
+        tags: ["discovery"],
+        responses: {
+          "200": { description: "Service is healthy" },
+        },
+      },
+    },
+    "/.well-known/x402.json": {
+      get: {
+        summary: "x402 service discovery",
+        tags: ["discovery"],
+        responses: {
+          "200": { description: "Machine-readable x402 service catalog" },
+        },
+      },
+    },
+    "/.well-known/x402": {
+      get: {
+        summary: "x402 service discovery alias",
+        tags: ["discovery"],
+        responses: {
+          "200": { description: "Machine-readable x402 service catalog" },
+        },
+      },
+    },
+    "/api/services": {
+      get: {
+        summary: "List services",
+        tags: ["discovery"],
+        responses: {
+          "200": { description: "Available x402engine services" },
+        },
+      },
+    },
+  };
+
+  for (const service of services) {
+    const method = service.method.toLowerCase();
+    const bodyParams = service.parameters?.body ?? {};
+    const queryParams = service.parameters?.query ?? {};
+    const routeKey = `${service.method} ${service.path}`;
+    const requestBodyRequired = Object.values(bodyParams).some((param: any) => param?.required);
+    const requiredBodyFields = Object.entries(bodyParams)
+      .filter(([, param]: any) => param?.required)
+      .map(([name]) => name);
+
+    const operation: Record<string, any> = {
+      summary: service.name,
+      description: service.description,
+      tags: [service.category || "services"],
+      "x-service-id": service.id,
+      "x-price": service.price,
+      "x-payment-options": routes[routeKey]?.accepts ?? [],
+      responses: {
+        "200": { description: "Successful paid response" },
+        "402": { description: "Payment required" },
+        "4XX": { description: "Invalid request or payment" },
+      },
+    };
+
+    const parameters = Object.entries(queryParams).map(([name, param]: any) => ({
+      name,
+      in: "query",
+      required: Boolean(param?.required),
+      description: param?.description,
+      schema: toSchema(param),
+      example: param?.example,
+    }));
+    if (parameters.length) {
+      operation.parameters = parameters;
+    }
+
+    if (Object.keys(bodyParams).length) {
+      operation.requestBody = {
+        required: requestBodyRequired,
+        content: {
+          "application/json": {
+            schema: {
+              type: "object",
+              properties: Object.fromEntries(
+                Object.entries(bodyParams).map(([name, param]) => [name, toSchema(param)]),
+              ),
+              required: requiredBodyFields,
+            },
+          },
+        },
+      };
+    }
+
+    paths[service.path] = {
+      ...(paths[service.path] ?? {}),
+      [method]: operation,
+    };
+  }
+
+  return {
+    openapi: "3.1.0",
+    info: {
+      title: "x402engine API",
+      version: "3.0.0",
+      description: "Pay-per-call API gateway for AI agents using HTTP 402 payments.",
+    },
+    servers: [
+      { url: "https://x402-gateway-production.up.railway.app" },
+      { url: "https://x402engine.app" },
+    ],
+    paths,
+    components: {
+      securitySchemes: {
+        x402: {
+          type: "apiKey",
+          in: "header",
+          name: "X-PAYMENT",
+          description: "Base64-encoded x402 payment payload.",
+        },
+      },
+    },
+  };
+}
+
 app.get("/.well-known/x402.json", freeEndpointLimiter, (_req, res) => {
+  res.json(discoveryResponse);
+});
+
+app.get("/.well-known/x402", freeEndpointLimiter, (_req, res) => {
   res.json(discoveryResponse);
 });
 
@@ -272,9 +413,52 @@ app.get("/.well-known/agent.json", freeEndpointLimiter, (_req, res) => {
   res.sendFile(path.join(__dirname, "../public/.well-known/agent.json"));
 });
 
+app.get("/.well-known/agent-card.json", freeEndpointLimiter, (_req, res) => {
+  res.sendFile(path.join(__dirname, "../public/.well-known/agent.json"));
+});
+
 // llms.txt — LLM-readable service catalog
 app.get("/llms.txt", freeEndpointLimiter, (_req, res) => {
   res.type("text/plain").sendFile(path.join(__dirname, "../public/llms.txt"));
+});
+
+app.get("/openapi.json", freeEndpointLimiter, (_req, res) => {
+  res.json(openApiResponse);
+});
+
+app.get("/robots.txt", freeEndpointLimiter, (_req, res) => {
+  res.type("text/plain").send([
+    "User-agent: *",
+    "Allow: /",
+    "Sitemap: https://x402engine.app/sitemap.xml",
+    "",
+  ].join("\n"));
+});
+
+app.get("/sitemap.xml", freeEndpointLimiter, (_req, res) => {
+  res.type("application/xml").send(`<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://x402engine.app/</loc></url>
+  <url><loc>https://x402engine.app/docs/</loc></url>
+  <url><loc>https://x402engine.app/services/</loc></url>
+  <url><loc>https://x402engine.app/discovery/</loc></url>
+  <url><loc>https://x402engine.app/status/</loc></url>
+  <url><loc>https://x402engine.app/.well-known/x402.json</loc></url>
+  <url><loc>https://x402engine.app/openapi.json</loc></url>
+</urlset>
+`);
+});
+
+app.get("/favicon.ico", freeEndpointLimiter, (_req, res) => {
+  res.type("image/svg+xml").send(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="#050505"/><path d="M36 4 14 36h15l-1 24 22-34H35z" fill="#22c55e"/></svg>`);
+});
+
+app.all(/^\/x402station-wildcard-[^/]+\/[^/]+$/, freeEndpointLimiter, (_req, res) => {
+  res.status(204).end();
+});
+
+app.all(["/index.php", "/xmlrpc.php"], freeEndpointLimiter, (_req, res) => {
+  res.status(204).end();
 });
 
 // Agent manifest — machine-readable endpoint manifest with SLOs, pricing, determinism
@@ -307,6 +491,31 @@ app.get("/api/services/:id", freeEndpointLimiter, (req, res) => {
   res.json({
     ...svc,
     paymentOptions: routes[routeKey]?.accepts ?? [],
+  });
+});
+
+app.all("/api/llm/grok-4-fast", freeEndpointLimiter, (_req, res) => {
+  res.redirect(308, "/api/llm/grok");
+});
+
+app.get("/api/*", freeEndpointLimiter, (req, res, next) => {
+  const svc = getAllServices().find((service) => service.path === req.path && service.method !== "GET");
+  if (!svc) {
+    return next();
+  }
+
+  const routes = buildRoutesConfig() as Record<string, any>;
+  const routeKey = `${svc.method} ${svc.path}`;
+  res.json({
+    id: svc.id,
+    name: svc.name,
+    description: svc.description,
+    endpoint: `https://x402-gateway-production.up.railway.app${svc.path}`,
+    method: svc.method,
+    price: svc.price,
+    requiresPayment: true,
+    paymentOptions: routes[routeKey]?.accepts ?? [],
+    message: `Use ${svc.method} ${svc.path} with an x402 payment to call this service.`,
   });
 });
 

@@ -1187,8 +1187,8 @@
     },
     {
       "id": "llm-grok",
-      "name": "Grok 4",
-      "description": "xAI's most capable model — strong reasoning and real-time knowledge",
+      "name": "Grok 4.3",
+      "description": "xAI's current Grok 4 route — strong reasoning and real-time knowledge",
       "price": "$0.06",
       "method": "POST",
       "path": "/api/llm/grok",
@@ -1520,8 +1520,8 @@
     },
     {
       "id": "llm-grok-code",
-      "name": "Grok Code Fast",
-      "description": "xAI's code-specialized model — fast code generation and analysis",
+      "name": "Grok Build 0.1",
+      "description": "xAI's build-focused model — code generation, analysis, and agentic implementation work",
       "price": "$0.04",
       "method": "POST",
       "path": "/api/llm/grok-code",
@@ -1668,8 +1668,8 @@
     },
     {
       "id": "llm-gemini-3-pro",
-      "name": "Gemini 3 Pro",
-      "description": "Google's next-gen pro model — advanced reasoning, coding, and multimodal understanding",
+      "name": "Gemini 3.1 Pro",
+      "description": "Google's Gemini 3.1 Pro Preview on the Gemini Pro compatibility route — advanced reasoning, coding, and multimodal understanding",
       "price": "$0.045",
       "method": "POST",
       "path": "/api/llm/gemini-3-pro",
@@ -2149,8 +2149,8 @@
     },
     {
       "id": "llm-deepseek-v3.2-speciale",
-      "name": "DeepSeek V3.2 Speciale",
-      "description": "DeepSeek's enhanced reasoning variant — improved chain-of-thought for complex tasks",
+      "name": "DeepSeek V3.2",
+      "description": "DeepSeek V3.2 served on the Speciale compatibility route — strong reasoning and coding at low cost",
       "price": "$0.008",
       "method": "POST",
       "path": "/api/llm/deepseek-v3.2-speciale",
@@ -2800,38 +2800,6 @@
       "cost": "$0.002"
     },
     {
-      "id": "llm-grok-4-fast",
-      "name": "Grok 4 Fast",
-      "description": "xAI's fast model — 2M context window at very low cost, great for large document processing",
-      "price": "$0.004",
-      "method": "POST",
-      "path": "/api/llm/grok-4-fast",
-      "mimeType": "application/json",
-      "category": "compute",
-      "upstream": {
-        "provider": "openrouter",
-        "baseUrl": "https://openrouter.ai/api/v1"
-      },
-      "parameters": {
-        "body": {
-          "messages": {
-            "type": "array",
-            "required": true,
-            "description": "Array of message objects with role and content",
-            "example": [{ "role": "user", "content": "Hello" }]
-          },
-          "max_tokens": {
-            "type": "number",
-            "required": false,
-            "description": "Maximum tokens to generate",
-            "example": 1024,
-            "default": 1024
-          }
-        }
-      },
-      "cost": "$0.0002"
-    },
-    {
       "id": "llm-command-a",
       "name": "Cohere Command A",
       "description": "Cohere's flagship model — 256k context, strong for enterprise RAG and structured generation",
@@ -2862,6 +2830,230 @@
         }
       },
       "cost": "$0.004"
+    },
+    {
+      "id": "llm-claude-opus-4.8",
+      "name": "Claude Opus 4.8",
+      "description": "Anthropic's latest Opus model — premium analysis, coding, and long-context autonomous work",
+      "price": "$0.09",
+      "method": "POST",
+      "path": "/api/llm/claude-opus-4.8",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": {
+        "provider": "openrouter",
+        "baseUrl": "https://openrouter.ai/api/v1"
+      },
+      "parameters": {
+        "body": {
+          "messages": {
+            "type": "array",
+            "required": true,
+            "description": "Array of message objects with role and content",
+            "example": [{ "role": "user", "content": "Hello" }]
+          },
+          "max_tokens": {
+            "type": "number",
+            "required": false,
+            "description": "Maximum tokens to generate",
+            "example": 1024,
+            "default": 1024
+          }
+        }
+      },
+      "cost": "$0.06"
+    },
+    {
+      "id": "llm-qwen3.7-plus",
+      "name": "Qwen 3.7 Plus",
+      "description": "Alibaba's cost-effective Qwen 3.7 model — 1M context with strong coding and multilingual support",
+      "price": "$0.006",
+      "method": "POST",
+      "path": "/api/llm/qwen3.7-plus",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": {
+        "provider": "openrouter",
+        "baseUrl": "https://openrouter.ai/api/v1"
+      },
+      "parameters": {
+        "body": {
+          "messages": {
+            "type": "array",
+            "required": true,
+            "description": "Array of message objects with role and content",
+            "example": [{ "role": "user", "content": "Hello" }]
+          },
+          "max_tokens": {
+            "type": "number",
+            "required": false,
+            "description": "Maximum tokens to generate",
+            "example": 16384,
+            "default": 16384
+          }
+        }
+      },
+      "cost": "$0.002"
+    },
+    {
+      "id": "llm-qwen3.7-max",
+      "name": "Qwen 3.7 Max",
+      "description": "Alibaba's flagship Qwen 3.7 model — 1M context for agent-centric coding and productivity tasks",
+      "price": "$0.015",
+      "method": "POST",
+      "path": "/api/llm/qwen3.7-max",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": {
+        "provider": "openrouter",
+        "baseUrl": "https://openrouter.ai/api/v1"
+      },
+      "parameters": {
+        "body": {
+          "messages": {
+            "type": "array",
+            "required": true,
+            "description": "Array of message objects with role and content",
+            "example": [{ "role": "user", "content": "Hello" }]
+          },
+          "max_tokens": {
+            "type": "number",
+            "required": false,
+            "description": "Maximum tokens to generate",
+            "example": 16384,
+            "default": 16384
+          }
+        }
+      },
+      "cost": "$0.005"
+    },
+    {
+      "id": "llm-glm-5.2",
+      "name": "GLM 5.2",
+      "description": "Z.ai's large-scale reasoning model — 1M context for long-horizon agent workflows and software engineering",
+      "price": "$0.03",
+      "method": "POST",
+      "path": "/api/llm/glm-5.2",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": {
+        "provider": "openrouter",
+        "baseUrl": "https://openrouter.ai/api/v1"
+      },
+      "parameters": {
+        "body": {
+          "messages": {
+            "type": "array",
+            "required": true,
+            "description": "Array of message objects with role and content",
+            "example": [{ "role": "user", "content": "Hello" }]
+          },
+          "max_tokens": {
+            "type": "number",
+            "required": false,
+            "description": "Maximum tokens to generate",
+            "example": 16384,
+            "default": 16384
+          }
+        }
+      },
+      "cost": "$0.01"
+    },
+    {
+      "id": "llm-deepseek-v4-flash",
+      "name": "DeepSeek V4 Flash",
+      "description": "DeepSeek's low-latency V4 model — ultra-low-cost reasoning and coding with 1M context",
+      "price": "$0.003",
+      "method": "POST",
+      "path": "/api/llm/deepseek-v4-flash",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": {
+        "provider": "openrouter",
+        "baseUrl": "https://openrouter.ai/api/v1"
+      },
+      "parameters": {
+        "body": {
+          "messages": {
+            "type": "array",
+            "required": true,
+            "description": "Array of message objects with role and content",
+            "example": [{ "role": "user", "content": "Hello" }]
+          },
+          "max_tokens": {
+            "type": "number",
+            "required": false,
+            "description": "Maximum tokens to generate",
+            "example": 16384,
+            "default": 16384
+          }
+        }
+      },
+      "cost": "$0.0005"
+    },
+    {
+      "id": "llm-deepseek-v4-pro",
+      "name": "DeepSeek V4 Pro",
+      "description": "DeepSeek's stronger V4 model — advanced reasoning, coding, and long-context analysis",
+      "price": "$0.006",
+      "method": "POST",
+      "path": "/api/llm/deepseek-v4-pro",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": {
+        "provider": "openrouter",
+        "baseUrl": "https://openrouter.ai/api/v1"
+      },
+      "parameters": {
+        "body": {
+          "messages": {
+            "type": "array",
+            "required": true,
+            "description": "Array of message objects with role and content",
+            "example": [{ "role": "user", "content": "Hello" }]
+          },
+          "max_tokens": {
+            "type": "number",
+            "required": false,
+            "description": "Maximum tokens to generate",
+            "example": 16384,
+            "default": 16384
+          }
+        }
+      },
+      "cost": "$0.001"
+    },
+    {
+      "id": "llm-minimax-m3",
+      "name": "MiniMax M3",
+      "description": "MiniMax's multimodal foundation model — 1M context for agentic work, coding, and long-document tasks",
+      "price": "$0.01",
+      "method": "POST",
+      "path": "/api/llm/minimax-m3",
+      "mimeType": "application/json",
+      "category": "compute",
+      "upstream": {
+        "provider": "openrouter",
+        "baseUrl": "https://openrouter.ai/api/v1"
+      },
+      "parameters": {
+        "body": {
+          "messages": {
+            "type": "array",
+            "required": true,
+            "description": "Array of message objects with role and content",
+            "example": [{ "role": "user", "content": "Hello" }]
+          },
+          "max_tokens": {
+            "type": "number",
+            "required": false,
+            "description": "Maximum tokens to generate",
+            "example": 1024,
+            "default": 1024
+          }
+        }
+      },
+      "cost": "$0.001"
     }
   ]
 }

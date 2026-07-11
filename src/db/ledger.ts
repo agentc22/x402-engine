@@ -6,6 +6,14 @@ const { Pool } = pg;
 let pool: pg.Pool;
 let cleanupTimer: ReturnType<typeof setInterval> | null = null;
 
+function getRequestLogRetentionDays(): number {
+  const raw = process.env.REQUEST_LOG_RETENTION_DAYS;
+  if (!raw) return 0;
+
+  const days = Number.parseInt(raw, 10);
+  return Number.isFinite(days) && days > 0 ? days : 0;
+}
+
 export async function initDatabase(): Promise<void> {
   const databaseUrl = process.env.DATABASE_URL;
   if (!databaseUrl) {
@@ -66,18 +74,23 @@ export async function initDatabase(): Promise<void> {
   // Start batched log flusher
   startLogFlusher();
 
-  // Start daily cleanup timer (every 24 hours)
-  cleanupTimer = setInterval(async () => {
-    try {
-      const deleted = await cleanupOldRequests(90);
-      if (deleted > 0) {
-        console.log(`  DB cleanup: removed ${deleted} request logs older than 90 days`);
+  // Request logs are dashboard/accounting history. Retention is opt-in.
+  const retentionDays = getRequestLogRetentionDays();
+  if (retentionDays > 0) {
+    cleanupTimer = setInterval(async () => {
+      try {
+        const deleted = await cleanupOldRequests(retentionDays);
+        if (deleted > 0) {
+          console.log(`  DB cleanup: removed ${deleted} request logs older than ${retentionDays} days`);
+        }
+      } catch (err: any) {
+        console.error("DB cleanup failed:", err.message);
       }
-    } catch (err: any) {
-      console.error("DB cleanup failed:", err.message);
-    }
-  }, 24 * 60 * 60 * 1000);
-  cleanupTimer.unref(); // Don't prevent process exit
+    }, 24 * 60 * 60 * 1000);
+    cleanupTimer.unref(); // Don't prevent process exit
+  } else {
+    console.log("  DB cleanup: request log retention disabled");
+  }
 }
 
 // --- Batched request logging ---

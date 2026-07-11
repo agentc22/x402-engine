@@ -6,7 +6,7 @@ This package is local-only scaffolding for `x402engine` and does **not** publish
 
 - `manifest/agent-manifest.schema.v1.json` - strict schema (`agent-manifest.v1`)
 - `manifest/agent-manifest.catalog.v1.json` - single source catalog for generation defaults/profiles/examples
-- `manifest/agent-manifest.v1.json` - generated full manifest (61 current endpoints)
+- `manifest/agent-manifest.v1.json` - generated full manifest (82 current endpoints)
 - `manifest/agent-manifest.integrity.v1.json` - hash + signature scaffold output
 
 ## Generate -> Validate -> Hash -> Sign -> Publish

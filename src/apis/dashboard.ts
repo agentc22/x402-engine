@@ -22,8 +22,12 @@ router.get("/api/dashboard/stats", authCheck, async (_req, res) => {
     const pool = getPool();
     const [
       totalRow,
+      apiTotalRow,
+      paymentEventsRow,
       last24hRow,
+      apiLast24hRow,
       last7dRow,
+      apiLast7dRow,
       byServiceRows,
       byNetworkRows,
       hourlyRows,
@@ -37,10 +41,14 @@ router.get("/api/dashboard/stats", authCheck, async (_req, res) => {
       revenue7dRows,
       dailyRevenueAmountRows,
     ] = await Promise.all([
+      pool.query(`SELECT COUNT(*)::int AS count FROM requests`),
       pool.query(`SELECT COUNT(*)::int AS count FROM requests WHERE service != 'megaeth-payment'`),
+      pool.query(`SELECT COUNT(*)::int AS count FROM requests WHERE service = 'megaeth-payment'`),
+      pool.query(`SELECT COUNT(*)::int AS count FROM requests WHERE created_at > NOW() - INTERVAL '1 day'`),
       pool.query(`SELECT COUNT(*)::int AS count FROM requests WHERE created_at > NOW() - INTERVAL '1 day' AND service != 'megaeth-payment'`),
+      pool.query(`SELECT COUNT(*)::int AS count FROM requests WHERE created_at > NOW() - INTERVAL '7 days'`),
       pool.query(`SELECT COUNT(*)::int AS count FROM requests WHERE created_at > NOW() - INTERVAL '7 days' AND service != 'megaeth-payment'`),
-      pool.query(`SELECT service, COUNT(*)::int AS count FROM requests WHERE service != 'megaeth-payment' GROUP BY service ORDER BY count DESC`),
+      pool.query(`SELECT service, COUNT(*)::int AS count FROM requests GROUP BY service ORDER BY count DESC`),
       pool.query(`SELECT COALESCE(network, 'unknown') AS network, COUNT(*)::int AS count FROM requests WHERE network IS NOT NULL GROUP BY network ORDER BY count DESC`),
       pool.query(`
         SELECT date_trunc('hour', created_at) AS hour, COUNT(*)::int AS count
@@ -60,12 +68,13 @@ router.get("/api/dashboard/stats", authCheck, async (_req, res) => {
       pool.query(`
         SELECT service, endpoint, payer, network, amount, upstream_status, latency_ms, created_at,
                CASE
+                 WHEN service = 'megaeth-payment' THEN 'payment-verification'
                  WHEN network = 'dev-bypass' THEN 'dev-bypass'
                  WHEN payer IS NOT NULL OR network IS NOT NULL OR amount IS NOT NULL THEN 'paid'
                  WHEN upstream_status > 0 AND upstream_status < 400 THEN 'legacy-unattributed'
                  ELSE 'unknown'
                END AS payment_state
-        FROM requests WHERE service != 'megaeth-payment' ORDER BY created_at DESC LIMIT 50
+        FROM requests ORDER BY created_at DESC LIMIT 50
       `),
       pool.query(`
         SELECT COALESCE(network, 'unknown') AS network,
@@ -73,7 +82,7 @@ router.get("/api/dashboard/stats", authCheck, async (_req, res) => {
         FROM requests WHERE amount IS NOT NULL AND service != 'megaeth-payment'
         GROUP BY network
       `),
-      pool.query(`SELECT COUNT(DISTINCT payer)::int AS count FROM requests WHERE payer IS NOT NULL AND service != 'megaeth-payment'`),
+      pool.query(`SELECT COUNT(DISTINCT payer)::int AS count FROM requests WHERE payer IS NOT NULL`),
       pool.query(`
         SELECT date_trunc('day', created_at)::date AS day,
                COALESCE(network, 'unknown') AS network,
@@ -173,8 +182,12 @@ router.get("/api/dashboard/stats", authCheck, async (_req, res) => {
 
     res.json({
       total: totalRow.rows[0].count,
+      apiTotal: apiTotalRow.rows[0].count,
+      paymentEvents: paymentEventsRow.rows[0].count,
       last24h: last24hRow.rows[0].count,
+      apiLast24h: apiLast24hRow.rows[0].count,
       last7d: last7dRow.rows[0].count,
+      apiLast7d: apiLast7dRow.rows[0].count,
       uniquePayers: uniquePayersRow.rows[0].count,
       byService: byServiceRows.rows,
       byNetwork: byNetworkRows.rows,
@@ -198,6 +211,135 @@ router.get("/api/dashboard/stats", authCheck, async (_req, res) => {
     });
   } catch (err: any) {
     // Avoid leaking internal error details/config values to API consumers
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// Read-only admin diagnostics for validating dashboard counters against the live DB.
+router.get("/api/dashboard/diagnostics", authCheck, async (_req, res) => {
+  try {
+    const pool = getPool();
+    const [
+      requestSummary,
+      tableStats,
+      monthlyRows,
+      serviceRows,
+      txSummary,
+      dbIdentity,
+      oldestRows,
+      newestRows,
+    ] = await Promise.all([
+      pool.query(`
+        SELECT
+          COUNT(*)::int AS total,
+          COUNT(*) FILTER (WHERE service != 'megaeth-payment')::int AS api_total,
+          COUNT(*) FILTER (WHERE service = 'megaeth-payment')::int AS payment_events,
+          COUNT(*) FILTER (WHERE created_at >= NOW() - INTERVAL '1 day')::int AS last_24h,
+          COUNT(*) FILTER (WHERE created_at >= NOW() - INTERVAL '7 days')::int AS last_7d,
+          COUNT(*) FILTER (WHERE created_at >= NOW() - INTERVAL '30 days')::int AS last_30d,
+          COUNT(*) FILTER (WHERE created_at >= NOW() - INTERVAL '90 days')::int AS within_90d,
+          COUNT(*) FILTER (WHERE created_at < NOW() - INTERVAL '90 days')::int AS older_than_90d,
+          COUNT(*) FILTER (WHERE upstream_status = 404)::int AS upstream_404,
+          COUNT(*) FILTER (WHERE upstream_status = 404 AND created_at >= NOW() - INTERVAL '1 day')::int AS upstream_404_24h,
+          MIN(created_at) AS first_request_at,
+          MAX(created_at) AS last_request_at
+        FROM requests
+      `),
+      pool.query(`
+        SELECT
+          c.relname AS table_name,
+          c.reltuples::bigint AS estimated_rows,
+          c.relpages::int AS pages,
+          pg_total_relation_size(c.oid)::bigint AS total_bytes,
+          pg_size_pretty(pg_total_relation_size(c.oid)) AS total_size
+        FROM pg_class c
+        JOIN pg_namespace n ON n.oid = c.relnamespace
+        WHERE n.nspname = current_schema()
+          AND c.relname IN ('requests', 'used_tx_hashes')
+        ORDER BY c.relname
+      `),
+      pool.query(`
+        SELECT date_trunc('month', created_at)::date AS month,
+               COUNT(*)::int AS count,
+               MIN(created_at) AS first_at,
+               MAX(created_at) AS last_at
+        FROM requests
+        GROUP BY month
+        ORDER BY month
+      `),
+      pool.query(`
+        SELECT service,
+               COUNT(*)::int AS count,
+               COUNT(*) FILTER (WHERE upstream_status = 404)::int AS upstream_404,
+               MIN(created_at) AS first_at,
+               MAX(created_at) AS last_at
+        FROM requests
+        GROUP BY service
+        ORDER BY count DESC
+      `),
+      pool.query(`
+        SELECT COUNT(*)::int AS total,
+               MIN(created_at) AS first_tx_at,
+               MAX(created_at) AS last_tx_at
+        FROM used_tx_hashes
+      `),
+      pool.query(`
+        SELECT current_database() AS database,
+               current_schema() AS schema,
+               current_user AS db_user,
+               inet_server_addr()::text AS server_addr,
+               inet_server_port() AS server_port,
+               current_setting('server_version') AS server_version
+      `),
+      pool.query(`
+        SELECT service, endpoint, upstream_status, created_at
+        FROM requests
+        ORDER BY created_at ASC
+        LIMIT 10
+      `),
+      pool.query(`
+        SELECT service, endpoint, upstream_status, created_at
+        FROM requests
+        ORDER BY created_at DESC
+        LIMIT 10
+      `),
+    ]);
+
+    const tableMetadata = Object.fromEntries(
+      tableStats.rows.map((row: any) => [
+        row.table_name,
+        {
+          estimatedRows: Number(row.estimated_rows),
+          pages: row.pages,
+          totalBytes: Number(row.total_bytes),
+          totalSize: row.total_size,
+        },
+      ]),
+    );
+
+    res.json({
+      timestamp: new Date().toISOString(),
+      database: dbIdentity.rows[0],
+      railway: {
+        projectId: process.env.RAILWAY_PROJECT_ID ?? null,
+        environmentId: process.env.RAILWAY_ENVIRONMENT_ID ?? null,
+        environmentName: process.env.RAILWAY_ENVIRONMENT_NAME ?? null,
+        serviceId: process.env.RAILWAY_SERVICE_ID ?? null,
+        serviceName: process.env.RAILWAY_SERVICE_NAME ?? null,
+        publicDomain: process.env.RAILWAY_PUBLIC_DOMAIN ?? null,
+      },
+      requests: requestSummary.rows[0],
+      usedTxHashes: txSummary.rows[0],
+      tables: tableMetadata,
+      byMonth: monthlyRows.rows,
+      byService: serviceRows.rows,
+      samples: {
+        oldest: oldestRows.rows,
+        newest: newestRows.rows,
+      },
+    });
+  } catch (err: any) {
+    console.error("[dashboard] Diagnostics failed:", err.message);
     res.status(500).json({ error: "Internal server error" });
   }
 });
@@ -313,6 +455,7 @@ function shortAddr(a) {
 }
 function payerLabel(r) {
   if (r.payer) return shortAddr(r.payer);
+  if (r.payment_state === 'payment-verification') return 'Verification';
   if (r.network === 'dev-bypass') return 'Dev bypass';
   if (r.payment_state === 'legacy-unattributed') return 'Legacy unattributed';
   if (r.network && r.network.includes('solana') && r.amount) return 'Verified';
@@ -350,9 +493,10 @@ async function load() {
 
     // Cards
     document.getElementById('cards').innerHTML = [
-      {l:'Total Requests', v:d.total.toLocaleString()},
-      {l:'Last 24h', v:d.last24h.toLocaleString()},
-      {l:'Last 7 Days', v:d.last7d.toLocaleString()},
+      {l:'Total Logged Requests', v:d.total.toLocaleString(), s:'Paid API: '+(d.apiTotal||0).toLocaleString()+' | Payment events: '+(d.paymentEvents||0).toLocaleString()},
+      {l:'Paid API Calls', v:(d.apiTotal||0).toLocaleString(), s:'Excludes internal payment verification rows'},
+      {l:'Last 24h', v:d.last24h.toLocaleString(), s:'Paid API: '+(d.apiLast24h||0).toLocaleString()},
+      {l:'Last 7 Days', v:d.last7d.toLocaleString(), s:'Paid API: '+(d.apiLast7d||0).toLocaleString()},
       {l:'Unique Payers', v:d.uniquePayers.toLocaleString()},
       {l:'Revenue 24h', v:'$'+(d.revenue24h||0).toFixed(2), s:'Last 24 hours', green: (d.revenue24h||0) > 0},
       {l:'Revenue 7d', v:'$'+(d.revenue7d||0).toFixed(2), s:'Last 7 days', green: (d.revenue7d||0) > 0},

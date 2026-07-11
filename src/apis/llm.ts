@@ -28,7 +28,7 @@ const MODELS: Record<string, ModelConfig> = {
   // Meta
   "llama": { model: "meta-llama/llama-3.3-70b-instruct", serviceId: "llm-llama" },
   // xAI
-  "grok": { model: "x-ai/grok-4", serviceId: "llm-grok" },
+  "grok": { model: "x-ai/grok-4.3", serviceId: "llm-grok" },
   // Qwen
   "qwen": { model: "qwen/qwen-2.5-72b-instruct", serviceId: "llm-qwen" },
   // Mistral
@@ -45,21 +45,25 @@ const MODELS: Record<string, ModelConfig> = {
   // Zhipu
   "glm": { model: "z-ai/glm-5", serviceId: "llm-glm" },
   // xAI (code-focused)
-  "grok-code": { model: "x-ai/grok-code-fast-1", serviceId: "llm-grok-code" },
+  "grok-code": { model: "x-ai/grok-build-0.1", serviceId: "llm-grok-code" },
   // ByteDance
   "seed": { model: "bytedance-seed/seed-1.6", serviceId: "llm-seed" },
   // Mistral (code-focused)
   "devstral": { model: "mistralai/devstral-2512", serviceId: "llm-devstral" },
   // DeepSeek (newer)
   "deepseek-v3.2": { model: "deepseek/deepseek-v3.2", serviceId: "llm-deepseek-v3.2" },
+  "deepseek-v4-flash": { model: "deepseek/deepseek-v4-flash", serviceId: "llm-deepseek-v4-flash", reasoning: true },
+  "deepseek-v4-pro": { model: "deepseek/deepseek-v4-pro", serviceId: "llm-deepseek-v4-pro", reasoning: true },
   // Google (newer)
-  "gemini-3-pro": { model: "google/gemini-3-pro-preview", serviceId: "llm-gemini-3-pro" },
+  "gemini-3-pro": { model: "google/gemini-3.1-pro-preview", serviceId: "llm-gemini-3-pro", reasoning: true },
   "gemini-3-flash": { model: "google/gemini-3-flash-preview", serviceId: "llm-gemini-3-flash" },
   // Anthropic (newer)
   "claude-sonnet-4.6": { model: "anthropic/claude-sonnet-4.6", serviceId: "llm-claude-sonnet-4.6" },
   // OpenAI (newer)
   "gpt-5.2-pro": { model: "openai/gpt-5.2-pro", serviceId: "llm-gpt-5.2-pro", reasoning: true },
   "gpt-5.1": { model: "openai/gpt-5.1", serviceId: "llm-gpt-5.1" },
+  "gpt-5-nano": { model: "openai/gpt-5-nano", serviceId: "llm-gpt-5-nano" },
+  "o4-mini": { model: "openai/o4-mini", serviceId: "llm-o4-mini", reasoning: true },
   // Qwen (code-focused)
   "qwen-coder": { model: "qwen/qwen3-coder-next", serviceId: "llm-qwen-coder" },
   // OpenAI (latest)
@@ -68,13 +72,25 @@ const MODELS: Record<string, ModelConfig> = {
   "gpt-5.3-codex": { model: "openai/gpt-5.3-codex", serviceId: "llm-gpt-5.3-codex", reasoning: true },
   // Anthropic (previous-gen)
   "claude-opus-4.5": { model: "anthropic/claude-opus-4.5", serviceId: "llm-claude-opus-4.5" },
+  "claude-opus-4.8": { model: "anthropic/claude-opus-4.8", serviceId: "llm-claude-opus-4.8" },
   // Google (latest)
   "gemini-3.1-pro": { model: "google/gemini-3.1-pro-preview", serviceId: "llm-gemini-3.1-pro", reasoning: true },
   "gemini-3.1-flash-lite": { model: "google/gemini-3.1-flash-lite-preview", serviceId: "llm-gemini-3.1-flash-lite" },
   // Qwen (latest)
   "qwen3.5": { model: "qwen/qwen3.5-plus-02-15", serviceId: "llm-qwen3.5" },
+  "qwen3.7-plus": { model: "qwen/qwen3.7-plus", serviceId: "llm-qwen3.7-plus", reasoning: true },
+  "qwen3.7-max": { model: "qwen/qwen3.7-max", serviceId: "llm-qwen3.7-max", reasoning: true },
   // DeepSeek (enhanced reasoning)
-  "deepseek-v3.2-speciale": { model: "deepseek/deepseek-v3.2-speciale", serviceId: "llm-deepseek-v3.2-speciale", reasoning: true },
+  "deepseek-v3.2-speciale": { model: "deepseek/deepseek-v3.2", serviceId: "llm-deepseek-v3.2-speciale", reasoning: true },
+  // MiniMax (newer)
+  "minimax-m2.7": { model: "minimax/minimax-m2.7", serviceId: "llm-minimax-m2.7" },
+  "minimax-m3": { model: "minimax/minimax-m3", serviceId: "llm-minimax-m3" },
+  // Meta (newer)
+  "llama-4-maverick": { model: "meta-llama/llama-4-maverick", serviceId: "llm-llama-4-maverick" },
+  // Cohere
+  "command-a": { model: "cohere/command-a", serviceId: "llm-command-a" },
+  // Zhipu
+  "glm-5.2": { model: "z-ai/glm-5.2", serviceId: "llm-glm-5.2", reasoning: true },
 };
 
 // Reasoning models burn tokens on chain-of-thought before generating content.

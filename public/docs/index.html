@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>API Documentation — x402engine</title>
-  <meta name="description" content="Complete API reference for the x402engine. 74 endpoints including face swap, 44 LLMs, image generation, web search, code execution, and transaction simulation. Payment integration guides and code examples.">
+  <meta name="description" content="Complete API reference for the x402engine. 82 endpoints including face swap, 50 LLMs, image generation, web search, code execution, and transaction simulation. Payment integration guides and code examples.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -110,7 +110,7 @@
         </div>
         <div>
           <div class="mt-6 mb-2 text-xs text-gray-600 uppercase tracking-wider font-medium px-3">LLM & AI</div>
-          <a href="#llm-models" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">All Models (38)</a>
+          <a href="#llm-models" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">All Models (50)</a>
           <a href="#embeddings" class="sidebar-link block py-1.5 px-3 text-gray-400 hover:text-white border-l-2 border-transparent transition">Embeddings</a>
         </div>
         <div>
@@ -128,7 +128,7 @@
         <!-- Overview -->
         <section id="overview" class="mb-16">
           <h1 class="text-3xl font-bold text-white mb-4">API Documentation</h1>
-          <p class="text-gray-400 leading-relaxed mb-4">The x402engine exposes 61 production APIs behind <a href="https://www.x402.org" class="text-brand-400 hover:underline">x402 micropayments</a>. Every endpoint returns <code class="text-xs bg-white/5 px-1.5 py-0.5 rounded">402 Payment Required</code> until a valid stablecoin payment is attached to the request.</p>
+          <p class="text-gray-400 leading-relaxed mb-4">The x402engine exposes 82 production APIs behind <a href="https://www.x402.org" class="text-brand-400 hover:underline">x402 micropayments</a>. Every endpoint returns <code class="text-xs bg-white/5 px-1.5 py-0.5 rounded">402 Payment Required</code> until a valid stablecoin payment is attached to the request.</p>
           <div class="card-glow rounded-xl p-5 space-y-2 text-sm">
             <div class="flex items-start gap-3">
               <span class="text-brand-400 mt-0.5">Base URL</span>
@@ -220,7 +220,7 @@ console.log(<span class="text-emerald-400">await</span> balances.json());</code>
 
           <div class="mt-6 rounded-xl border border-brand-500/20 bg-brand-500/5 p-4 text-sm">
             <h4 class="text-brand-400 font-semibold mb-2">💡 Test All Endpoints</h4>
-            <p class="text-gray-300 mb-2">Want to test all 61 endpoints at once? Download our comprehensive test suite:</p>
+            <p class="text-gray-300 mb-2">Want to test all 82 endpoints at once? Download our comprehensive test suite:</p>
             <pre class="bg-white/5 rounded px-3 py-2 text-xs overflow-x-auto"><code>curl -O https://x402-gateway-production.up.railway.app/test-all-endpoints.mjs
 TEST_PRIVATE_KEY=0x... node test-all-endpoints.mjs</code></pre>
             <p class="text-gray-400 text-xs mt-2">Includes proper parameters and examples for every endpoint category.</p>
@@ -515,7 +515,7 @@ console.log(<span class="text-emerald-400">await</span> res.json());</code></pre
                 <code class="text-white text-sm font-mono">/.well-known/x402.json</code>
                 <span class="text-gray-500 text-xs ml-auto">Free</span>
               </div>
-              <p class="text-gray-400 text-sm">Full discovery document — services, networks, payment routes, categories.</p>
+              <p class="text-gray-400 text-sm">Full discovery document — services, networks, payment routes, categories. Also available at <code class="text-xs bg-white/5 px-1 rounded">/.well-known/x402</code>.</p>
             </div>
             <div class="card-glow rounded-xl p-5">
               <div class="flex items-center gap-3 mb-2">
@@ -532,6 +532,22 @@ console.log(<span class="text-emerald-400">await</span> res.json());</code></pre
                 <span class="text-gray-500 text-xs ml-auto">Free</span>
               </div>
               <p class="text-gray-400 text-sm">Service details including payment options. Example: <code class="text-xs bg-white/5 px-1 rounded">/api/services/crypto-price</code></p>
+            </div>
+            <div class="card-glow rounded-xl p-5">
+              <div class="flex items-center gap-3 mb-2">
+                <span class="method-get px-2 py-0.5 rounded text-xs font-mono font-bold">GET</span>
+                <code class="text-white text-sm font-mono">/.well-known/agent-card.json</code>
+                <span class="text-gray-500 text-xs ml-auto">Free</span>
+              </div>
+              <p class="text-gray-400 text-sm">A2A-compatible agent card. Equivalent to <code class="text-xs bg-white/5 px-1 rounded">/.well-known/agent.json</code>.</p>
+            </div>
+            <div class="card-glow rounded-xl p-5">
+              <div class="flex items-center gap-3 mb-2">
+                <span class="method-get px-2 py-0.5 rounded text-xs font-mono font-bold">GET</span>
+                <code class="text-white text-sm font-mono">/openapi.json</code>
+                <span class="text-gray-500 text-xs ml-auto">Free</span>
+              </div>
+              <p class="text-gray-400 text-sm">OpenAPI 3.1 document generated from the live service catalog.</p>
             </div>
           </div>
         </section>
@@ -1362,7 +1378,7 @@ Content-Type: application/json
             <span class="method-post px-2 py-0.5 rounded text-xs font-bold">POST</span>
             <h3 class="text-lg font-semibold text-white">/api/llm/{model}</h3>
           </div>
-          <p class="text-gray-400 text-sm mb-4">Chat completion via 38 models from OpenAI, Anthropic, Google, DeepSeek, Meta, xAI, Qwen, Mistral, Perplexity, Moonshot, MiniMax, Zhipu, and ByteDance. All models use the same request/response format.</p>
+          <p class="text-gray-400 text-sm mb-4">Chat completion via 50 models from OpenAI, Anthropic, Google, DeepSeek, Meta, xAI, Qwen, Mistral, Perplexity, Moonshot, MiniMax, Z.ai, Cohere, and ByteDance. All models use the same request/response format.</p>
 
           <div class="overflow-x-auto mb-4">
             <table class="w-full text-sm">
@@ -1396,40 +1412,54 @@ Content-Type: application/json
               <tbody class="text-gray-300">
                 <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/gpt-4o</td><td class="py-1.5 text-xs text-gray-400">GPT-4o</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.04</td></tr>
                 <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/gpt-4o-mini</td><td class="py-1.5 text-xs text-gray-400">GPT-4o Mini</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.003</td></tr>
-                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/gpt-4.1</td><td class="py-1.5 text-xs text-gray-400">GPT-4.1</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.03</td></tr>
-                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/gpt-4.1-mini</td><td class="py-1.5 text-xs text-gray-400">GPT-4.1 Mini</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.006</td></tr>
-                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/gpt-5</td><td class="py-1.5 text-xs text-gray-400">GPT-5</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.035</td></tr>
-                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/gpt-5-mini</td><td class="py-1.5 text-xs text-gray-400">GPT-5 Mini</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.007</td></tr>
-                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/o3</td><td class="py-1.5 text-xs text-gray-400">o3 (reasoning)</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.03</td></tr>
-                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/o4-mini</td><td class="py-1.5 text-xs text-gray-400">o4 Mini (reasoning)</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.02</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/o1</td><td class="py-1.5 text-xs text-gray-400">OpenAI o1</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.03</td></tr>
                 <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/claude-opus</td><td class="py-1.5 text-xs text-gray-400">Claude Opus 4.6</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.09</td></tr>
                 <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/claude-sonnet</td><td class="py-1.5 text-xs text-gray-400">Claude Sonnet 4.5</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.06</td></tr>
                 <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/claude-haiku</td><td class="py-1.5 text-xs text-gray-400">Claude Haiku 4.5</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.02</td></tr>
                 <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/gemini-pro</td><td class="py-1.5 text-xs text-gray-400">Gemini 2.5 Pro</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.035</td></tr>
                 <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/gemini-flash</td><td class="py-1.5 text-xs text-gray-400">Gemini 2.5 Flash</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.009</td></tr>
                 <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/deepseek</td><td class="py-1.5 text-xs text-gray-400">DeepSeek V3</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.005</td></tr>
-                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/deepseek-r1</td><td class="py-1.5 text-xs text-gray-400">DeepSeek R1 (reasoning)</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.01</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/deepseek-r1</td><td class="py-1.5 text-xs text-gray-400">DeepSeek R1</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.01</td></tr>
                 <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/llama</td><td class="py-1.5 text-xs text-gray-400">Llama 3.3 70B</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.002</td></tr>
-                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/grok</td><td class="py-1.5 text-xs text-gray-400">Grok 4</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.06</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/grok</td><td class="py-1.5 text-xs text-gray-400">Grok 4.3</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.06</td></tr>
                 <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/qwen</td><td class="py-1.5 text-xs text-gray-400">Qwen3 235B</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.004</td></tr>
                 <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/mistral</td><td class="py-1.5 text-xs text-gray-400">Mistral Large 3</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.006</td></tr>
-                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/perplexity</td><td class="py-1.5 text-xs text-gray-400">Perplexity Sonar Pro (search)</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.06</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/perplexity</td><td class="py-1.5 text-xs text-gray-400">Perplexity Sonar Pro</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.06</td></tr>
                 <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/gpt-5.2</td><td class="py-1.5 text-xs text-gray-400">GPT-5.2</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.08</td></tr>
-                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/gpt-5.2-codex</td><td class="py-1.5 text-xs text-gray-400">GPT-5.2 Codex (reasoning)</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.06</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/gpt-5.2-codex</td><td class="py-1.5 text-xs text-gray-400">GPT-5.2 Codex</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.06</td></tr>
                 <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/kimi</td><td class="py-1.5 text-xs text-gray-400">Kimi K2.5</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.03</td></tr>
                 <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/minimax</td><td class="py-1.5 text-xs text-gray-400">MiniMax M2.5</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.01</td></tr>
                 <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/glm</td><td class="py-1.5 text-xs text-gray-400">GLM-5</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.03</td></tr>
-                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/grok-code</td><td class="py-1.5 text-xs text-gray-400">Grok Code Fast</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.04</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/grok-code</td><td class="py-1.5 text-xs text-gray-400">Grok Build 0.1</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.04</td></tr>
                 <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/seed</td><td class="py-1.5 text-xs text-gray-400">Seed 1.6</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.02</td></tr>
                 <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/devstral</td><td class="py-1.5 text-xs text-gray-400">Devstral 2</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.02</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/deepseek-v3.2</td><td class="py-1.5 text-xs text-gray-400">DeepSeek V3.2</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.005</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/gemini-3-pro</td><td class="py-1.5 text-xs text-gray-400">Gemini 3.1 Pro</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.045</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/gemini-3-flash</td><td class="py-1.5 text-xs text-gray-400">Gemini 3 Flash</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.012</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/claude-sonnet-4.6</td><td class="py-1.5 text-xs text-gray-400">Claude Sonnet 4.6</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.06</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/gpt-5.2-pro</td><td class="py-1.5 text-xs text-gray-400">GPT-5.2 Pro</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.25</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/qwen-coder</td><td class="py-1.5 text-xs text-gray-400">Qwen3 Coder</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.004</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/gpt-5.1</td><td class="py-1.5 text-xs text-gray-400">GPT-5.1</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.035</td></tr>
                 <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/gpt-5.4</td><td class="py-1.5 text-xs text-gray-400">GPT-5.4</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.10</td></tr>
-                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/gpt-5.4-pro</td><td class="py-1.5 text-xs text-gray-400">GPT-5.4 Pro (reasoning)</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.30</td></tr>
-                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/gpt-5.3-codex</td><td class="py-1.5 text-xs text-gray-400">GPT-5.3 Codex (reasoning)</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.08</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/gpt-5.4-pro</td><td class="py-1.5 text-xs text-gray-400">GPT-5.4 Pro</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.30</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/gpt-5.3-codex</td><td class="py-1.5 text-xs text-gray-400">GPT-5.3 Codex</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.08</td></tr>
                 <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/claude-opus-4.5</td><td class="py-1.5 text-xs text-gray-400">Claude Opus 4.5</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.09</td></tr>
-                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/gemini-3.1-pro</td><td class="py-1.5 text-xs text-gray-400">Gemini 3.1 Pro (reasoning)</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.05</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/gemini-3.1-pro</td><td class="py-1.5 text-xs text-gray-400">Gemini 3.1 Pro</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.05</td></tr>
                 <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/gemini-3.1-flash-lite</td><td class="py-1.5 text-xs text-gray-400">Gemini 3.1 Flash Lite</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.003</td></tr>
                 <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/qwen3.5</td><td class="py-1.5 text-xs text-gray-400">Qwen 3.5</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.006</td></tr>
-                <tr><td class="py-1.5 font-mono text-xs">/api/llm/deepseek-v3.2-speciale</td><td class="py-1.5 text-xs text-gray-400">DeepSeek V3.2 Speciale (reasoning)</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.008</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/deepseek-v3.2-speciale</td><td class="py-1.5 text-xs text-gray-400">DeepSeek V3.2</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.008</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/minimax-m2.7</td><td class="py-1.5 text-xs text-gray-400">MiniMax M2.7</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.01</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/llama-4-maverick</td><td class="py-1.5 text-xs text-gray-400">Llama 4 Maverick</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.003</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/gpt-5-nano</td><td class="py-1.5 text-xs text-gray-400">GPT-5 Nano</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.002</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/o4-mini</td><td class="py-1.5 text-xs text-gray-400">OpenAI o4-mini</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.03</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/command-a</td><td class="py-1.5 text-xs text-gray-400">Cohere Command A</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.04</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/claude-opus-4.8</td><td class="py-1.5 text-xs text-gray-400">Claude Opus 4.8</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.09</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/qwen3.7-plus</td><td class="py-1.5 text-xs text-gray-400">Qwen 3.7 Plus</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.006</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/qwen3.7-max</td><td class="py-1.5 text-xs text-gray-400">Qwen 3.7 Max</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.015</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/glm-5.2</td><td class="py-1.5 text-xs text-gray-400">GLM 5.2</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.03</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/deepseek-v4-flash</td><td class="py-1.5 text-xs text-gray-400">DeepSeek V4 Flash</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.003</td></tr>
+                <tr class="border-b border-white/[0.03]"><td class="py-1.5 font-mono text-xs">/api/llm/deepseek-v4-pro</td><td class="py-1.5 text-xs text-gray-400">DeepSeek V4 Pro</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.006</td></tr>
+                <tr><td class="py-1.5 font-mono text-xs">/api/llm/minimax-m3</td><td class="py-1.5 text-xs text-gray-400">MiniMax M3</td><td class="py-1.5 text-xs text-brand-400 text-right">$0.01</td></tr>
               </tbody>
             </table>
           </div>
